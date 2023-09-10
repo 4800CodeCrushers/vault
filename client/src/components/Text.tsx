@@ -1,8 +1,10 @@
-function Text() {
+import { TextProps } from '../types/components'
 
+function Text(props: TextProps) {
+  const {children = 'Vault', color = 'black', size='12pt'} = props;
   return (
-    <div style = {{color: 'red', fontSize: 20}}>
-        Hello
+    <div style = {{color: color, fontSize: size}}>
+      {children}
     </div>
   );
 }
