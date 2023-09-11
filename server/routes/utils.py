@@ -11,9 +11,18 @@ def makeAPIResponse(code, message, data = None, serialize = True):
 	if data != None: payload['data'] = serializeData(data) if serialize else data
 	return make_response(payload, code)
 
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
 
 def beforeRequest():
 	print('running hook')
+	# # When seeing the CORS options, let the client know we allow the requests 
+	# if request.method == 'OPTIONS':
+	# 	return _build_cors_preflight_response()
     # # Ensure we do not run this when logging in since we will not have a session key
 	# if request.path != '/auth/login':
 	# 	# Get the session key from the request

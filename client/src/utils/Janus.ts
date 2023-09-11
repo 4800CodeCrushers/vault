@@ -1,25 +1,25 @@
+import { GameInfo } from "../types/classes";
+
 export default class Janus {
 
   static BASE_URL = "http://127.0.0.1:17777/";
 
   static async GET_GAME(id: number) {
-    return this.contactAPI({
-      url: `auth/game/${id}`,
+    return this.contactAPI<GameInfo>({
+      url: `vg/${id}`,
       method: "GET",
-      authorizationRequired: false,
-      print: true
+      authorizationRequired: false
     });
   }
 
-  static async GET_GAME_COVER(id: number) {
-    return this.contactAPI({
-      url: `auth/game`,
-      method: "GET",
+  static async SEARCH_GAME(query: string) {
+    return this.contactAPI<GameInfo>({
+      url: `vg/`,
+      method: "POST",
       authorizationRequired: false,
-      print: true
+      body: {query: query}
     });
   }
-  
 
   /** Contact the Vault API */
   private static async contactAPI<T>(props: ContactAPIProps): Promise<APIResponse<T>> {
@@ -50,11 +50,12 @@ export default class Janus {
         } 
         // Wait for the server to respond
         let response: Response = await fetch(Janus.BASE_URL + url, requestOptions);
-        
+
         // Print response to console for debugging
         if(props.print) {
-          console.log(JSON.stringify(result, null, "  "));
+          console.log(response);
         }
+        
         // If logging in, save session key
         if (loggingIn) {
           let key = response.headers?.get('Authorization');

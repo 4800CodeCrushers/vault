@@ -1,5 +1,6 @@
 from flask import Blueprint, make_response, request
-import json, hashlib, uuid, utils, requests
+import json, hashlib, uuid, requests
+from routes import utils
 
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
