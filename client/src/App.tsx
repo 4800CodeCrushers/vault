@@ -9,7 +9,7 @@ function App() {
   // A reference to the input field
   const inputRef: any = useRef(null);
   const [id, setId] = useState<number>(1942);
-  const [query, setQuery] = useState<string>("Super Mario Bros 3");
+  const [query, setQuery] = useState<string>("Call of Duty Black Ops");
   const [title, setTitle] = useState<string>();
   const [developer, setDeveloper] = useState<string>();
   const [summary, setSummary] = useState<string>();

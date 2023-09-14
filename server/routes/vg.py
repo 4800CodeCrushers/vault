@@ -89,13 +89,12 @@ def searchGame():
 
 	data = response.json()
 	if response.status_code == 200:	
-		print(len(data))
 		
 		# Filter involved companies where developer = true
 		for i in range(len(data)):
 			# developer_companies = [company for company in data[i]['involved_companies'] if company['developer'] == True]
 			# data[i]['involved_companies'] = developer_companies
-			print(data[i]['involved_companies'])
+			print(data[i])
 			
 	else:
 		print("Error:", response.text)

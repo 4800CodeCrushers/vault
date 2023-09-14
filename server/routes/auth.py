@@ -38,9 +38,10 @@ def login():
 	else:
 		return utils.makeAPIResponse(400, 'Invalid credentials')	
 
-# @auth.route('/logout', methods=['POST'])
-# def logout():
-# 	# Remove session key
+@auth.route('/logout', methods=['POST'])
+def logout():
+	# Remove session key
+	print('log out')
 # 	credential = Credentials.query.filter(Credentials.session_key == request.session_key).first()
 # 	credential.session_key = None
 # 	db.session.commit()
