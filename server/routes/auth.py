@@ -7,6 +7,9 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def register(app, options):
 	app.register_blueprint(auth, **options)
 
+@auth.route('/create', methods=['POST'])
+def create():
+    return utils.makeAPIResponse(200, 'Creation successful')
 
 @auth.route('/login', methods=['POST'])
 def login():
