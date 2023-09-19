@@ -8,6 +8,18 @@ auth = Blueprint('auth', __name__, url_prefix='/api/auth')
 def register(app, options):
 	app.register_blueprint(auth, **options)
 
+@auth.route('/create', methods=['POST'])
+def create():
+    return utils.makeAPIResponse(200, 'Creation successful')
+
+
+@auth.route('/resetpassword', methods=['POST'])
+def create():
+	#verify password first before reset
+	#after password verified, ask for new password
+	#reset password after new password verified to be within password constraints
+	return utils.makeAPIResponse(200, 'Reset successful')
+
 
 @auth.route('/login', methods=['POST'])
 def login():
