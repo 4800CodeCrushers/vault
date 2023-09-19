@@ -2,7 +2,15 @@ import { GameInfo } from "../types/classes";
 
 export default class Janus {
 
-  static BASE_URL = "http://127.0.0.1:17777/";
+  static BASE_URL = "http://127.0.0.1:17777/api/";
+
+  static async LOGIN(id: number) {
+    return this.contactAPI<GameInfo>({
+      url: `auth/${id}`,
+      method: "GET",
+      authorizationRequired: false
+    });
+  }
 
   static async GET_GAME(id: number) {
     return this.contactAPI<GameInfo>({

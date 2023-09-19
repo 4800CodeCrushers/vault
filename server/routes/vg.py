@@ -1,9 +1,10 @@
-from flask import Blueprint, make_response, request
+from flask import Blueprint, request
 import requests
-from routes import utils
+from models import Credentials
+from utils import makeAPIResponse
+from extensions import db
 
-vg = Blueprint('vg', __name__, url_prefix='/vg')
-
+vg = Blueprint('vg', __name__, url_prefix='/api/vg')
 def register(app, options):
 	app.register_blueprint(vg, **options)
 
@@ -48,18 +49,18 @@ def getGame(id):
 		print("Error:", response.text)
 	
 	if len(data) > 0:
-		return utils.makeAPIResponse(200, 'Got the game.',  data[0], False)
+		return makeAPIResponse(200, 'Got the game.',  data[0], False)
 	else:
-		return utils.makeAPIResponse(404, 'Could not find game.', {}, False)
+		return makeAPIResponse(404, 'Could not find game.', {}, False)
 	
-
 @vg.route('/', methods=['POST'])
 def searchGame():
+	
 	token = "mt8tntiq4be5mdf1m5hv72pa7xrsft"
 	clientID = "fqgbk3v135ggx22yzzjx72yctiho44"
 
 	# Reject requests without the proper field
-	if 'query' not in request.json: return utils.makeAPIResponse(400, 'Missing required field: query')
+	if 'query' not in request.json: return makeAPIResponse(400, 'Missing required field: query')
 	# Get the query from the request
 	query = request.json['query']
 
@@ -100,9 +101,6 @@ def searchGame():
 		print("Error:", response.text)
 	
 	if len(data) > 0:
-		return utils.makeAPIResponse(200, 'Got the game.',  data[0], False)
+		return makeAPIResponse(200, 'Got the game.',  data[0])
 	else:
-		return utils.makeAPIResponse(404, 'Could not find game.', {}, False)
-
-
-
+		return makeAPIResponse(404, 'Could not find game.', {})

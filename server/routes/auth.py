@@ -1,9 +1,10 @@
-from flask import Blueprint, make_response, request
-import json, hashlib, uuid, requests
-from routes import utils
+from flask import Blueprint, request
+import hashlib, uuid
+from extensions import db
+from models import Credentials, Users
+from utils import makeAPIResponse
 
-auth = Blueprint('auth', __name__, url_prefix='/auth')
-
+auth = Blueprint('auth', __name__, url_prefix='/api/auth')
 def register(app, options):
 	app.register_blueprint(auth, **options)
 
@@ -11,39 +12,37 @@ def register(app, options):
 @auth.route('/login', methods=['POST'])
 def login():
 	# Reject requests without the proper fields
-	if 'username' not in request.json: return utils.makeAPIResponse(400, 'Missing required field: username')
-	if 'password' not in request.json: return utils.makeAPIResponse(400, 'Missing required field: password') 
+	if 'email' not in request.json: return makeAPIResponse(400, 'Missing required field: email')
+	if 'password' not in request.json: return makeAPIResponse(400, 'Missing required field: password') 
 	# Get the username and password from the request
-	username = request.json['username']
+	email = request.json['email']
 	password = request.json['password']
 	# Hash password
-	hashed_password = hashlib.sha1((password + 'secret_key').encode()).hexdigest()
+	secret_key = '9e4906f13c979b6c15432f6de4526f7179bb3641'
+	hashed_password = hashlib.sha1((password + secret_key).encode()).hexdigest()
 	# Check if this account exists in the DB
-	print(f'{username}\'s password is {password} and was hashed to: {hashed_password}')
-	return utils.makeAPIResponse(200, 'Login successful')
-
-	credential = Credentials.query.filter(Credentials.username == username, Credentials.password == hashed_password).first()
+	print(f'{email}\'s password is {password} and was hashed to: {hashed_password}')
+	credential = Credentials.query.filter(Credentials.email == email, Credentials.password == hashed_password).first()
 	if credential:
 		# Create a new session key
-		session_key = uuid.uuid4()
+		key = uuid.uuid4()
 		# Put the new session key in the DB
-		credential.session_key = session_key
+		credential.key = key
 		db.session.commit()
 		# Get the logging in user's info
-		user = Users.query.filter(Users.id == credential.id).first()
+		user = Users.query.filter(Users.id == credential.user_id).first()
 		# Return the reponse, with the user info and session key attached
-		response = utils.makeAPIResponse(200, 'Login successful', user)
-		response.headers['Authorization'] = session_key
+		response = makeAPIResponse(200, 'Login successful', user)
+		response.headers['Authorization'] = key
 		return response
 	else:
-		return utils.makeAPIResponse(400, 'Invalid credentials')	
+		return makeAPIResponse(400, 'Invalid credentials')	
 
 @auth.route('/logout', methods=['POST'])
 def logout():
 	# Remove session key
-	print('log out')
-# 	credential = Credentials.query.filter(Credentials.session_key == request.session_key).first()
-# 	credential.session_key = None
-# 	db.session.commit()
-# 	# Return response
-# 	return utils.makeAPIResponse(200, 'Logout successful')
+	credential = Credentials.query.filter(Credentials.key == request.key).first()
+	credential.key = None
+	db.session.commit()
+	# Return response
+	return makeAPIResponse(200, 'Logout successful')

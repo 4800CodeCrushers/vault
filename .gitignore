@@ -5,6 +5,8 @@ client/node_modules
 # production
 client/build
 
+server/config.json
+
 # misc
 /.DS_Store
 client/.DS_Store
