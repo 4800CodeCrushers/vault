@@ -1,7 +1,6 @@
 export default class Utility {
 
-
-    /** Get time of day of this timestamp. Ex - 4:32 PM. */
+  /** Get time of day of this timestamp. Ex - 4:32 PM. */
   static getTimeOfDay(timestamp: number): string {
     // Extract the hour and minute from the given timestamp
     let time = new Date(timestamp);
@@ -90,7 +89,7 @@ export default class Utility {
     return "#" + newR + newG + newB;
   }
 
-/** Get the tint of a given hex value. Amount is a number from 0-100. Default is 30.  */
+  /** Get the tint of a given hex value. Amount is a number from 0-100. Default is 30.  */
   static getTint (hex: string, amount: number = 30) {
     // Ensure amount is within the proper bounds
     if (amount > 100) amount = 100;

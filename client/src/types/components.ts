@@ -1,5 +1,9 @@
 import { CSSProperties } from "react"
 
+export type IconName = 'pin' | 'settings' | 'members' | 
+'search' | 'eye' | 'eye-closed' | 
+'close' | 'close-circle' | 'pencil';
+
 export type TextProps = {
     /** The color of the text. */
   color?: string,
@@ -12,3 +16,18 @@ export type TextProps = {
   /** What happens if the text is clicked? */
   onClick?: (e: any) => void,
 }
+
+export type IconProps = {
+  /** The name of the icon. */
+  name: IconName,
+  /** The icon size. The default size is 30 */
+  size?: number | string,
+  /** The icon color. The default size is colors.icon */
+  color?: string,
+  /** What happens if the icon is clicked? */
+  onClick?: (e: any) => void,
+  /** What should the cursor look like when hovering over the icon? */
+  cursor?: 'pointer' | 'default' | 'text'
+  /** Additional styling to be applied to the icon */
+  style?: CSSProperties,
+};
