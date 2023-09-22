@@ -1,9 +1,6 @@
 from extensions import db
 from sqlalchemy import inspect
 
-class Record():
-	def serialize(self):
-		return {c: getattr(self, c) for c in inspect(self).attrs.keys()}
 
 class Credentials(db.Model):
 	"""

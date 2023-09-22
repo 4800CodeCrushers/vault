@@ -27,6 +27,3 @@ export type GameInfo = {
         developer: boolean
     }[]
 }
-
-
-

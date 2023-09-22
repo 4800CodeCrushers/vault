@@ -1,9 +1,10 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { Text } from "./components";
-import Janus from "./utils/Janus";
-import Utility from "./utils/Utility";
+import { Janus, Utility } from "./utils";
 
 // troublesome IDs - 15471, 15472, 1945
+
+let games: string[] = ['Call of Duty Black Ops', 'Super Mario', 'Call of Duty World at War', 'Mario Kart Wii', 'Super Metroid', 'Call of Duty Black Ops', 'Super Mario', 'Call of Duty World at War', 'Mario Kart Wii', 'Super Metroid'];
 
 function App() {
   // A reference to the input field
@@ -18,10 +19,10 @@ function App() {
   const [release, setRelease] = useState<number>();
   const [showResult, setShowResult] = useState<boolean>(false);
 
-  async function getGame() {
-    if (!query) return;
+  async function getGame(name: string) {
+    if (!name) return;
     setShowResult(false);
-    let response = await Janus.SEARCH_GAME(query);
+    let response = await Janus.SEARCH_GAME(name);
     // let response = await Janus.GET_GAME(id);
     if (response.success) {
       setTitle(response.data.name);
@@ -40,6 +41,12 @@ function App() {
       setLogoUrl(response.data.involved_companies[0].company.logo?.url);
       setTimeout(() => {setShowResult(true);}, 100);
     }
+  }
+
+  function getGames() {
+    games.forEach(element => {
+      getGame(element);
+    });
   }
 
   function onTextChange() {
@@ -72,7 +79,7 @@ function App() {
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <input style = {styles.input} value={query} ref={inputRef} placeholder="enter id" onChange={onTextChange}/>
-        <button style={styles.button} onClick={() => getGame()}>Get Game</button>
+        <button style={styles.button} onClick={() => getGames()}>Get Game</button>
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ def getGame(id):
 			data[i]['involved_companies'] = developer_companies
 			print(data[0])
 	else:
-		print("Error:", response.text)
+		print("Error:", response.text, response.status_code)
 	
 	if len(data) > 0:
 		return makeAPIResponse(200, 'Got the game.',  data[0], False)
@@ -90,15 +90,15 @@ def searchGame():
 
 	data = response.json()
 	if response.status_code == 200:	
-		
+		print(f'Got {query}')
 		# Filter involved companies where developer = true
-		for i in range(len(data)):
+		# for i in range(len(data)):
 			# developer_companies = [company for company in data[i]['involved_companies'] if company['developer'] == True]
 			# data[i]['involved_companies'] = developer_companies
-			print(data[i])
+			# print(data[i])
 			
 	else:
-		print("Error:", response.text)
+		print("Error:", response.text, response.status_code)
 	
 	if len(data) > 0:
 		return makeAPIResponse(200, 'Got the game.',  data[0])

@@ -14,7 +14,7 @@ def create():
 
 
 @auth.route('/resetpassword', methods=['POST'])
-def create():
+def reset():
 	#verify password first before reset
 	#after password verified, ask for new password
 	#reset password after new password verified to be within password constraints
