@@ -7,12 +7,8 @@ from json import load
 
 # Create app
 app = Flask(__name__)
-# Get the db uri from the config.json file
-with open('config.json') as f:
-	config = load(f)
-	print(config['db_uri'])
-	app.config['SQLALCHEMY_DATABASE_URI'] = config['db_uri']
 # Connect database with app
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:motcon-dofcop-Topqa7@vault.c5rigsmisjnw.us-west-1.rds.amazonaws.com:3306/vault'
 db.init_app(app)
 # Enable CORS request
 CORS(app, supports_credentials=True, expose_headers='Authorization')
