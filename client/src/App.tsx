@@ -1,7 +1,8 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { Text } from "./components";
+import { Text, GameScreen } from "./components";
 import { Janus, Utility } from "./utils";
-
+import Game from "./classes/Game";
+import data from './data.json';
 // troublesome IDs - 15471, 15472, 1945
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   const [imageID, setImageID] = useState<string>();
   const [logoUrl, setLogoUrl] = useState<string>();
   const [release, setRelease] = useState<number>();
+  const [screenshot, setScreenshot] = useState<string>();
 
   async function getGame() {
     if (!query) return;
@@ -42,15 +44,23 @@ function App() {
       setImageID(response.data.cover.image_id);
       setRelease(response.data.first_release_date);
       setLogoUrl(response.data.involved_companies[0].company.logo.image_id);
+      setScreenshot(response.data.screenshots[Math.floor(Math.random() * response.data.screenshots.length)].image_id);
       // What for a split sec for the image to load
       setTimeout(() => {setShowResult(true);}, 200);
     }
+
+    
   }
 
   function onTextChange() {
     setQuery(inputRef.current.value);
     setId(parseInt(inputRef.current.value));
   }
+
+  // let game: Game = new Game(data);
+  // return (
+  //   <GameScreen game={game}/>
+  // );
 
   return (
     <div style = {styles.screen}>
@@ -73,6 +83,9 @@ function App() {
 
         </div>
       </div>
+      <img style={{...styles.screenShot, opacity: showResult ? 1 : 0}} src={`https://images.igdb.com/igdb/image/upload/t_screenshot_big/${screenshot}.png`}/>
+
+
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <input style = {styles.input} value={query} ref={inputRef} placeholder="enter id" onChange={onTextChange}/>
@@ -121,8 +134,14 @@ let styles: {[key: string]: CSSProperties} = {
     borderColor: "white",
     borderWidth: 10,
     boxShadow: '15px rgba(0, 0, 0, 0.5)',
-    
-
+  },
+  screenShot: {
+    borderRadius: 15,
+    height: "600px",
+    borderColor: "white",
+    borderWidth: 10,
+    boxShadow: '15px rgba(0, 0, 0, 0.5)',
+    width: '1000px'
   },
   logo: {
     height: 50,

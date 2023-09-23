@@ -1,11 +1,12 @@
 import { CSSProperties } from "react"
+import Game from "../classes/Game";
 
 export type IconName = 'pin' | 'settings' | 'members' | 
 'search' | 'eye' | 'eye-closed' | 
 'close' | 'close-circle' | 'pencil';
 
 export type TextProps = {
-    /** The color of the text. */
+  /** The color of the text. */
   color?: string,
   /** The text size. The default size is 12pt. */
   size?: number | string,
@@ -31,3 +32,8 @@ export type IconProps = {
   /** Additional styling to be applied to the icon */
   style?: CSSProperties,
 };
+
+export type GameScreenProps = {
+  /** The game to render */
+  game: Game
+}

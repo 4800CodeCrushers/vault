@@ -4,7 +4,7 @@ from extensions import db
 import requests, time, json
 
 
-def IGDBrequest(params):
+def igdbRequest(params):
 	"""
 	Make a request to IGDB.
 
@@ -28,17 +28,21 @@ def IGDBrequest(params):
 	# Get the games list from the response
 	found_games = response.json()
 	print(json.dumps( found_games, indent=2))
+
+	# Flatten the result, and store it in the database
+
+
+
 	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
 	if response.status_code == 429:
 		time.sleep(.33)
-		return IGDBrequest(params)
+		return igdbRequest(params)
 	# Return the games if we retrieved at least one
 	elif response.status_code == 200 and len(found_games) > 0:
 		return makeAPIResponse(200, 'Got the game.',  found_games[0])	
 	else:
 		return makeAPIResponse(404, 'Could not find a game.')
 	
-		
 def makeAPIResponse(code, message, data = None):
 	"""
 	Create a response to an API request.

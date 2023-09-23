@@ -5,26 +5,36 @@ export type GameInfo = {
     name: string,
     /** The summary of the game */
     summary: string,
-    /** Release data */
+    /** Release date */
     first_release_date: number,
+    /** Rating */
+    rating: number,
     /** The cover of the game */
     cover: {
         image_id: string
     },
-    /** The url of the game */
-    url: string,
-    /** The developers of the game */
+    /** The screenshots of the game */
+    screenshots: {
+        image_id: string
+    }[],
+    /** The companies involved with the game */
     involved_companies: {
         company: {
             id: number,
             logo: {
-                id: number,
-                url: string,
                 image_id: string,
             }
             name: string,
-            
         },
-        developer: boolean
+        developer: boolean,
+        publisher: boolean
+    }[],
+    /** The genres of the game */
+    genres: {
+        name: string
+    }[],
+    /** The platforms of the game */
+    platforms: {
+        name: string
     }[]
 }
