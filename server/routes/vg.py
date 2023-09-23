@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 import requests
 from models import Credentials
-from utils import makeAPIResponse
+from utils import makeAPIResponse, IGDBrequest
 from extensions import db
 
 vg = Blueprint('vg', __name__, url_prefix='/api/vg')
@@ -9,98 +9,39 @@ def register(app, options):
 	app.register_blueprint(vg, **options)
 
 
-@vg.route('/<int:id>', methods=['GET'])
-def getGame(id):
-	token = "mt8tntiq4be5mdf1m5hv72pa7xrsft"
-	clientID = "fqgbk3v135ggx22yzzjx72yctiho44"
-
+@vg.route('/', methods=['POST'])
+def getGames():
+	# Get the query from the request
+	id = request.json['id']
+	# Reject requests without the proper field
+	if 'id' is None: 
+		return makeAPIResponse(400, 'Missing required field: id')
+	# The params for our search
 	params = (
-		'fields '
-		'url,'
-		'name,'
-		'first_release_date,'
-		'summary,'
-		'cover.*,'
-		'involved_companies.company.name,'
-		'involved_companies.company.logo.url,'
-		'involved_companies.developer;'
+		f'fields first_release_date, url, name, summary, cover.*, rating, genres.name,'
+		f'involved_companies.company.name, involved_companies.company.logo.image_id, involved_companies.developer, involved_companies.publisher;' 
 		f'where id = {id};'
 	)
-
-	response = requests.post(
-		'https://api.igdb.com/v4/games', **{
-			'headers': {
-				"Content-Type": "application/json", 
-				"Authorization": f'Bearer {token}',
-				"Client-ID": f'{clientID}'
-			},
-			'data': params
-
-		}
-	)
-	data = response.json()
-	if response.status_code == 200:
-		# Filter involved companies where developer = true
-		for i in range(len(data)):
-			developer_companies = [company for company in data[i]['involved_companies'] if company['developer'] == True]
-			data[i]['involved_companies'] = developer_companies
-			print(data[0])
-	else:
-		print("Error:", response.text, response.status_code)
+	# Get the game(s) from IGDB
+	return IGDBrequest(params)
 	
-	if len(data) > 0:
-		return makeAPIResponse(200, 'Got the game.',  data[0], False)
-	else:
-		return makeAPIResponse(404, 'Could not find game.', {}, False)
-	
-@vg.route('/', methods=['POST'])
+
+@vg.route('/search', methods=['POST'])
 def searchGame():
-	
-	token = "mt8tntiq4be5mdf1m5hv72pa7xrsft"
-	clientID = "fqgbk3v135ggx22yzzjx72yctiho44"
-
-	# Reject requests without the proper field
-	if 'query' not in request.json: return makeAPIResponse(400, 'Missing required field: query')
 	# Get the query from the request
 	query = request.json['query']
-
+	# Reject requests without the proper field
+	if 'query' is None: 
+		return makeAPIResponse(400, 'Missing required field: query')
+	# Get the offset of the search results
+	offset = request.json['offset'] if request.json['offset'] else 0
+	# The params for our search
 	params = (
 		f'search \"{query}\";'
-		'fields '
-		'url,'
-		'name,'
-		'first_release_date,'
-		'summary,'
-		'cover.*,'
-		'involved_companies.company.name,'
-		'involved_companies.company.logo.url,'
-		'involved_companies.developer;'
+		f'fields first_release_date, url, name, summary, cover.*, rating, genres.name,'
+		f'involved_companies.company.name, involved_companies.company.logo.image_id, involved_companies.developer, involved_companies.publisher;' 
+		f'limit 1; offset {offset}; where rating > 0;'
 	)
+	# Get the game(s) from IGDB
+	return IGDBrequest(params)
 
-	response = requests.post(
-		'https://api.igdb.com/v4/games', **{
-			'headers': {
-				"Content-Type": "application/json", 
-				"Authorization": f'Bearer {token}',
-				"Client-ID": f'{clientID}'
-			},
-			'data': params
-		}
-	)
-
-	data = response.json()
-	if response.status_code == 200:	
-		print(f'Got {query}')
-		# Filter involved companies where developer = true
-		# for i in range(len(data)):
-			# developer_companies = [company for company in data[i]['involved_companies'] if company['developer'] == True]
-			# data[i]['involved_companies'] = developer_companies
-			# print(data[i])
-			
-	else:
-		print("Error:", response.text, response.status_code)
-	
-	if len(data) > 0:
-		return makeAPIResponse(200, 'Got the game.',  data[0])
-	else:
-		return makeAPIResponse(404, 'Could not find game.', {})

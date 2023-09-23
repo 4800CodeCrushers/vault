@@ -4,25 +4,28 @@ import { Janus, Utility } from "./utils";
 
 // troublesome IDs - 15471, 15472, 1945
 
-let games: string[] = ['Call of Duty Black Ops', 'Super Mario', 'Call of Duty World at War', 'Mario Kart Wii', 'Super Metroid', 'Call of Duty Black Ops', 'Super Mario', 'Call of Duty World at War', 'Mario Kart Wii', 'Super Metroid'];
-
 function App() {
   // A reference to the input field
   const inputRef: any = useRef(null);
+  const [showResult, setShowResult] = useState<boolean>(false);
+
   const [id, setId] = useState<number>(1942);
   const [query, setQuery] = useState<string>("Call of Duty Black Ops");
+
+  // All of these hooks can be replaced with a Game object
+
   const [title, setTitle] = useState<string>();
   const [developer, setDeveloper] = useState<string>();
   const [summary, setSummary] = useState<string>();
   const [imageID, setImageID] = useState<string>();
   const [logoUrl, setLogoUrl] = useState<string>();
   const [release, setRelease] = useState<number>();
-  const [showResult, setShowResult] = useState<boolean>(false);
 
-  async function getGame(name: string) {
-    if (!name) return;
+  async function getGame() {
+    if (!query) return;
     setShowResult(false);
-    let response = await Janus.SEARCH_GAME(name);
+    // let response = await Janus.GET_GAME(545);
+    let response = await Janus.SEARCH_GAME(query);
     // let response = await Janus.GET_GAME(id);
     if (response.success) {
       setTitle(response.data.name);
@@ -38,15 +41,10 @@ function App() {
 
       setImageID(response.data.cover.image_id);
       setRelease(response.data.first_release_date);
-      setLogoUrl(response.data.involved_companies[0].company.logo?.url);
-      setTimeout(() => {setShowResult(true);}, 100);
+      setLogoUrl(response.data.involved_companies[0].company.logo.image_id);
+      // What for a split sec for the image to load
+      setTimeout(() => {setShowResult(true);}, 200);
     }
-  }
-
-  function getGames() {
-    games.forEach(element => {
-      getGame(element);
-    });
   }
 
   function onTextChange() {
@@ -56,7 +54,6 @@ function App() {
 
   return (
     <div style = {styles.screen}>
-
       {/* Render game info */}
       <div style={styles.gameContainer}>
         {/* Render image */}
@@ -68,18 +65,18 @@ function App() {
           {/* Release date and developer */}
           <div style={{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-evenly', alignContent: 'center', padding: 5}}>
             <Text size={22} style={{alignSelf: 'center'}}>{Utility.getRelativeDay(release)}</Text>
-            <Text size={22} style={{alignSelf: 'center'}}>{developer}</Text>
+            <img style={{...styles.image, opacity: showResult ? 1 : 0}} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${logoUrl}.png`}/>
+            {/* <Text size={22} style={{alignSelf: 'center'}}>{developer}</Text> */}
           </div>
           {/* Summary */}
           <Text size={20} color={"#757575"} style={{ textAlign: 'center', alignSelf: 'center', padding: 20}}>{summary}</Text>
 
         </div>
       </div>
-        
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <input style = {styles.input} value={query} ref={inputRef} placeholder="enter id" onChange={onTextChange}/>
-        <button style={styles.button} onClick={() => getGames()}>Get Game</button>
+        <button style={styles.button} onClick={() => getGame()}>Get Game</button>
       </div>
     </div>
   );

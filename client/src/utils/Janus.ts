@@ -14,18 +14,20 @@ export default class Janus {
 
   static async GET_GAME(id: number) {
     return this.contactAPI<GameInfo>({
-      url: `vg/${id}`,
-      method: "GET",
-      authorizationRequired: false
-    });
-  }
-
-  static async SEARCH_GAME(query: string) {
-    return this.contactAPI<GameInfo>({
       url: `vg/`,
       method: "POST",
       authorizationRequired: false,
-      body: {query: query}
+      body: {id: id }
+    });
+  }
+
+  static async SEARCH_GAME(query: string, offset: number = 0) {
+    return this.contactAPI<GameInfo>({
+      url: `vg/search`,
+      method: "POST",
+      authorizationRequired: false,
+      body: {query: query, offset: offset},
+      print: true
     });
   }
 
@@ -98,6 +100,7 @@ export default class Janus {
       } 
       else {
         console.log('Could not reach the server.');
+        console.log(error);
       }
     }
     // Return the result

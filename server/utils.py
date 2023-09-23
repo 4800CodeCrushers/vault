@@ -1,9 +1,10 @@
 from flask import make_response, request
 from models import Credentials, Users
 from extensions import db
-import requests
+import requests, time, json
 
-def IGDBrequest():
+
+def IGDBrequest(params):
 	"""
 	Make a request to IGDB.
 
@@ -13,21 +14,6 @@ def IGDBrequest():
 	# The credentials needed to contact IGDB
 	token = "mt8tntiq4be5mdf1m5hv72pa7xrsft"
 	clientID = "fqgbk3v135ggx22yzzjx72yctiho44"
-	# Get the query from the request
-	query = request.json['query']
-	# The search params
-	params = (
-		f'search \"{query}\";' if query else ''
-		'fields '
-		'url,'
-		'name,'
-		'first_release_date,'
-		'summary,'
-		'cover.*,'
-		'involved_companies.company.name,'
-		'involved_companies.company.logo.url,'
-		'involved_companies.developer;'
-	)
 	# Make the request
 	response = requests.post(
 		'https://api.igdb.com/v4/games', **{
@@ -41,30 +27,17 @@ def IGDBrequest():
 	)
 	# Get the games list from the response
 	found_games = response.json()
+	print(json.dumps( found_games, indent=2))
+	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
+	if response.status_code == 429:
+		time.sleep(.33)
+		return IGDBrequest(params)
 	# Return the games if we retrieved at least one
-	if response.status_code == 200 or len(found_games) > 0:
-		# Filter involved companies where developer = true
-		for i in range(len(found_games)):
-			# developer_companies = [company for company in data[i]['involved_companies'] if company['developer'] == True]
-			# data[i]['involved_companies'] = developer_companies
-			print(found_games[i])
+	elif response.status_code == 200 and len(found_games) > 0:
 		return makeAPIResponse(200, 'Got the game.',  found_games[0])	
 	else:
 		return makeAPIResponse(404, 'Could not find a game.')
 	
-def serializeData(data):
-	"""
-	Serialize a record or array of records into a JSON format.
-
-	Parameters:
-		data : record | record array
-	Returns:
-		A response to the user.
-    """
-	if type(data) is list:
-		return [e.serialize() for e in data]
-	else:
-		return data.serialize()
 		
 def makeAPIResponse(code, message, data = None):
 	"""
@@ -78,7 +51,18 @@ def makeAPIResponse(code, message, data = None):
 		A response to the user.
     """
 	payload = { 'success': code == 200, 'message': message }
-	if data != None: payload['data'] = serializeData(data) if issubclass(type(data), db.Model) else data
+
+	if data != None: 
+		# Serialize the data into JSON if it is a model
+		if issubclass(type(data), db.Model):
+			if type(data) is list:
+				payload['data'] = [e.serialize() for e in data]
+			else:
+				payload['data'] =  data.serialize()
+		# Otherwisae, just return the data
+		else:
+			payload['data'] = data
+
 	return make_response(payload, code)
 
 def beforeRequest():
