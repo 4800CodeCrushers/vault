@@ -21,7 +21,7 @@ export type GameInfo = {
     involved_companies: {
         company: {
             id: number,
-            logo: {
+            logo?: {
                 image_id: string,
             }
             name: string,

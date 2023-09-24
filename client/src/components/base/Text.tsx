@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { TextProps } from '../types/components'
+import { TextProps } from '../../types/components'
 
 function Text(props: TextProps) {
   // Extract values from the props

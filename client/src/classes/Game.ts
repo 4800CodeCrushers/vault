@@ -16,14 +16,35 @@ export default class Game {
     getName() { return this.info.name }
     /** Get the summary of the game */
     getSummary() { return this.info.summary }
+    /** Get the rating of the game */
+    getRating() { return this.info.rating }
     /** Get the cover URL of the game */
     getCoverURL() { return `https://images.igdb.com/igdb/image/upload/t_cover_big/${this.info.cover.image_id}.png` }
-    /** Get a screenshot URL of the game */
-    getScreenshotURL() { 
-        let ran = Math.floor(Math.random() * this.info.screenshots.length);
-        return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${this.info.screenshots[ran].image_id}.png` 
+    /** Get the cover URL of the game */
+    getDevURL() { 
+        if (this.info.involved_companies[0].company.logo)
+            return `https://images.igdb.com/igdb/image/upload/t_logo_med/${this.info.involved_companies[0].company.logo.image_id}.png`;
+        return undefined; 
     }
+    /** Get a screenshot URL of the game */
+    getScreenshotURL() { return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${this.info.screenshots[0].image_id}.png`}
     /** Get the release date */
     getReleaseDate() { return Utility.getRelativeDay(this.info.first_release_date) }
+    /** Get the platforms the game was released on */
+    getPlatforms() { 
+        let res: string[] = [];
+        this.info.platforms.forEach(element => {
+            res.push(element.name);
+        });
+        return res;
+    }
+    /** Get the genres of the game */
+    getGenres() { 
+        let res: string[] = [];
+        this.info.genres.forEach(element => {
+            res.push(element.name);
+        });
+        return res;
+    }
 
 }

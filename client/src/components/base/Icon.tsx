@@ -1,14 +1,17 @@
 import { CSSProperties } from "react";
-import { IconProps, IconName } from "../types/components";
+import { IconProps, IconName } from "../../types/components";
 
-import { MdPushPin, MdGroups2, MdSettings, MdSearch, MdCreate } from "react-icons/md";
+import { MdGroups2, MdSearch } from "react-icons/md";
 import { GoEye, GoEyeClosed } from "react-icons/go";
-import { AiOutlineClose, AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineCloseCircle, AiFillHome } from "react-icons/ai";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { HiArrowLeft } from "react-icons/hi";
 
 
 function Icon(props: IconProps) {
   // Extract values from the props
-  const {name = "pin", color = "white", size = 30, onClick, style, cursor = "pointer"} = props;
+  const {name = "members", color = "white", size = 30, onClick, style, cursor = "pointer"} = props;
   // The default style applied to the button
   let defaultStyle: CSSProperties = {
       color,
@@ -28,15 +31,17 @@ function getIcon (name: IconName) {
   // Keep adding new icons to this case statement
   // Kinda annoying, but clean way to render icons
   switch (name) {
-    case 'pin': return <MdPushPin/>;
     case 'members': return <MdGroups2/>;
-    case 'settings': return <MdSettings/>;
     case 'search': return <MdSearch/>;
-    case 'pencil': return <MdCreate/>;
     case 'eye': return <GoEye/>;
     case 'eye-closed': return <GoEyeClosed/>;
     case 'close': return <AiOutlineClose/>;
     case 'close-circle': return <AiOutlineCloseCircle/>;
+    case 'home': return <AiFillHome/>;
+    case 'catelog': return <BiSolidCategoryAlt/>;
+    case 'hamburger': return <GiHamburgerMenu/>;
+    case 'back': return <HiArrowLeft/>;
+    
   }
 }
 

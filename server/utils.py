@@ -39,7 +39,7 @@ def igdbRequest(params):
 		return igdbRequest(params)
 	# Return the games if we retrieved at least one
 	elif response.status_code == 200 and len(found_games) > 0:
-		return makeAPIResponse(200, 'Got the game.',  found_games[0])	
+		return makeAPIResponse(200, 'Got the game.',  found_games)	
 	else:
 		return makeAPIResponse(404, 'Could not find a game.')
 	

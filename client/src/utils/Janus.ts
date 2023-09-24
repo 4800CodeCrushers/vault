@@ -1,4 +1,4 @@
-import { GameInfo } from "../types/classes";
+import { GameInfo, APIResponse, ContactAPIProps } from "../types";
 
 export default class Janus {
 
@@ -21,8 +21,8 @@ export default class Janus {
     });
   }
 
-  static async SEARCH_GAME(query: string, offset: number = 0) {
-    return this.contactAPI<GameInfo>({
+  static async SEARCH_GAMES(query: string, offset: number = 0) {
+    return this.contactAPI<GameInfo[]>({
       url: `vg/search`,
       method: "POST",
       authorizationRequired: false,
@@ -107,32 +107,4 @@ export default class Janus {
     return result;
   }
 
-}
-
-
-
-type ContactAPIProps = {
-	/** The url to get data from. Default is an empty string. */
-	url: string,
-	/** What request method to use. Default is "GET" */
-	method: "POST" | "DELETE" | "PATCH" | "GET" | "PUT",
-	/** The item to upload. Default is null. */
-	upload?: any, 
-	/** Print the contact process for debugging. Default is false. */
-	print?: boolean,
-	/** Is a session key required to make this request  Default is true. */
-	authorizationRequired?: boolean,
-	/** The request body. Default is undefined.  */
-	body?: any,
-	/** Are we logging in? Used to make sure we extract the session key.  */
-  loggingIn?: boolean
-}
-
-type APIResponse<T> = {
-	/** The reponse data */
-	data: T,
-	/** Was the response a success? */
-	success: boolean,
-	/** The message of the response */
-	message: string,
 }
