@@ -2,10 +2,11 @@ import { CSSProperties, useState } from 'react';
 import { MenuTabProps } from '../../types/components'
 import { Styles } from '../../types';
 import { Icon, Text } from '../';
+import { Utility } from '../../utils';
 
 function MenuTab(props: MenuTabProps) {
   // Extract values from the props
-  const { name, icon, onClick, selected } = props;
+  const { name, icon, onClick, selected = false, fontSize = 24, height = 50, color } = props;
 
   const [hovering, setHovering] = useState<boolean>(false);
 
@@ -13,15 +14,19 @@ function MenuTab(props: MenuTabProps) {
     display: 'flex', 
     flexDirection: 'row',
     opacity: selected || hovering ? 1 : .5,
-    height: 50,
+    height,
+    width: '100%',
     alignItems: 'center',
-    margin: '10px 10px 10px 30px',
+    backgroundColor: hovering ? Utility.getTint('#0e0e0e', 15) : undefined,
+    paddingLeft: 30,
+    overflow: 'hidden',
+
   }
 
   return (
     <div style={containerStyle} onClick={onClick} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-      <Icon name={icon} size={40} color={selected ? '#29916e' : undefined}/>
-      <Text size={24} style={{fontWeight: 'bold', marginLeft: 15}} color={selected ? '#29916e' : undefined}>{name}</Text>
+      {icon && <Icon name={icon} size={40} color={selected ? '#29916e' : undefined} style={{marginRight: 15}}/>}
+      <Text size={fontSize} style={{fontWeight: 'bold'}} color={color ?? (selected ? '#29916e' : undefined)}>{name}</Text>
     </div>
   );
 }

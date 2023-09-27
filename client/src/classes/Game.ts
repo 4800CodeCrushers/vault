@@ -19,10 +19,14 @@ export default class Game {
     /** Get the rating of the game */
     getRating() { return this.info.rating }
     /** Get the cover URL of the game */
-    getCoverURL() { return `https://images.igdb.com/igdb/image/upload/t_cover_big/${this.info.cover.image_id}.png` }
+    getCoverURL() { 
+        if (this.info.cover)
+            return `https://images.igdb.com/igdb/image/upload/t_cover_big/${this.info.cover.image_id}.png`;
+        return undefined; 
+    }
     /** Get the cover URL of the game */
     getDevURL() { 
-        if (this.info.involved_companies[0].company.logo)
+        if (this.info.involved_companies != null && this.info.involved_companies[0].company.logo)
             return `https://images.igdb.com/igdb/image/upload/t_logo_med/${this.info.involved_companies[0].company.logo.image_id}.png`;
         return undefined; 
     }

@@ -98,7 +98,7 @@ const styles: Styles = {
     outline: "none", 
     flexGrow: 1,
     width: "100%",
-    fontSize: 40,
+    fontSize: 32,
     color: 'white',
     borderRadius: 25,
     margin: '0px 10px 0px 0px',

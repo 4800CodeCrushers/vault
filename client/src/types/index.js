@@ -11,7 +11,9 @@ export {
     TextInputProps,
     Screens,
     Tabs,
+    HomePanelProps,
     GamePanelProps,
+    PicNames,
     HomePanelProps
 } from './components';
 

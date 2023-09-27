@@ -12,11 +12,13 @@ function HomePanel(props: HomePanelProps) {
   const [query, setQuery] = useState<string>(State.query);
   const [searchedOnce, setSearchedOnce] = useState<boolean>(State.loadedGames.length > 0);
   const [games, setGames] = useState<Game[]>(State.loadedGames);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function getGames() {
     if (!query) return;
+    setLoading(true);
     let response = await Janus.SEARCH_GAMES(query);
-    setSearchedOnce(true);
+
     if (response.success) {
       State.loadedGames = response.data.map(info => new Game(info));
       setGames(State.loadedGames);
@@ -24,6 +26,8 @@ function HomePanel(props: HomePanelProps) {
     else {
       setGames([]);
     }
+    setSearchedOnce(true);
+    setLoading(false);
   }
 
   function reset() {
@@ -39,8 +43,8 @@ function HomePanel(props: HomePanelProps) {
       {!searchedOnce && <Text style={styles.greeting}>{Utility.getGreeting() + ", John Smith!"}</Text>}
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
-        <TextInput value={query} placeholder="Search for a game..." leftIcon={'search'} rightIcon={query ? 'close' : undefined} onRightIconClick={() => reset()} onChange={(text) => {setQuery(text); State.query = text;}} onSubmit={() => getGames()}/>
-        <button style={styles.button} onClick={() => getGames()}>Get Games</button>
+        <TextInput value={query} placeholder="Search for a game" leftIcon={'search'} rightIcon={query ? 'close' : undefined} onRightIconClick={() => reset()} onChange={(text) => {setQuery(text); State.query = text;}} onSubmit={() => getGames()}/>
+        <button style={{...styles.button, opacity: loading ? .5 : 1}} onClick={() => getGames()}>Let's GO!</button>
       </div>
       {/* Result Grid */}
       <div style = {styles.grid}>
@@ -63,7 +67,7 @@ let styles: Styles = {
     textAlign: 'center',
     fontSize: 48,
     fontWeight: 'bold',
-    marginBottom: 60
+    marginBottom: 60,
   },
   inputContainer: {
     display: 'flex', 
@@ -76,7 +80,7 @@ let styles: Styles = {
     backgroundColor: '#29916e',
     color: 'white',
     width: '120px',
-    height: 75,
+    height: 55,
     borderRadius: 25,
     fontSize: "16pt",
     marginLeft: 15

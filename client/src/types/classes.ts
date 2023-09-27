@@ -10,7 +10,7 @@ export type GameInfo = {
     /** Rating */
     rating: number,
     /** The cover of the game */
-    cover: {
+    cover?: {
         image_id: string
     },
     /** The screenshots of the game */
@@ -18,7 +18,7 @@ export type GameInfo = {
         image_id: string
     }[],
     /** The companies involved with the game */
-    involved_companies: {
+    involved_companies?: {
         company: {
             id: number,
             logo?: {

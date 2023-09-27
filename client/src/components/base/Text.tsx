@@ -9,6 +9,8 @@ function Text(props: TextProps) {
     color,
     fontSize: size ?? `calc(12pt + .2vmin)`,
     userSelect: "none",
+    pointerEvents: 'none'
+    
   };
 
   return (

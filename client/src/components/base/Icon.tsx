@@ -3,10 +3,12 @@ import { IconProps, IconName } from "../../types/components";
 
 import { MdGroups2, MdSearch } from "react-icons/md";
 import { GoEye, GoEyeClosed } from "react-icons/go";
-import { AiOutlineClose, AiOutlineCloseCircle, AiFillHome } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineCloseCircle, AiFillHome, AiFillCopy } from "react-icons/ai";
 import { BiSolidCategoryAlt } from "react-icons/bi";
+import { BsFillCheckCircleFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiArrowLeft } from "react-icons/hi";
+import { FcSettings } from "react-icons/fc";
 
 
 function Icon(props: IconProps) {
@@ -41,7 +43,8 @@ function getIcon (name: IconName) {
     case 'catelog': return <BiSolidCategoryAlt/>;
     case 'hamburger': return <GiHamburgerMenu/>;
     case 'back': return <HiArrowLeft/>;
-    
+    case 'copy': return <AiFillCopy/>;
+    case 'check': return <BsFillCheckCircleFill/>;
   }
 }
 

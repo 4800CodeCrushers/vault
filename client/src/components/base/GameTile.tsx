@@ -1,9 +1,9 @@
 import { CSSProperties, useState, useRef } from 'react';
-import { GameProps } from '../../types/components'
+import { GameTileProps } from '../../types/components'
 import { Styles } from '../../types';
 import { Icon, Text } from '..';
 
-function GameTile(props: GameProps) {
+function GameTile(props: GameTileProps) {
   // Extract values from the props
   const { game, onClick } = props;
   const [hovering, setHovering] = useState<boolean>(false);
@@ -17,8 +17,9 @@ function GameTile(props: GameProps) {
   }
 
   return (
-    <div style = {{...styles.container,  borderColor: hovering ? 'white': 'gray'}} key={game.getID()} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-      <img style={styles.image} src={game?.getCoverURL()} onClick={() => onClick(game)}/>
+    <div style = {{...styles.container,  borderColor: hovering ? 'white': 'gray'}} key={game.getID()} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)} onClick={() => onClick(game)}>
+      <img style={styles.image} src={game?.getCoverURL()}/>
+      <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
       {/* { hovering && renderOnHover()} */}
     </div>
   );
@@ -28,7 +29,6 @@ function GameTile(props: GameProps) {
 let styles: Styles = {
   container: {
     borderWidth: 2,
-   
     borderStyle: 'solid',
     width: 200,
   },
@@ -36,7 +36,19 @@ let styles: Styles = {
     width: '100%',
     height: 300,
     display: 'block',
+    pointerEvents: 'none',
+    userSelect: 'none'
   },
+  title: {
+    textAlign: 'center', 
+    display: '-webkit-box',
+    WebkitUserSelect: 'none',
+    WebkitLineClamp: 2, // Set the maximum number of lines to display
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden', 
+    paddingRight: 2, 
+    paddingLeft: 2
+  }
 }
 
 

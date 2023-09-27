@@ -58,15 +58,18 @@ export type MenuTabProps = {
   /** The name of the tab. */
   name: string,
   /** The icon of the tab. */
-  icon: IconName,
+  icon?: IconName,
    /** Is the tab selected?. */
-  selected: boolean,
+  selected?: boolean,
+  /** Size of font. Default is 24 */
+  fontSize?: number,
+  /** The height. Default is 50 */
+  height?: number,
   /** What happens if the option is clicked? */
   onClick: (e: any) => void,
+  /** The color of the text. */
+  color?: string,
 }
-
-
-export type IconName = 'members' | 'search' | 'eye' | 'eye-closed' | 'close' | 'close-circle' | 'home' | 'catelog' | 'hamburger' | 'back';
 
 export type IconProps = {
   /** The name of the icon. */
@@ -83,11 +86,24 @@ export type IconProps = {
   style?: CSSProperties,
 };
 
-export type GameProps = {
+export type GameTileProps = {
   /** The game to render */
   game: Game,
   /** What happens if the game is clicked? */
   onClick: (game: Game) => void,
+}
+
+export type ProfilePicProps = {
+  /** The picture to render */
+  picture: PicNames,
+  /** The picture size. The default is 100. */
+  size?: number | string,
+  /** The background. The default is green. */
+  color?: string,
+  /** The amount of padding to surround the image with. Default is 15. */
+  padding?: number,
+  /** What happens if the pic is clicked? */
+  onClick?: () => void,
 }
 
 export type HomePanelProps = {
@@ -95,5 +111,59 @@ export type HomePanelProps = {
   onGameSelect: (game: Game) => void,
 }
 
+export type GamePanelProps = {
+  /** The game to render */
+  game: Game,
+}
+
+
+
 export type Screens = "main" | "login" | "create";
 export type Tabs = "home" | "collection" | "friends" | 'game';
+
+export type IconName = 
+  | 'members' 
+  | 'search' 
+  | 'eye' 
+  | 'eye-closed' 
+  | 'close' 
+  | 'close-circle' 
+  | 'home' 
+  | 'catelog' 
+  | 'hamburger' 
+  | 'back' 
+  | 'check' 
+  | 'copy';
+
+
+export type PicNames =
+  | 'Atari CX40'
+  | 'Gameboy Advance'
+  | 'Gameboy Micro'
+  | 'Gravis Joypad'
+  | 'MAME'
+  | 'Microsoft Xbox'
+  | 'Nintendo 64'
+  | 'Nintendo Family Computer Player 1 Classic'
+  | 'Nintendo Family Computer Player 1'
+  | 'Nintendo Family Computer Player 2 Classic'
+  | 'Nintendo Family Computer Player 2'
+  | 'Nintendo Gamecube'
+  | 'Nintendo NES'
+  | 'Nintendo SNES Alternate'
+  | 'Nintendo SNES'
+  | 'Nintendo Wii'
+  | 'SNK Neo Geo'
+  | 'Sega Dreamcast'
+  | 'Sega Genesis'
+  | 'Sega Mega Drive Alternate'
+  | 'Sega Mega Drive'
+  | 'Sega Saturn'
+  | 'Sony Playstation 2'
+  | 'Sony Playstation 3'
+  | 'Sony Playstation Blue'
+  | 'Sony Playstation Dual Shock'
+  | 'Sony Playstation Green'
+  | 'Sony Playstation Portable'
+  | 'Sony Playstation'
+  | 'Xbox 360';
