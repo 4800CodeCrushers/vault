@@ -13,7 +13,7 @@ function MenuTab(props: MenuTabProps) {
   let containerStyle: CSSProperties =  {
     display: 'flex', 
     flexDirection: 'row',
-    opacity: selected || hovering ? 1 : .5,
+    opacity: selected || hovering ? 1 : .8,
     height,
     width: '100%',
     alignItems: 'center',
@@ -24,9 +24,15 @@ function MenuTab(props: MenuTabProps) {
   }
 
   return (
-    <div style={containerStyle} onClick={onClick} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+    <div 
+      style={containerStyle} 
+      onClick={onClick} 
+      onMouseEnter={() => setHovering(true)} 
+      onMouseLeave={() => setHovering(false)}
+    >
       {icon && <Icon name={icon} size={40} color={selected ? '#29916e' : undefined} style={{marginRight: 15}}/>}
       <Text size={fontSize} style={{fontWeight: 'bold'}} color={color ?? (selected ? '#29916e' : undefined)}>{name}</Text>
+    
     </div>
   );
 }

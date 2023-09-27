@@ -7,7 +7,7 @@ import { updateInterfaceDeclaration } from 'typescript';
 
 function ProfilePic(props: ProfilePicProps) {
   // Extract values from the props
-  const { picture, size = 80, color = '#29916e', padding = 15, onClick} = props;
+  const { picture, size = 80, color = '#29916e', padding = 15, onClick, style} = props;
   let width = size; let height = size; let borderRadius = "100%";
   let background = `linear-gradient(${Utility.getShade(color, 75)}, ${color})`;
   const [hovering, setHovering] = useState<boolean>();
@@ -15,9 +15,9 @@ function ProfilePic(props: ProfilePicProps) {
 
   return (
     <div 
-      style={{ background, width, height, borderRadius,padding, 
+      style={{ background, width, height, borderRadius, padding, 
         opacity: (hovering || onClick == undefined) ? 1 : .85, 
-        ...styles.imageContainer
+        ...styles.imageContainer, ...style
       }} 
       onClick={onClick} 
       onMouseEnter={() => setHovering(true)} 

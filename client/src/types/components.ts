@@ -8,7 +8,7 @@ export type TextProps = {
   /** The text size. The default size is 12pt. */
   size?: number | string,
   /** The text to render. */
-  children?: string | null | (string | JSX.Element)[]
+  children?: string | null | (string | JSX.Element)[] | JSX.Element
   /** Additional styling to be applied to the text */
   style?: CSSProperties,
   /** What happens if the text is clicked? */
@@ -24,6 +24,8 @@ export type TextInputProps = {
   growWidth?: number| string,
   /** The minimum width of the textbox. */
   minWidth?: number| string,
+  /** The size of the font. */
+  fontSize?: number | string,
   /** The max characters that can be inputted. */
   maxCharacters?: number,
   /** Additional styling to be applied to the text input */
@@ -93,11 +95,24 @@ export type GameTileProps = {
   onClick: (game: Game) => void,
 }
 
+export type PopupProps = {
+  /** The game to render */
+  game?: Game,
+  /** Is the popup visible? */
+  shown: boolean,
+  /** The body of the popup. */
+  children?: string | null | (string | JSX.Element)[] | JSX.Element,
+  /** What happens when we close */
+  onClose: () => void,
+}
+
 export type ProfilePicProps = {
   /** The picture to render */
   picture: PicNames,
   /** The picture size. The default is 100. */
   size?: number | string,
+  /** Additional styling to be applied to the overall container */
+  style?: CSSProperties,
   /** The background. The default is green. */
   color?: string,
   /** The amount of padding to surround the image with. Default is 15. */

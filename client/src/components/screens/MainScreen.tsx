@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text } from '..';
-import { Styles, Tabs } from '../../types'
+import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput } from '..';
+import { Styles, Tabs, PicNames } from '../../types'
 import { Game } from "../../classes";
 import { Utility, Janus } from '../../utils';
 
@@ -13,16 +13,20 @@ function MainScreen(props: {}) {
   const [showSideMenu, setShowSideMenu] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [copiedRecently, setCopiedRecently] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
   const [game, setGame] = useState<Game>();
+  const [name, setName] = useState<string>("John Smith");
+  const [selectedImage, setSelectedImage] = useState<PicNames>("Xbox 360");
 
-  function renderMenu() {
+
+  function rendeSideMenu() {
     if (!showSideMenu) return <></>;
     return (
       <div style = {styles.sideMenuContainer}>
         <div style={{width: '100%'}}>
           <div style={styles.sideMenuHeaderContainer}>
-            <ProfilePic picture={'Xbox 360'}/>
-            <Text style={styles.name} size={'14pt'}>John Smith</Text>
+            <ProfilePic picture={selectedImage}/>
+            <Text style={styles.name} size={'14pt'}>{name}</Text>
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
           </div>
           <MenuTab name={'Home'} icon={'home'} onClick={() => {setSelectedTab('home'); lastSelectedTab = 'home';}} selected={selectedTab === 'home'}/>
@@ -45,14 +49,14 @@ function MainScreen(props: {}) {
 
     return (
       <div style={styles.dropDownContainer}>
-        <ProfilePic picture={'Xbox 360'} size={60}/>
-        <Text style={styles.name} size={'14pt'}>John Smith</Text>
+        <ProfilePic picture={selectedImage} size={60}/>
+        <Text style={styles.name} size={'14pt'}>{name}</Text>
         <div style={styles.friendCodeContainer}>
           <Text size={'10pt'} style={{marginRight: 20}} color = {'gray'}>Code: 123-456-789</Text>
           <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
         </div>
         <div style={{backgroundColor: 'white', width: '100%', height: 1}}/>
-        <MenuTab name={'Settings'} fontSize={18} height={35} onClick={() => {}}/>
+        <MenuTab name={'Settings'} fontSize={18} height={35} onClick={() => {setShowPopup(true);setShowDropDown(false);}}/>
         <MenuTab name={'Sign Out'} fontSize={18} height={35} color={'red'} onClick={() => {}}/>
       </div>
     );
@@ -65,20 +69,91 @@ function MainScreen(props: {}) {
           <Icon name="hamburger" size={35} onClick={() => setShowSideMenu(!showSideMenu)} style={{marginRight: 15}}/>
           <Icon name="back" size={35} onClick={lastSelectedTab !== selectedTab ? () => setSelectedTab(lastSelectedTab) : undefined} style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}/>
         </div>
-        <ProfilePic picture={'Xbox 360'} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>
+        <ProfilePic picture={selectedImage} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>
         { renderDropDown() }
       </div>  
     );
   }
 
+
+
+
+  
+  function renderSettings() {
+
+    const images: PicNames[] = [
+      'Atari CX40',
+      'Gameboy Advance',
+      'Gameboy Micro',
+      'Gravis Joypad',
+      'MAME',
+      'Microsoft Xbox',
+      'Nintendo 64',
+      'Nintendo Family Computer Player 1 Classic',
+      'Nintendo Family Computer Player 1',
+      'Nintendo Family Computer Player 2 Classic',
+      'Nintendo Family Computer Player 2',
+      'Nintendo Gamecube',
+      'Nintendo NES',
+      'Nintendo SNES Alternate',
+      'Nintendo SNES',
+      'Nintendo Wii',
+      'SNK Neo Geo',
+      'Sega Dreamcast',
+      'Sega Genesis',
+      'Sega Mega Drive Alternate',
+      'Sega Mega Drive',
+      'Sega Saturn',
+      'Sony Playstation 2',
+      'Sony Playstation 3',
+      'Sony Playstation Blue',
+      'Sony Playstation Dual Shock',
+      'Sony Playstation Green',
+      'Sony Playstation Portable',
+      'Sony Playstation',
+      'Xbox 360'
+    ];
+
+    return (
+      <div style={styles.settingsContainer}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 15}}>
+          <ProfilePic picture={selectedImage} size={75} style={{marginRight: 20}}/>
+          <TextInput 
+            placeholder={'Enter name'} 
+            value={name} 
+            onChange={(text) => setName(text)}
+            height={40}
+            width={275}
+            fontSize={20}
+          />
+        </div>
+        <div style={styles.iconsGrid}>
+          {images.map((image, index) => (
+            <img 
+              style={{width: 40, height: 40, margin: 5, opacity: selectedImage === image ? 1 : .35}} 
+              src={require(`../../assets/icons/${image}.png`)}
+              onClick={() => setSelectedImage(image)}
+              key={image}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style = {styles.screen}>
-      { renderMenu() }
+      { rendeSideMenu() }
+      {/* Render main panel */}
       <div style = {styles.panelContainer}>
         { renderToolbar() }
         { selectedTab == 'home' && <HomePanel onGameSelect={game => {setGame(game); setSelectedTab('game');}}/>}
         { game && selectedTab == 'game' && <GamePanel game={game}/>}
       </div>
+      {/* Render popup */}
+      <Popup shown = {showPopup} onClose={() => setShowPopup(false)}>
+        { renderSettings() }
+      </Popup>
     </div>
   );
 
@@ -117,7 +192,7 @@ let styles: Styles = {
     top: 75, 
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    backgroundColor: '#202629',
+    backgroundColor: '#2b3134',
     boxShadow: '50px rgba(0, 0, 0, 1)'
   },
   friendCodeContainer: {
@@ -156,6 +231,30 @@ let styles: Styles = {
     paddingLeft: 2,
     marginTop: 10,
     marginBottom: 10,
+  },
+  settingsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    padding: 15
+  },
+  iconsGrid: {
+    gridTemplateColumns: 'repeat(auto-fill, minmax(45px, 1fr))',
+    gap: '2px',
+    display: 'grid',
+    width: '100%',
+  },
+  backdrop: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: '100%',
+    minHeight: '100%',
+    opacity: .26,
+    backgroundColor: 'red'
   }
 
 }

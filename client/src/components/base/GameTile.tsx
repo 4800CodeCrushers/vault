@@ -17,8 +17,24 @@ function GameTile(props: GameTileProps) {
   }
 
   return (
-    <div style = {{...styles.container,  borderColor: hovering ? 'white': 'gray'}} key={game.getID()} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)} onClick={() => onClick(game)}>
-      <img style={styles.image} src={game?.getCoverURL()}/>
+    <div 
+      style = {{
+        ...styles.container, 
+        transform: hovering ? 'scale(1.03)' : 'scale(1)', 
+        borderColor: hovering ? 'white': 'gray'
+      }} 
+      key={game.getID()} 
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)} 
+      onClick={() => onClick(game)}
+    >
+      <img 
+        style={{
+          zIndex: hovering ? 1 : undefined, 
+          ...styles.image
+        }} 
+        src={game?.getCoverURL()}
+      />
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
       {/* { hovering && renderOnHover()} */}
     </div>
@@ -29,7 +45,6 @@ function GameTile(props: GameTileProps) {
 let styles: Styles = {
   container: {
     borderWidth: 2,
-    borderStyle: 'solid',
     width: 200,
   },
   image: {

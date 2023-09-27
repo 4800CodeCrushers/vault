@@ -5,7 +5,7 @@ import {Icon, Text} from "../";
 
 function TextInput(props: TextInputProps) {
   // Extract values from the props
-  const { minWidth, placeholder = 'Search', width = "50%", height = 70, canEdit = true, backgroundColor = '#363636', autoFocus = false} = props;
+  const { minWidth, placeholder = 'Search', width = "50%", height = 70, canEdit = true, backgroundColor = '#363636', autoFocus = false, fontSize = 32} = props;
   // A reference to the input field
   const inputRef: any = useRef(null);
   // The text in the textbox
@@ -25,7 +25,7 @@ function TextInput(props: TextInputProps) {
       }
     }
     
-    return <input ref={inputRef} style={{...styles.text, backgroundColor}} placeholder = {placeholder} maxLength={props.maxCharacters} onChange={() => onChange()} onKeyDown={(event) => onEnter(event)} type = {props.type} value={props.value ?? undefined} readOnly = {!canEdit} autoFocus = {autoFocus}/> 
+    return <input ref={inputRef} style={{...styles.text, backgroundColor, fontSize}} placeholder = {placeholder} maxLength={props.maxCharacters} onChange={() => onChange()} onKeyDown={(event) => onEnter(event)} type = {props.type} value={props.value ?? undefined} readOnly = {!canEdit} autoFocus = {autoFocus}/> 
         
   }
   
@@ -98,10 +98,9 @@ const styles: Styles = {
     outline: "none", 
     flexGrow: 1,
     width: "100%",
-    fontSize: 32,
     color: 'white',
     borderRadius: 25,
-    margin: '0px 10px 0px 0px',
+    marginLeft: 10,
   },
   title: { 
     marginBottom: 5,
