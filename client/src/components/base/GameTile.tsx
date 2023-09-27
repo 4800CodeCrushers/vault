@@ -10,7 +10,7 @@ function GameTile(props: GameProps) {
 
   function renderOnHover() {
     return (
-      <div style={{ alignSelf: 'center', width: 200, height: 300, backgroundColor: 'gray', opacity: hovering ? .5 : 0}}>
+      <div style={{ position: 'absolute', top: 0, width: 200, height: 300, backgroundColor: 'gray', opacity: hovering ? .5 : 0}}>
 
       </div>
     );
