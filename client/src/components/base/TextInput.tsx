@@ -25,7 +25,7 @@ function TextInput(props: TextInputProps) {
       }
     }
     
-    return <input ref={inputRef} style={{...styles.text, backgroundColor, fontSize}} placeholder = {placeholder} maxLength={props.maxCharacters} onChange={() => onChange()} onKeyDown={(event) => onEnter(event)} type = {props.type} value={props.value ?? undefined} readOnly = {!canEdit} autoFocus = {autoFocus}/> 
+    return <input ref={inputRef} style={{...styles.text, backgroundColor, fontSize}} placeholder = {placeholder} maxLength={props.maxCharacters} onChange={() => onChange()} onKeyDown={(event) => onEnter(event)} type = {props.type} value={props.value ?? ""} readOnly = {!canEdit} autoFocus = {autoFocus}/> 
         
   }
   

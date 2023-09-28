@@ -6,14 +6,13 @@ import { Utility } from '../../utils';
 
 function Popup(props: PopupProps) {
   // Extract values from the props
-  const { game, shown, children, onClose} = props;
-
-  if (!shown) return <></>;
+  const { game, children, onClose} = props;
 
   return (
-    <div>
+    <div style={{zIndex: 10}}>
       <div style = {styles.popupContainer}>
         {children}
+        <Icon name={'close'} style={styles.close} onClick={onClose}/>
       </div>
       <div style={styles.backdrop} onClick={onClose}/>
     </div>
@@ -51,6 +50,12 @@ let styles: Styles = {
     minHeight: '100%',
     opacity: .26,
     backgroundColor: 'black'
+  },
+  close: {
+    position: 'absolute',
+    top: 10,
+    right: 20,
+    zIndex: 3,
   }
 }
 

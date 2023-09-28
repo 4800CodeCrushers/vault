@@ -17,7 +17,7 @@ function MenuTab(props: MenuTabProps) {
     height,
     width: '100%',
     alignItems: 'center',
-    backgroundColor: hovering ? Utility.getTint('#0e0e0e', 15) : undefined,
+    backgroundColor: hovering ? Utility.getTint('#0e0e0e', 25) : undefined,
     paddingLeft: 30,
     overflow: 'hidden',
 

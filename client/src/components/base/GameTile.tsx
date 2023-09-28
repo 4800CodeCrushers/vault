@@ -8,35 +8,27 @@ function GameTile(props: GameTileProps) {
   const { game, onClick } = props;
   const [hovering, setHovering] = useState<boolean>(false);
 
-  function renderOnHover() {
-    return (
-      <div style={{ position: 'absolute', top: 0, width: 200, height: 300, backgroundColor: 'gray', opacity: hovering ? .5 : 0}}>
-
-      </div>
-    );
-  }
-
   return (
     <div 
       style = {{
         ...styles.container, 
         transform: hovering ? 'scale(1.03)' : 'scale(1)', 
-        borderColor: hovering ? 'white': 'gray'
+        borderColor: hovering ? 'white': 'gray',
+        zIndex: hovering ? 3 : 1,
       }} 
-      key={game.getID()} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
       onClick={() => onClick(game)}
     >
-      <img 
-        style={{
-          zIndex: hovering ? 1 : undefined, 
-          ...styles.image
-        }} 
-        src={game?.getCoverURL()}
-      />
+      {/* Cover Art */}
+      <img style={{ zIndex: -1, opacity: hovering ? .3 : 1, ...styles.image}} src={game?.getCoverURL()}/>
+      {/* Buttons on hover */}
+      <div style={styles.buttonContainer}>
+        {hovering && <Icon size={60} name={'close-circle'} color={'red'} style={{marginRight: 20}}/>}
+        {hovering && <Icon size={55} name={'check'} color={'green'}/>}
+      </div>
+      {/* Title text */}
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
-      {/* { hovering && renderOnHover()} */}
     </div>
   );
 }
@@ -44,15 +36,16 @@ function GameTile(props: GameTileProps) {
 
 let styles: Styles = {
   container: {
-    borderWidth: 2,
     width: 200,
+    margin: 10
   },
   image: {
     width: '100%',
-    height: 300,
-    display: 'block',
+    height: 250,
     pointerEvents: 'none',
-    userSelect: 'none'
+    position: 'absolute',
+    alignSelf: 'center',
+    userSelect: 'none',
   },
   title: {
     textAlign: 'center', 
@@ -62,7 +55,15 @@ let styles: Styles = {
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden', 
     paddingRight: 2, 
-    paddingLeft: 2
+    paddingLeft: 2,
+  },
+  buttonContainer: {
+    width: '100%', 
+    height: 250,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }
 

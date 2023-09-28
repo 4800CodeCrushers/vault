@@ -98,8 +98,6 @@ export type GameTileProps = {
 export type PopupProps = {
   /** The game to render */
   game?: Game,
-  /** Is the popup visible? */
-  shown: boolean,
   /** The body of the popup. */
   children?: string | null | (string | JSX.Element)[] | JSX.Element,
   /** What happens when we close */

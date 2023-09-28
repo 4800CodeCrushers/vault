@@ -3,13 +3,15 @@ import { Text, TextInput, GameTile } from '..';
 import { HomePanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game } from '../../classes';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 
 
 function HomePanel(props: HomePanelProps) {
   const { onGameSelect } = props;
 
-  const [query, setQuery] = useState<string>(State.query);
+  const [query, setQuery] = useState<string | undefined>(State.query);
+  const [listRef, animationEnabled] = useAutoAnimate();
   const [searchedOnce, setSearchedOnce] = useState<boolean>(State.loadedGames.length > 0);
   const [games, setGames] = useState<Game[]>(State.loadedGames);
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,6 +19,7 @@ function HomePanel(props: HomePanelProps) {
   async function getGames() {
     if (!query) return;
     setLoading(true);
+    animationEnabled(true);
     let response = await Janus.SEARCH_GAMES(query);
 
     if (response.success) {
@@ -33,9 +36,12 @@ function HomePanel(props: HomePanelProps) {
   function reset() {
     setSearchedOnce(false);
     setGames([]);
-    setQuery("");
-    State.query = "";
+    setQuery(undefined);
+    State.query = undefined;
+    animationEnabled(false);
   }
+
+  
 
   return (
     <div style = {{...styles.panel, justifyContent: !searchedOnce ? 'center' : undefined}}>
@@ -47,8 +53,8 @@ function HomePanel(props: HomePanelProps) {
         <button style={{...styles.button, opacity: !query || loading ? .5 : 1}} onClick={() => getGames()}>Let's GO!</button>
       </div>
       {/* Result Grid */}
-      <div style = {styles.grid}>
-        {games?.map(game => <GameTile game={game} onClick={() => onGameSelect(game)}/>)}
+      <div style = {styles.grid} ref = {listRef}>
+        {games?.map(game => <GameTile key={game.getID()} game={game} onClick={() => onGameSelect(game)}/>)}
       </div>
       { searchedOnce && games.length == 0 && <Text style={{textAlign: 'center'}}>No Games Found!</Text>}
     </div>
@@ -89,7 +95,6 @@ let styles: Styles = {
     margin: 30,
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-    gap: '2px',
     width: '80%',
     alignSelf: 'center',
   },

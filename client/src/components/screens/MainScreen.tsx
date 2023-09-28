@@ -3,12 +3,14 @@ import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput
 import { Styles, Tabs, PicNames } from '../../types'
 import { Game } from "../../classes";
 import { Utility, Janus } from '../../utils';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 // troublesome IDs - 15471, 15472, 1945
 
 let lastSelectedTab: "home" | "collection" | "friends" = 'home';
 function MainScreen(props: {}) {
-
+  
+  const [listRef] = useAutoAnimate();
   const [selectedTab, setSelectedTab] = useState<Tabs>('home');
   const [showSideMenu, setShowSideMenu] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -65,7 +67,7 @@ function MainScreen(props: {}) {
   function renderToolbar() {
     return (
       <div style={styles.toolbarContainer}>
-        <div style={styles.toolbarContainer}>
+        <div>
           <Icon name="hamburger" size={35} onClick={() => setShowSideMenu(!showSideMenu)} style={{marginRight: 15}}/>
           <Icon name="back" size={35} onClick={lastSelectedTab !== selectedTab ? () => setSelectedTab(lastSelectedTab) : undefined} style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}/>
         </div>
@@ -75,10 +77,6 @@ function MainScreen(props: {}) {
     );
   }
 
-
-
-
-  
   function renderSettings() {
 
     const images: PicNames[] = [
@@ -127,13 +125,13 @@ function MainScreen(props: {}) {
             fontSize={20}
           />
         </div>
-        <div style={styles.iconsGrid}>
+        <div style={styles.iconsGrid} ref = {listRef}>
           {images.map((image, index) => (
             <img 
               style={{width: 40, height: 40, margin: 5, opacity: selectedImage === image ? 1 : .35}} 
               src={require(`../../assets/icons/${image}.png`)}
               onClick={() => setSelectedImage(image)}
-              key={image}
+              key={index}
             />
           ))}
         </div>
@@ -151,9 +149,7 @@ function MainScreen(props: {}) {
         { game && selectedTab == 'game' && <GamePanel game={game}/>}
       </div>
       {/* Render popup */}
-      <Popup shown = {showPopup} onClose={() => setShowPopup(false)}>
-        { renderSettings() }
-      </Popup>
+      {showPopup && <Popup onClose={() => setShowPopup(false)}>{renderSettings()}</Popup>}
     </div>
   );
 
@@ -180,6 +176,7 @@ let styles: Styles = {
     flexDirection: 'column',
     alignItems: 'center',
     padding: 5,
+    marginTop: 10
   },
   dropDownContainer: {
     display: 'flex',
@@ -216,8 +213,9 @@ let styles: Styles = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
-
+    alignItems: 'center',
+    zIndex: 4,
+    marginBottom: 20
   },
   name: {
     textAlign: 'center', 
