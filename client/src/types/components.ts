@@ -46,6 +46,8 @@ export type TextInputProps = {
   onChange?: (text: string) => void,
     /** Title of the text input field */
   title?: string,
+  /** default value of the text input field */
+  defaultValue?: string,
   /** Color of the text input field */
   backgroundColor?: string,
   /** The text of the text input field */
@@ -106,7 +108,7 @@ export type PopupProps = {
 
 export type ProfilePicProps = {
   /** The picture to render */
-  picture: PicNames,
+  picture?: PicNames,
   /** The picture size. The default is 100. */
   size?: number | string,
   /** Additional styling to be applied to the overall container */
@@ -129,9 +131,22 @@ export type GamePanelProps = {
   game: Game,
 }
 
+export type LandingScreenProps = {
+  /** The function to run when the user wants to try the app */
+  onTryit: () => void,
+  /** The function to run when the user logs in */
+  onLogin: () => void,
+}
+
+export type MainScreenProps = {
+  /** The function to run when the user logs out */
+  onLogout: () => void,
+  /** The function to run when the user wants to create an account */
+  onAccountCreate: () => void,
+}
 
 
-export type Screens = "main" | "login" | "create";
+export type Screens = "main" | "landing" | 'loading';
 export type Tabs = "home" | "collection" | "friends" | 'game';
 
 export type IconName = 

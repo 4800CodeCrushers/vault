@@ -1,6 +1,7 @@
 export { default as GamePanel } from './screens/GamePanel';
 export { default as HomePanel } from './screens/HomePanel';
 export { default as MainScreen } from './screens/MainScreen';
+export { default as LandingScreen } from './screens/LandingScreen';
 
 export { default as Text } from './base/Text';
 export { default as Popup } from './base/Popup';

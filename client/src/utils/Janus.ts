@@ -1,33 +1,71 @@
-import { GameInfo, APIResponse, ContactAPIProps } from "../types";
+import { GameInfo, APIResponse, ContactAPIProps, UserInfo, PicNames } from "../types";
 
 export default class Janus {
 
   static BASE_URL = "http://127.0.0.1:17777/api/";
 
-  static async LOGIN(id: number) {
-    return this.contactAPI<GameInfo>({
-      url: `auth/${id}`,
-      method: "GET",
-      authorizationRequired: false
+  static async LOGIN(email: string, password: string) {
+    return this.contactAPI<UserInfo>({
+      url: `auth/login`,
+      method: "POST",
+      authorizationRequired: false,
+      body: {email: email, password: password},
+      loggingIn: true
     });
   }
+
+  static async LOGOUT() {
+    // Remove the session key from local secured storage
+    window.localStorage.removeItem('key');
+    // contacy the server
+    return await this.contactAPI<{}>({
+      method: "POST",
+      url: `auth/logout`,
+    });
+  }
+
+  static async CREATE_ACCOUNT(email: string, password: string, name: string) {
+    return this.contactAPI<GameInfo>({
+      url: `auth/login`,
+      method: "POST",
+      authorizationRequired: false,
+      body: {email: email, password: password}
+    });
+  }
+
+  /** Get the user's info from the server */
+  static async GET_ME() {
+    return this.contactAPI<UserInfo>({
+      method: "GET",
+      url: `users/me`,
+    });
+  }
+
+  /** Send the user's updated info to the server */
+  static async PATCH_ME(data: {picture: PicNames, name: string}) {
+    return this.contactAPI<{}>({
+      method: "PATCH",
+      url: `users/me`,
+      body: data,
+    });
+  }
+
 
   static async GET_GAME(id: number) {
     return this.contactAPI<GameInfo>({
       url: `vg/`,
-      method: "POST",
+      method: "GET",
       authorizationRequired: false,
       body: {id: id }
     });
   }
 
   static async SEARCH_GAMES(query: string, offset: number = 0) {
+    let urlParams = `query=${query}` + `&offset=${offset}`;
     return this.contactAPI<GameInfo[]>({
-      url: `vg/search`,
-      method: "POST",
-      authorizationRequired: false,
-      body: {query: query, offset: offset},
-      print: true
+      url: `vg/search?` + urlParams,
+      method: "GET",
+      authorizationRequired: false
     });
   }
 

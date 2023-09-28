@@ -14,9 +14,12 @@ export {
     HomePanelProps,
     GamePanelProps,
     PicNames,
-    HomePanelProps
+    HomePanelProps,
+    LandingScreenProps,
+    MainScreenProps
 } from './components';
 
 export {
     GameInfo,
+    UserInfo
 } from './classes';

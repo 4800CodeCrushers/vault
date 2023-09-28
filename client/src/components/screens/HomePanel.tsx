@@ -2,7 +2,7 @@ import { CSSProperties, useState, useRef } from 'react';
 import { Text, TextInput, GameTile } from '..';
 import { HomePanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
-import { Game } from '../../classes';
+import { Game, User } from '../../classes';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 
@@ -46,7 +46,7 @@ function HomePanel(props: HomePanelProps) {
   return (
     <div style = {{...styles.panel, justifyContent: !searchedOnce ? 'center' : undefined}}>
       {/* Render Greeting */}
-      {!searchedOnce && <Text style={styles.greeting}>{Utility.getGreeting() + ", John Smith!"}</Text>}
+      {!searchedOnce && User.me && <Text style={styles.greeting}>{Utility.getGreeting() + ", " + User.me?.getName()}</Text>}
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <TextInput value={query} placeholder="Search for a game" leftIcon={'search'} rightIcon={query ? 'close' : undefined} onRightIconClick={() => reset()} onChange={(text) => {setQuery(text); State.query = text;}} onSubmit={() => getGames()}/>
@@ -71,7 +71,7 @@ let styles: Styles = {
   },
   greeting: {
     textAlign: 'center',
-    fontSize: 48,
+    fontSize: 42,
     fontWeight: 'bold',
     marginBottom: 60,
   },
@@ -85,7 +85,7 @@ let styles: Styles = {
     border: 'none',
     backgroundColor: '#29916e',
     color: 'white',
-    width: '120px',
+    width: 120,
     height: 55,
     borderRadius: 25,
     fontSize: "16pt",

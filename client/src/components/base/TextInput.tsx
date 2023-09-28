@@ -8,14 +8,13 @@ function TextInput(props: TextInputProps) {
   const { minWidth, placeholder = 'Search', width = "50%", height = 70, canEdit = true, backgroundColor = '#363636', autoFocus = false, fontSize = 32} = props;
   // A reference to the input field
   const inputRef: any = useRef(null);
-  // The text in the textbox
-  const [text, setText] = useState<string>('');
+  // Is the textbox focused
+  const [focused, setFocused] = useState<boolean>(false);
 
   /** Render the text input */
   function renderTextInput() {
     /** Function to call when the text changes */ 
     function onChange() {
-      setText(inputRef.current.value);
       if(props.onChange) props.onChange(inputRef.current.value);
     }
     /** Function to call when the user presses the Enter key */
@@ -25,10 +24,23 @@ function TextInput(props: TextInputProps) {
       }
     }
     
-    return <input ref={inputRef} style={{...styles.text, backgroundColor, fontSize}} placeholder = {placeholder} maxLength={props.maxCharacters} onChange={() => onChange()} onKeyDown={(event) => onEnter(event)} type = {props.type} value={props.value ?? ""} readOnly = {!canEdit} autoFocus = {autoFocus}/> 
+    return <input 
+      ref={inputRef} 
+      style={{...styles.text, backgroundColor, fontSize}} 
+      placeholder = {placeholder} 
+      maxLength={props.maxCharacters} 
+      onChange={() => onChange()} 
+      onKeyDown={(event) => onEnter(event)} 
+      type = {props.type} 
+      defaultValue={props.defaultValue}
+      // value={props.value ?? ""} 
+      readOnly = {!canEdit} 
+      autoFocus = {autoFocus}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+    /> 
         
   }
-  
   /** Render the left icon */  
   function renderLeftIcon() {
     if (!props.leftIcon) return <></>;
@@ -53,7 +65,7 @@ function TextInput(props: TextInputProps) {
       {/* The title of the text input */}
       {props.title && <Text size={'12pt'} style={styles.title}>{props.title}</Text>}
       {/* The text input and icons */}
-      <div style = {{...styles.textInputContainer, backgroundColor }}>
+      <div style = {{...styles.textInputContainer, backgroundColor,  borderWidth: focused ? 2 : 1 }}>
         {renderLeftIcon()}
         {renderTextInput()}
         {renderRightIcon()}
@@ -77,13 +89,11 @@ const styles: Styles = {
     alignItems: "center",
     paddingLeft: 5,
     paddingRight: 5,
-    borderWidth: 3,
     borderColor: 'white',
     borderStyle: 'solid',
   },
   leftIconContainer: {
     height: "100%",
-    marginRight: 2,
     display:'flex',
     alignItems:'center',
   },
@@ -100,7 +110,7 @@ const styles: Styles = {
     width: "100%",
     color: 'white',
     borderRadius: 25,
-    marginLeft: 10,
+    padding: 5,
   },
   title: { 
     marginBottom: 5,

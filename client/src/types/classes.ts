@@ -1,3 +1,5 @@
+import { PicNames } from "."
+
 export type GameInfo = {
     /** The id of the game */
     id: number,
@@ -37,4 +39,19 @@ export type GameInfo = {
     platforms: {
         name: string
     }[]
+}
+
+export type UserInfo = {
+    /** The id of the user */
+    id: number,
+    /** The name of the user */
+    name: string,
+    /** The user's picture */
+    picture?: PicNames,
+    /** The user's friend code */
+    code: string,
+    /** The user's color */
+    color?: string,
+    /** when did the user join */
+    joined: number,
 }

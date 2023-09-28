@@ -1,19 +1,48 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { MainScreen } from "./components";
+import { MainScreen, LandingScreen } from "./components";
 import { Screens, Styles } from "./types";
-import { Janus, Utility } from "./utils";
+import { Janus, State, Utility } from "./utils";
+import { User } from "./classes";
 
 function App() {
+  // Get the session key from local storage
+  let key = window.localStorage.getItem('key'); 
+  // Set the start screen based on if the key exists
+  const [screen, setScreen] = useState<Screens>(key ? "loading" : "landing");
 
-  let key = window.localStorage.getItem('key'); // Get the session key from local storage
-  const [screen, setScreen] = useState<Screens>(key ? "main" : "main"); // Set the start screen based on if the key exists
-  
+  useEffect(() => {
+     // Get the user while the loading screen is shown
+    if (screen === "loading") getMe();
+  }, []);
+
+  // Get the user from the server
+  async function getMe() {
+    // Get data from the server
+    let response = await Janus.GET_ME();
+    if (response.success) {
+      User.me = new User(response.data);
+    }
+    else {
+      // Remove the session key from local secured storage
+      window.localStorage.removeItem('key');
+    }
+    // Delay transition from loading screen to see its beauty 
+    setTimeout(() => {
+      setScreen(response.success ? 'main' : 'landing');
+    }, 500);
+  }
+  // Log the user out 
+  async function logout() {
+    await Janus.LOGOUT();
+    setScreen("landing");
+  }
+
   return (
     <div style = {styles.screen}>
-      { screen === "main" && <MainScreen/>}
+      { screen === "main" && <MainScreen onAccountCreate={() => {State.creatingAccount = true; setScreen('landing');}} onLogout={() => logout()}/>}
+      { screen === "landing" && <LandingScreen onTryit={() => setScreen('main')} onLogin={() => setScreen('main')}/>}
     </div>
   );
-
 }
 
 let styles: Styles = {

@@ -1,4 +1,4 @@
-import { GameInfo } from "../types/classes";
+import { GameInfo } from "../types";
 import { Utility } from "../utils";
 
 export default class Game {

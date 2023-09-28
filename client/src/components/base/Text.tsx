@@ -8,9 +8,9 @@ function Text(props: TextProps) {
   let defaultStyle: CSSProperties = {
     color,
     fontSize: size ?? `calc(12pt + .2vmin)`,
-    userSelect: "none",
-    pointerEvents: 'none'
-    
+    userSelect: !onClick ? "none" : undefined,
+    pointerEvents:  !onClick ? 'none' : undefined,
+    cursor: !onClick ? undefined : 'pointer'
   };
 
   return (

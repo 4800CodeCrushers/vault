@@ -7,7 +7,7 @@ import { updateInterfaceDeclaration } from 'typescript';
 
 function ProfilePic(props: ProfilePicProps) {
   // Extract values from the props
-  const { picture, size = 80, color = '#29916e', padding = 15, onClick, style} = props;
+  const { picture = 'Xbox 360', size = 80, color = '#29916e', padding = 15, onClick, style} = props;
   let width = size; let height = size; let borderRadius = "100%";
   let background = `linear-gradient(${Utility.getShade(color, 75)}, ${color})`;
   const [hovering, setHovering] = useState<boolean>();

@@ -1,25 +1,45 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput } from '..';
-import { Styles, Tabs, PicNames } from '../../types'
-import { Game } from "../../classes";
-import { Utility, Janus } from '../../utils';
+import { Styles, Tabs, PicNames, MainScreenProps } from '../../types'
+import { Game, User } from "../../classes";
+import { Utility, Janus, State } from '../../utils';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 // troublesome IDs - 15471, 15472, 1945
 
 let lastSelectedTab: "home" | "collection" | "friends" = 'home';
-function MainScreen(props: {}) {
+function MainScreen(props: MainScreenProps) {
   
   const [listRef] = useAutoAnimate();
   const [selectedTab, setSelectedTab] = useState<Tabs>('home');
   const [showSideMenu, setShowSideMenu] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
   const [copiedRecently, setCopiedRecently] = useState<boolean>(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [game, setGame] = useState<Game>();
-  const [name, setName] = useState<string>("John Smith");
-  const [selectedImage, setSelectedImage] = useState<PicNames>("Xbox 360");
+  const [name, setName] = useState<string | undefined>(User.me?.getName());
+  const [selectedImage, setSelectedImage] = useState<PicNames>(User.me?.getPicture() ?? 'Xbox 360');
 
+  useEffect(() => {
+    State.creatingAccount = true; 
+ }, []);
+
+
+  async function onUpdateClick() {
+    if (!name || !selectedImage) return;
+    setLoading(true);
+    let response = await Janus.PATCH_ME({name: name, picture: selectedImage});
+    if (response.success) {
+      setShowPopup(false);
+    }
+    else {
+      setError(response.message);
+      setTimeout(() => setError(undefined), 3500);
+    }
+    setLoading(false);
+  }
 
   function rendeSideMenu() {
     if (!showSideMenu) return <></>;
@@ -44,7 +64,7 @@ function MainScreen(props: {}) {
     if (!showDropDown) return <></>;
 
     function onCodeCopy() {
-      navigator.clipboard.writeText('123-456-789');
+      if (User.me?.getCode()) navigator.clipboard.writeText(User.me.getCode());
       setCopiedRecently(true);
       setTimeout(() => setCopiedRecently(false), 3500);
     }
@@ -54,12 +74,12 @@ function MainScreen(props: {}) {
         <ProfilePic picture={selectedImage} size={60}/>
         <Text style={styles.name} size={'14pt'}>{name}</Text>
         <div style={styles.friendCodeContainer}>
-          <Text size={'10pt'} style={{marginRight: 20}} color = {'gray'}>Code: 123-456-789</Text>
+          <Text size={'10pt'} style={{marginRight: 20}} color = {'gray'}>{`Code: ${User.me?.getCode()}`}</Text>
           <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
         </div>
         <div style={{backgroundColor: 'white', width: '100%', height: 1}}/>
         <MenuTab name={'Settings'} fontSize={18} height={35} onClick={() => {setShowPopup(true);setShowDropDown(false);}}/>
-        <MenuTab name={'Sign Out'} fontSize={18} height={35} color={'red'} onClick={() => {}}/>
+        <MenuTab name={'Sign Out'} fontSize={18} height={35} color={'red'} onClick={() => props.onLogout()}/>
       </div>
     );
   }
@@ -71,7 +91,8 @@ function MainScreen(props: {}) {
           <Icon name="hamburger" size={35} onClick={() => setShowSideMenu(!showSideMenu)} style={{marginRight: 15}}/>
           <Icon name="back" size={35} onClick={lastSelectedTab !== selectedTab ? () => setSelectedTab(lastSelectedTab) : undefined} style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}/>
         </div>
-        <ProfilePic picture={selectedImage} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>
+        {User.me && <ProfilePic picture={selectedImage} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>}
+        {!User.me && <button style={styles.createAccountButton} onClick={() => props.onAccountCreate()}>Create Account</button>}
         { renderDropDown() }
       </div>  
     );
@@ -119,7 +140,8 @@ function MainScreen(props: {}) {
           <TextInput 
             placeholder={'Enter name'} 
             value={name} 
-            onChange={(text) => setName(text)}
+            onChange={(text) => {setName(text); User.me?.setName(text)}}
+            defaultValue={User.me?.getName()}
             height={40}
             width={275}
             fontSize={20}
@@ -130,11 +152,14 @@ function MainScreen(props: {}) {
             <img 
               style={{width: 40, height: 40, margin: 5, opacity: selectedImage === image ? 1 : .35}} 
               src={require(`../../assets/icons/${image}.png`)}
-              onClick={() => setSelectedImage(image)}
+              onClick={() => {setSelectedImage(image); User.me?.setPicture(image);}}
               key={index}
             />
           ))}
         </div>
+        <button style={{...styles.updateButton, opacity: loading ? .5 : 1}} onClick={() => onUpdateClick()}>Update</button>
+        {/* Status Text */}
+        {error && <Text color={'red'} style={{marginTop: 25}}>{error}</Text>}
       </div>
     );
   }
@@ -253,7 +278,25 @@ let styles: Styles = {
     minHeight: '100%',
     opacity: .26,
     backgroundColor: 'red'
-  }
+  },
+  updateButton: {
+    border: 'none',
+    backgroundColor: '#29916e',
+    color: 'white',
+    width: 100,
+    height: 50,
+    borderRadius: 25,
+    fontSize: "16pt",
+    marginTop: 40
+  },
+  createAccountButton: {
+    border: 'none',
+    backgroundColor: '#29916e',
+    color: 'white',
+    borderRadius: 25,
+    padding: 10,
+    fontSize: 13,
+  },
 
 }
   

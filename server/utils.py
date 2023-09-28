@@ -82,9 +82,9 @@ def beforeRequest():
 		response.headers.add('Access-Control-Allow-Headers', "*")
 		response.headers.add('Access-Control-Allow-Methods', "*")
 		return response
-    
-	# Ensure we do not run this when logging in since we will not have a session key
-	if False and request.path != '/auth/login':
+   
+	# Ensure we do not run this when logging/finding a game in since we will not have a session key
+	if request.path != '/api/auth/login' and not request.path.startswith('/api/vg'):
 		# Get the session key from the request
 		key = request.headers.get('Authorization')
 		# Reject the user if they did not give us a session key
@@ -96,4 +96,4 @@ def beforeRequest():
 		# Attach the session key to the request, for convenience
 		request.key = key
 		# Attach the user who made the request, for convenience
-		request.user = Users.query.filter(Users.id == credentials.id).first()
+		request.user = Users.query.filter(Users.id == credentials.user_id).first()

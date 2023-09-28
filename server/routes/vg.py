@@ -30,14 +30,15 @@ def getGames():
 	return igdbRequest(params)
 	
 
-@vg.route('/search', methods=['POST'])
+@vg.route('/search', methods=['GET'])
 def searchGame():
-	# Get the query from the request
-	query = request.json['query']
-	# Reject requests without the proper field
-	if 'query' == None: return makeAPIResponse(400, 'Missing required field: query')
+	# Reject requests without the a query arg
+	if request.args.get('query'):
+		query = request.args.get('query')
+	else: 
+		return makeAPIResponse(400, 'Missing required field: query')
 	# Get the offset of the search results
-	offset = request.json['offset'] if request.json['offset'] else 0
+	offset = request.args.get('offset') if request.args.get('offset') else 0
 	# The params for our search
 	params = (
 		f'search \"{query}\";'
