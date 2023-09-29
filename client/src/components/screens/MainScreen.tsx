@@ -157,7 +157,7 @@ function MainScreen(props: MainScreenProps) {
             />
           ))}
         </div>
-        <button style={{...styles.updateButton, opacity: loading ? .5 : 1}} onClick={() => onUpdateClick()}>Update</button>
+        <button style={{...styles.updateButton, opacity: loading ? .5 : 1}} disabled = {loading} onClick={() => onUpdateClick()}>Update</button>
         {/* Status Text */}
         {error && <Text color={'red'} style={{marginTop: 25}}>{error}</Text>}
       </div>

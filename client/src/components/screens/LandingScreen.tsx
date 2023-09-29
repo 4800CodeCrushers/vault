@@ -68,7 +68,7 @@ function LandingScreen(props: LandingScreenProps) {
             onSubmit={() => onButtonPress()}
           />
         )}
-        <button onClick={() => onButtonPress()} style={{...styles.button, opacity: (!email || !password || loading) ? .65 : 1}}>{creating ? "Create" : "Login"}</button>
+        <button onClick={() => onButtonPress()} style={{...styles.button, opacity: (!email || !password || loading) ? .65 : 1}} disabled={loading}>{creating ? "Create" : "Login"}</button>
       </div>
       {/* Status Text */}
       <div style={styles.errorContainer}>

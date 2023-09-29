@@ -14,7 +14,7 @@ import { FcSettings } from "react-icons/fc";
 function Icon(props: IconProps) {
   // Extract values from the props
   const {name = "members", color = "white", size = 30, onClick, style, cursor = "pointer"} = props;
-  // The default style applied to the button
+  // The default style applied to the icon
   let defaultStyle: CSSProperties = {
       color,
       cursor: onClick ? cursor : undefined, 

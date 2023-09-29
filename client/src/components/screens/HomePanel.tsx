@@ -50,7 +50,7 @@ function HomePanel(props: HomePanelProps) {
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <TextInput value={query} placeholder="Search for a game" leftIcon={'search'} rightIcon={query ? 'close' : undefined} onRightIconClick={() => reset()} onChange={(text) => {setQuery(text); State.query = text;}} onSubmit={() => getGames()}/>
-        <button style={{...styles.button, opacity: !query || loading ? .5 : 1}} onClick={() => getGames()}>Let's GO!</button>
+        <button style={{...styles.button, opacity: !query || loading ? .5 : 1}} disabled = {loading} onClick={() => getGames()}>Let's GO!</button>
       </div>
       {/* Result Grid */}
       <div style = {styles.grid} ref = {listRef}>
