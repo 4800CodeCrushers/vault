@@ -15,6 +15,21 @@ export type TextProps = {
   onClick?: (e: any) => void,
 }
 
+export type ButtonProps = {
+  /** The color of the button. */
+  color?: string,
+  /** The name of the button. */
+  name: string,
+  /** The Is the button disabled. */
+  disabled?: boolean,
+  /** The button width. */
+  width?: number,
+  /** Additional styling to be applied to the button */
+  style?: CSSProperties,
+  /** What happens if the button is clicked? */
+  onClick?: (e: any) => void,
+}
+
 export type TextInputProps = {
   /** The width of the textbox. */
   width?: number | string,

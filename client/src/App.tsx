@@ -35,6 +35,9 @@ function App() {
   async function logout() {
     await Janus.LOGOUT();
     setScreen("landing");
+    State.loadedGames = [];
+    State.query = "";
+    State.creatingAccount = false;
   }
 
   return (

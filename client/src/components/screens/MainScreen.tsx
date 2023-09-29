@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput } from '..';
+import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput, Button } from '..';
 import { Styles, Tabs, PicNames, MainScreenProps } from '../../types'
 import { Game, User } from "../../classes";
 import { Utility, Janus, State } from '../../utils';
@@ -88,11 +88,21 @@ function MainScreen(props: MainScreenProps) {
     return (
       <div style={styles.toolbarContainer}>
         <div>
-          <Icon name="hamburger" size={35} onClick={() => setShowSideMenu(!showSideMenu)} style={{marginRight: 15}}/>
-          <Icon name="back" size={35} onClick={lastSelectedTab !== selectedTab ? () => setSelectedTab(lastSelectedTab) : undefined} style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}/>
+          <Icon 
+            name="hamburger" 
+            size={35} 
+            onClick={() => setShowSideMenu(!showSideMenu)} 
+            style={{marginRight: 15}}
+          />
+          <Icon 
+            name="back" 
+            size={35} 
+            onClick={lastSelectedTab !== selectedTab ? () => setSelectedTab(lastSelectedTab) : undefined} 
+            style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}
+          />
         </div>
         {User.me && <ProfilePic picture={selectedImage} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>}
-        {!User.me && <button style={styles.createAccountButton} onClick={() => props.onAccountCreate()}>Create Account</button>}
+        {!User.me && <Button name = {'Create Account'} onClick={() => props.onAccountCreate()}/>}
         { renderDropDown() }
       </div>  
     );
@@ -157,7 +167,7 @@ function MainScreen(props: MainScreenProps) {
             />
           ))}
         </div>
-        <button style={{...styles.updateButton, opacity: loading ? .5 : 1}} disabled = {loading} onClick={() => onUpdateClick()}>Update</button>
+        <Button name = {'Update'} disabled = {loading} onClick={() => onUpdateClick()}/>
         {/* Status Text */}
         {error && <Text color={'red'} style={{marginTop: 25}}>{error}</Text>}
       </div>
@@ -278,24 +288,6 @@ let styles: Styles = {
     minHeight: '100%',
     opacity: .26,
     backgroundColor: 'red'
-  },
-  updateButton: {
-    border: 'none',
-    backgroundColor: '#29916e',
-    color: 'white',
-    width: 100,
-    height: 50,
-    borderRadius: 25,
-    fontSize: "16pt",
-    marginTop: 40
-  },
-  createAccountButton: {
-    border: 'none',
-    backgroundColor: '#29916e',
-    color: 'white',
-    borderRadius: 25,
-    padding: 10,
-    fontSize: 13,
   },
 
 }

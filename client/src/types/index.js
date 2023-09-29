@@ -9,6 +9,7 @@ export {
     IconName,
     TextProps,
     TextInputProps,
+    ButtonProps,
     Screens,
     Tabs,
     HomePanelProps,

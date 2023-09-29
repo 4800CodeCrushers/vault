@@ -1,8 +1,8 @@
-import { CSSProperties, useEffect, useRef, useState } from "react";
-import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput } from '..';
+import { useState } from "react";
+import { Text, Button, TextInput } from '..';
 import { Styles, LandingScreenProps } from '../../types'
 import { User } from "../../classes";
-import { Utility, Janus, State } from '../../utils';
+import { Janus, State } from '../../utils';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 let createFields: string[] = ['name', 'email', 'password', 'confirm password'];
@@ -68,7 +68,7 @@ function LandingScreen(props: LandingScreenProps) {
             onSubmit={() => onButtonPress()}
           />
         )}
-        <button onClick={() => onButtonPress()} style={{...styles.button, opacity: (!email || !password || loading) ? .65 : 1}} disabled={loading}>{creating ? "Create" : "Login"}</button>
+        <Button name = {creating ? "Create" : "Login"} width = {200} onClick={() => onButtonPress()} disabled={!email || !password || loading}/>
       </div>
       {/* Status Text */}
       <div style={styles.errorContainer}>
@@ -106,15 +106,6 @@ let styles: Styles = {
     width: '100%', 
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  button: {
-    border: 'none',
-    backgroundColor: '#29916e',
-    color: 'white',
-    padding: 10,
-    borderRadius: 25,
-    fontSize: "16pt",
-    width: 200,
   },
   inputsContainer: {
     display: 'flex', 

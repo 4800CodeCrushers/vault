@@ -4,6 +4,7 @@ export { default as MainScreen } from './screens/MainScreen';
 export { default as LandingScreen } from './screens/LandingScreen';
 
 export { default as Text } from './base/Text';
+export { default as Button } from './base/Button';
 export { default as Popup } from './base/Popup';
 export { default as ProfilePic } from './base/ProfilePic';
 export { default as TextInput } from './base/TextInput';

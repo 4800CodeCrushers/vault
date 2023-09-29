@@ -1,5 +1,5 @@
 import { CSSProperties, useState, useRef } from 'react';
-import { Text, TextInput, GameTile } from '..';
+import { Text, TextInput, GameTile, Button } from '..';
 import { HomePanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
@@ -49,8 +49,16 @@ function HomePanel(props: HomePanelProps) {
       {!searchedOnce && User.me && <Text style={styles.greeting}>{Utility.getGreeting() + ", " + User.me?.getName()}</Text>}
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
-        <TextInput value={query} placeholder="Search for a game" leftIcon={'search'} rightIcon={query ? 'close' : undefined} onRightIconClick={() => reset()} onChange={(text) => {setQuery(text); State.query = text;}} onSubmit={() => getGames()}/>
-        <button style={{...styles.button, opacity: !query || loading ? .5 : 1}} disabled = {loading} onClick={() => getGames()}>Let's GO!</button>
+        <TextInput 
+          value={query} 
+          placeholder="Search for a game" 
+          leftIcon={'search'} 
+          rightIcon={query ? 'close' : undefined} 
+          onRightIconClick={() => reset()} 
+          onChange={(text) => {setQuery(text); State.query = text;}} 
+          onSubmit={() => getGames()}
+        />
+        <Button name = {"Let's GO!"} disabled = {!query || loading} style={{marginLeft: 15}} onClick={() => getGames()}/>
       </div>
       {/* Result Grid */}
       <div style = {styles.grid} ref = {listRef}>
@@ -80,16 +88,6 @@ let styles: Styles = {
     flexDirection: 'row',
     justifyContent: 'center', 
     alignItems: 'center',
-  },
-  button: {
-    border: 'none',
-    backgroundColor: '#29916e',
-    color: 'white',
-    width: 120,
-    height: 55,
-    borderRadius: 25,
-    fontSize: "16pt",
-    marginLeft: 15
   },
   grid: {
     margin: 30,
