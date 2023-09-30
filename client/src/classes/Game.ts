@@ -50,5 +50,13 @@ export default class Game {
         });
         return res;
     }
+    /** Get if the game is in the collection */
+    getCollected() { return this.info.collected }
+    /** Set if the game is in the collection */
+    setCollected(b: boolean) { this.info.collected = b }
+     /** Get if the game is in the wishlist */
+    getWished() { return this.info.wished }
+    /** Set if the game is in the wishlist */
+    setWished(b: boolean) { this.info.wished = b }
 
 }

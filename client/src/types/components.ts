@@ -175,7 +175,11 @@ export type IconName =
   | 'catelog' 
   | 'hamburger' 
   | 'back' 
+  | 'wishlist' 
+  | 'wishlist-fill' 
   | 'check' 
+  | 'plus' 
+  | 'minus' 
   | 'copy';
 
 

@@ -58,7 +58,7 @@ function HomePanel(props: HomePanelProps) {
           onChange={(text) => {setQuery(text); State.query = text;}} 
           onSubmit={() => getGames()}
         />
-        <Button name = {"Let's GO!"} disabled = {!query || loading} style={{marginLeft: 15}} onClick={() => getGames()}/>
+        <Button name = {"GO"} disabled = {!query || loading} width={100} style={{marginLeft: 15}} onClick={() => getGames()}/>
       </div>
       {/* Result Grid */}
       <div style = {styles.grid} ref = {listRef}>

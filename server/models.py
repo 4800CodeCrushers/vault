@@ -28,3 +28,16 @@ class Users(db.Model):
 	def serialize(self):
 		return {c: getattr(self, c) for c in inspect(self).attrs.keys()}
 	
+class Collections(db.Model):
+	"""
+	Holds a collection record.
+	"""
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, nullable=False)
+	game_id = db.Column(db.Integer, nullable=False)
+	wished = db.Column(db.Boolean, nullable=False)
+	collected = db.Column(db.Boolean, nullable=False)
+
+	def serialize(self):
+		return {c: getattr(self, c) for c in inspect(self).attrs.keys()}
+	

@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput, Button } from '..';
+import { ProfilePic, HomePanel, GamePanel, Icon, MenuTab, Text, Popup, TextInput, Button, CollectionPanel } from '..';
 import { Styles, Tabs, PicNames, MainScreenProps } from '../../types'
 import { Game, User } from "../../classes";
 import { Utility, Janus, State } from '../../utils';
@@ -52,8 +52,8 @@ function MainScreen(props: MainScreenProps) {
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
           </div>
           <MenuTab name={'Home'} icon={'home'} onClick={() => {setSelectedTab('home'); lastSelectedTab = 'home';}} selected={selectedTab === 'home'}/>
-          <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab('collection'); lastSelectedTab = 'collection';}} selected={selectedTab === 'collection'}/>
-          <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab('friends'); lastSelectedTab = 'friends';}} selected={selectedTab === 'friends'}/>
+          {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab('collection'); lastSelectedTab = 'collection';}} selected={selectedTab === 'collection'}/>}
+          {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab('friends'); lastSelectedTab = 'friends';}} selected={selectedTab === 'friends'}/>}
         </div>
         <div style={{backgroundColor: 'white', width: 1, height: '100%'}}/>
       </div>
@@ -181,6 +181,7 @@ function MainScreen(props: MainScreenProps) {
       <div style = {styles.panelContainer}>
         { renderToolbar() }
         { selectedTab == 'home' && <HomePanel onGameSelect={game => {setGame(game); setSelectedTab('game');}}/>}
+        { selectedTab == 'collection' && <CollectionPanel onGameSelect={game => {setGame(game); setSelectedTab('game');}}/>}
         { game && selectedTab == 'game' && <GamePanel game={game}/>}
       </div>
       {/* Render popup */}

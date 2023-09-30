@@ -5,10 +5,10 @@ import { MdGroups2, MdSearch } from "react-icons/md";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { AiOutlineClose, AiOutlineCloseCircle, AiFillHome, AiFillCopy } from "react-icons/ai";
 import { BiSolidCategoryAlt } from "react-icons/bi";
-import { BsFillCheckCircleFill } from "react-icons/bs";
+import { BsFillCheckCircleFill, BsBookmarkStar, BsFillBookmarkStarFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiArrowLeft } from "react-icons/hi";
-import { FcSettings } from "react-icons/fc";
+import { ImPlus, ImMinus } from "react-icons/im";
 
 
 function Icon(props: IconProps) {
@@ -45,6 +45,10 @@ function getIcon (name: IconName) {
     case 'back': return <HiArrowLeft/>;
     case 'copy': return <AiFillCopy/>;
     case 'check': return <BsFillCheckCircleFill/>;
+    case 'wishlist': return <BsBookmarkStar/>;
+    case 'wishlist-fill': return <BsFillBookmarkStarFill/>;
+    case 'plus': return <ImPlus/>;
+    case 'minus': return <ImMinus/>;
   }
 }
 

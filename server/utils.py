@@ -1,5 +1,5 @@
 from flask import make_response, request
-from models import Credentials, Users
+from models import Credentials, Users, Collections
 from extensions import db
 import requests, time, json
 
@@ -27,11 +27,19 @@ def igdbRequest(params):
 	)
 	# Get the games list from the response
 	found_games = response.json()
-	print(json.dumps( found_games, indent=2))
+	# print(json.dumps( found_games, indent=2))
+
+	# See if the game is in the user's collection
+	# This method hurts my soul I hope there is a better way to do this
+	if request.user:
+		for game in found_games:
+			item = Collections.query.filter(Collections.user_id == request.user.id, Collections.game_id == game['id']).first()
+			if item:
+				game['wished'] = item.wished 
+				game['collected'] = item.collected
+
 
 	# Flatten the result, and store it in the database
-
-
 
 	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
 	if response.status_code == 429:
@@ -84,15 +92,15 @@ def beforeRequest():
 		return response
    
 	# Ensure we do not run this when logging/finding a game in since we will not have a session key
-	if request.path != '/api/auth/login' and not request.path.startswith('/api/vg'):
+	if request.path != '/api/auth/login':
 		# Get the session key from the request
 		key = request.headers.get('Authorization')
 		# Reject the user if they did not give us a session key
-		if not key: return makeAPIResponse(401, 'Unauthorized')
+		if not key and request.path != '/api/vg/search': return makeAPIResponse(401, 'Unauthorized')
 		# Check if the session key they gave us is in the DB
 		credentials = Credentials.query.filter(Credentials.key == key).first()
 		# Reject the user if the session key they gave is not in the DB
-		if not credentials: return makeAPIResponse(400, 'Invalid credentials')
+		if not credentials and request.path != '/api/vg/search': return makeAPIResponse(400, 'Invalid credentials')
 		# Attach the session key to the request, for convenience
 		request.key = key
 		# Attach the user who made the request, for convenience

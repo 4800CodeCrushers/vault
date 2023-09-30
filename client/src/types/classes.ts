@@ -1,6 +1,10 @@
 import { PicNames } from "."
 
 export type GameInfo = {
+    /** Is the game in the collection? */
+    collected: boolean,
+    /** Is the game in the wish list? */
+    wished: boolean,
     /** The id of the game */
     id: number,
     /** The name of the game */

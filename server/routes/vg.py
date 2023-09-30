@@ -9,16 +9,10 @@ def register(app, options):
 	app.register_blueprint(vg, **options)
 
 
-@vg.route('/', methods=['POST'])
-def getGames():
-	# Get the query from the request
-	id = request.json['id']
-	# Reject requests without the proper field
-	if 'id' == None: return makeAPIResponse(400, 'Missing required field: id')
-	
+@vg.route('/<int:id>', methods=['GET'])
+def getGame(id):
 	# Check to see if the game with this id is in our database
 	# If it is, return the game
-	
 	# If it is not, contact IGDB
 	# The params for our search
 	params = (

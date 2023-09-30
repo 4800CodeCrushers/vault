@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from routes import vg, auth, users, trivia
+from routes import vg, auth, trivia, user, list
 from utils import beforeRequest
 from extensions import db
 from json import load
@@ -15,7 +15,8 @@ CORS(app, supports_credentials=True, expose_headers='Authorization')
 # Register routes
 app.register_blueprint(vg)
 app.register_blueprint(auth)
-app.register_blueprint(users)
+app.register_blueprint(user)
+app.register_blueprint(list)
 app.register_blueprint(trivia)
 # Register hook before each request to check for a session key
 app.before_request(beforeRequest)

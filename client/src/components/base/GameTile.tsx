@@ -2,11 +2,26 @@ import { CSSProperties, useState, useRef } from 'react';
 import { GameTileProps } from '../../types/components'
 import { Styles } from '../../types';
 import { Icon, Text } from '..';
+import { Janus } from '../../utils';
 
 function GameTile(props: GameTileProps) {
   // Extract values from the props
   const { game, onClick } = props;
   const [hovering, setHovering] = useState<boolean>(false);
+  const [collected, setCollected] = useState<boolean>(game.getCollected());
+  const [wished, setWished] = useState<boolean>(game.getWished());
+
+  async function onWishlistClick() {
+    let response = !game.getWished() ? await Janus.ADD_TO_COLLECTION(game.getID(), true) : await Janus.REMOVE_FROM_COLLECTION(game.getID(), true);
+    game.setWished(!game.getWished());
+    setWished(game.getWished());
+  }
+
+  async function onCollectionClick() {
+    let response = !game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
+    game.setCollected(!game.getCollected());
+    setCollected(game.getCollected());
+  }
 
   return (
     <div 
@@ -21,11 +36,11 @@ function GameTile(props: GameTileProps) {
       onClick={() => onClick(game)}
     >
       {/* Cover Art */}
-      <img style={{ zIndex: -1, opacity: hovering ? .3 : 1, ...styles.image}} src={game?.getCoverURL()}/>
+      <img style={{ zIndex: -1, opacity: (hovering) ? .7 : 1, ...styles.image}} src={game?.getCoverURL()}/>
       {/* Buttons on hover */}
       <div style={styles.buttonContainer}>
-        {hovering && <Icon size={60} name={'close-circle'} color={'red'} style={{marginRight: 20}}/>}
-        {hovering && <Icon size={55} name={'check'} color={'green'}/>}
+        {hovering && <Icon size={60} name={wished ? 'wishlist-fill' : 'wishlist'} style={{marginRight: 20}} onClick={() => onWishlistClick()}/>}
+        {hovering && <Icon size={60} name={collected ? 'minus' : 'plus'} onClick={() => onCollectionClick()}/>}
       </div>
       {/* Title text */}
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
