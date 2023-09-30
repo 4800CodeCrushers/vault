@@ -23,8 +23,9 @@ function LandingScreen(props: LandingScreenProps) {
     if (creating) {
       if (!email || !password || !name) return;
       let response = await Janus.CREATE_ACCOUNT(email, password, name);
+      console.log(response.message);
       if (response.success) {
-  
+        
       }
     }
     else {

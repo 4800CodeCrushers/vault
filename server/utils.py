@@ -27,7 +27,7 @@ def igdbRequest(params):
 	)
 	# Get the games list from the response
 	found_games = response.json()
-	# print(json.dumps( found_games, indent=2))
+	print(json.dumps( found_games, indent=2))
 
 	# See if the game is in the user's collection
 	# This method hurts my soul I hope there is a better way to do this
@@ -37,7 +37,6 @@ def igdbRequest(params):
 			if item:
 				game['wished'] = item.wished 
 				game['collected'] = item.collected
-
 
 	# Flatten the result, and store it in the database
 
@@ -92,7 +91,7 @@ def beforeRequest():
 		return response
    
 	# Ensure we do not run this when logging/finding a game in since we will not have a session key
-	if request.path != '/api/auth/login':
+	if request.path != '/api/auth/login' and request.path != '/api/auth/create':
 		# Get the session key from the request
 		key = request.headers.get('Authorization')
 		# Reject the user if they did not give us a session key

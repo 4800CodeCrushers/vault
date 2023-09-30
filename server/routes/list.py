@@ -22,7 +22,7 @@ def getCollection():
 	else:
 		return makeAPIResponse(404, 'Bad input for "wished".')	
 	collection = [e.serialize() for e in collection]
-	if len(collection):
+	if len(collection) > 0:
 		# Format the game_ids as a string in the form of "(1, 2, 3, ...)"
 		the_ids = "(" + ", ".join(str(item['game_id']) for item in collection) + ")"
 		# The params for our search
@@ -35,7 +35,6 @@ def getCollection():
 		return igdbRequest(params)
 	return makeAPIResponse(200, 'You do not have any games stored.', [])	
 	
-
 @list.route('/collection', methods=['POST'])
 def addToCollection():
 	# Get the offset and id from the request
