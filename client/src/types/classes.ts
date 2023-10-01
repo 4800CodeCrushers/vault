@@ -59,3 +59,10 @@ export type UserInfo = {
     /** when did the user join */
     joined: number,
 }
+
+export type TriviaInfo = {
+    question: string,
+    type: 'multiple' | 'boolean',
+    correct_answer: string,
+    incorrect_answers: string[]
+}

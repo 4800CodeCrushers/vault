@@ -13,18 +13,21 @@ def register(app, options):
 def getCollection():
 	# Get the offset from the request
 	wished = request.args.get('wished') if request.args.get('wished') else 'false'
-	offset = request.args.get('offset') if request.args.get('offset') else 0
+	offset = int(request.args.get('offset')) if request.args.get('offset') else 0
+	print(offset, type(offset))
 	# Get the games in the user's collection and serialize the result
 	if wished == 'true':
-		collection = Collections.query.filter(Collections.user_id == request.user.id, Collections.wished == True).offset(offset).limit(100).all()
+		collection = Collections.query.filter(Collections.user_id == request.user.id, Collections.wished == True).order_by(Collections.game_id).offset(offset).limit(100).all()
 	elif wished == 'false':
-		collection = Collections.query.filter(Collections.user_id == request.user.id, Collections.collected == True).offset(offset).limit(100).all()
+		collection = Collections.query.filter(Collections.user_id == request.user.id, Collections.collected == True).order_by(Collections.game_id).offset(offset).limit(100).all()
 	else:
 		return makeAPIResponse(404, 'Bad input for "wished".')	
 	collection = [e.serialize() for e in collection]
 	if len(collection) > 0:
 		# Format the game_ids as a string in the form of "(1, 2, 3, ...)"
 		the_ids = "(" + ", ".join(str(item['game_id']) for item in collection) + ")"
+		print(the_ids);
+		print(len(collection))
 		# The params for our search
 		params = (
 			f'fields first_release_date, url, name, summary, cover.*, rating, genres.name, screenshots.image_id, platforms.name,'

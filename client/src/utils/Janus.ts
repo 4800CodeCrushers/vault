@@ -1,4 +1,4 @@
-import { GameInfo, UserInfo, PicNames } from "../types";
+import { GameInfo, UserInfo, PicNames, TriviaInfo } from "../types";
 import { Utility}  from ".";
 
 export default class Janus {
@@ -96,7 +96,19 @@ export default class Janus {
   //#endregion
 
   //#region trivia
-  
+  static async GET_TRIVIA(): Promise<TriviaInfo> {
+    let requestOptions: RequestInit = { 
+      method: 'GET', 
+      headers: { 
+        "Content-Type": "application/json", 
+      },
+      mode: 'cors'
+    };
+    // Wait for the server to respond
+    let response: Response = await fetch("https://opentdb.com/api.php?amount=1&category=15");
+    let json = await response.json();
+    return json.results[0];
+  }
   //#endregion
 
 }

@@ -132,7 +132,7 @@ export default class Utility {
           method: method, 
           headers: { 
             "Content-Type": "application/json", 
-            ...((sessionKey != null && authorizationRequired) ? {authorization: sessionKey} : {})
+            ...((sessionKey != null) ? {authorization: sessionKey} : {})
           },
           body: (body ? JSON.stringify(body) : undefined),
           mode: 'cors'

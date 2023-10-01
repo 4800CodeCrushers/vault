@@ -4,13 +4,14 @@ import { HomePanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { forEachChild } from 'typescript';
 
 
 
 function CollectionPanel(props: HomePanelProps) {
   const { onGameSelect } = props;
 
-  const [query, setQuery] = useState<string | undefined>(State.query);
+  const [filterText, setFilterText] = useState<string | null>(State.filterText);
   const [listRef, animationEnabled] = useAutoAnimate();
   const [collection, setCollection] = useState<Game[]>([]);
   const [wishlist, setWishlist] = useState<Game[]>([]);
@@ -23,26 +24,75 @@ function CollectionPanel(props: HomePanelProps) {
 
   async function getStuff() {
     setLoading(true);
-    let response = await Janus.GET_COLLECTION();
-    setCollection(response.success ? response.data.map(info => new Game(info)) : []);
+    let response = await Janus.GET_COLLECTION(false);
+    let games = response.success ? response.data.map(info => new Game(info)) : [];
+    setCollection(games);
+    setLoading(false);
+
+    while (response.data.length > 0) {
+      response = await Janus.GET_COLLECTION(false, games.length);
+      games = games.concat(response.success ? response.data.map(info => new Game(info)) : []);
+      setCollection(games);
+    }
+
     let response2 = await Janus.GET_COLLECTION(true);
     setWishlist(response2.success ? response2.data.map(info => new Game(info)) : []);
-    setLoading(false);
+    let games2 = response2.success ? response2.data.map(info => new Game(info)) : [];
+
+    while (response2.data.length > 0) {
+      response2 = await Janus.GET_COLLECTION(true, games2.length);
+      games2 = games2.concat(response2.success ? response2.data.map(info => new Game(info)) : []);
+      setWishlist(games2);
+    }
+   
   }
 
+  function getListToRender(): Game[] {
+    let games: Game[] = viewingCollection ? collection : wishlist;
+    let filteredGames: Game[] = [];
+    if (filterText) {
+      games.forEach(game => {
+        let name = game.getName().toLowerCase();
+        if (name.includes(filterText.toLowerCase())) 
+          filteredGames.push(game);
+      });
+    }
+    else {
+      filteredGames = games;
+    }
+    return filteredGames;
+  }
 
-  let games: Game[] = viewingCollection ? collection : wishlist;
+  /** Runs when the user scrolls through the games */
+  function onScroll (e: React.UIEvent<HTMLElement>) {
+    const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
+    if(bottom) {
+      console.log('here');
+    }
+  }
+
+  function removeGame(game: Game, list: Game[]): Game[] {
+    let result: Game[] = [];
+    list.forEach( g => {
+      if (g.getID() !== game.getID()) result.push(g);
+    });
+    return result;
+  }
+
+  let renderList: Game[] = getListToRender();
+  let showNoGamesText = !loading && (viewingCollection && collection.length == 0) || (!viewingCollection && wishlist.length == 0);
   return (
-    <div style = {styles.panel}>
+    <div onScroll={onScroll} style = {styles.panel}>
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <TextInput 
-          value={query} 
+          value={filterText} 
+          defaultValue={filterText}
           placeholder="Find a game in your collection" 
           leftIcon={'search'} 
-          rightIcon={query ? 'close' : undefined} 
-          onRightIconClick={() => {setQuery(undefined); State.query = undefined;}} 
-          onChange={(text) => {setQuery(text); State.query = text;}} 
+          rightIcon={filterText ? 'close' : undefined} 
+          onRightIconClick={() => {setFilterText(null); State.filterText = null;}} 
+          onChange={(text) => { setFilterText(text); State.filterText = text;}} 
         />
       </div>
       {/* Collection or Wishlist */}
@@ -50,10 +100,18 @@ function CollectionPanel(props: HomePanelProps) {
         <Text size={25} onClick={() => setViewingCollection(true)} style={{fontWeight: 'bolder', textDecorationLine: viewingCollection ? 'underline' : undefined, marginRight: 50}}>Collection</Text>
         <Text size={25} onClick={() => setViewingCollection(false)} style={{fontWeight: 'bolder', textDecorationLine: !viewingCollection ? 'underline' : undefined}}>Wishlist</Text>
       </div>
-      { !loading && games.length == 0 && <Text style={{textAlign: 'center'}}>No Games Added!</Text>}
+      { showNoGamesText && <Text style={{textAlign: 'center'}}>No Games Added!</Text>}
       {/* Result Grid */}
       <div style = {styles.grid} ref = {listRef}>
-        {games.map(game => <GameTile key={game.getID()} game={game} onClick={() => onGameSelect(game)}/>)}
+        {renderList.map(game => 
+          <GameTile 
+            key={game.getID()} 
+            game={game} 
+            onClick={() => onGameSelect(game)}
+            onCollectionClick={(g) => setCollection(removeGame(g, collection))}
+            onWishlistClick={(g) => setWishlist(removeGame(g, wishlist))}
+          />
+        )}
       </div>
     </div>
   );

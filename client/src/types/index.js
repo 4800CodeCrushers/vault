@@ -22,5 +22,6 @@ export {
 
 export {
     GameInfo,
-    UserInfo
+    UserInfo,
+    TriviaInfo
 } from './classes';

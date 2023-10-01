@@ -62,7 +62,7 @@ export type TextInputProps = {
     /** Title of the text input field */
   title?: string,
   /** default value of the text input field */
-  defaultValue?: string,
+  defaultValue?: string | null,
   /** Color of the text input field */
   backgroundColor?: string,
   /** The text of the text input field */
@@ -110,6 +110,10 @@ export type GameTileProps = {
   game: Game,
   /** What happens if the game is clicked? */
   onClick: (game: Game) => void,
+  /** What happens if the wishlist button is clicked? */
+  onWishlistClick?: (game: Game) => void,
+  /** What happens if the collection button is clicked? */
+  onCollectionClick?: (game: Game) => void,
 }
 
 export type PopupProps = {

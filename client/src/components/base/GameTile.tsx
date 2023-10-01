@@ -12,12 +12,17 @@ function GameTile(props: GameTileProps) {
   const [wished, setWished] = useState<boolean>(game.getWished());
 
   async function onWishlistClick() {
+    if (props.onWishlistClick) props.onWishlistClick(game);
+
+    
     let response = !game.getWished() ? await Janus.ADD_TO_COLLECTION(game.getID(), true) : await Janus.REMOVE_FROM_COLLECTION(game.getID(), true);
     game.setWished(!game.getWished());
     setWished(game.getWished());
   }
 
   async function onCollectionClick() {
+    if (props.onCollectionClick) props.onCollectionClick(game);
+
     let response = !game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     game.setCollected(!game.getCollected());
     setCollected(game.getCollected());
@@ -33,7 +38,7 @@ function GameTile(props: GameTileProps) {
       }} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
-      onClick={() => onClick(game)}
+      // onClick={() => onClick(game)}
     >
       {/* Cover Art */}
       <img style={{ zIndex: -1, opacity: (hovering) ? .7 : 1, ...styles.image}} src={game?.getCoverURL()}/>

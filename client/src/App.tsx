@@ -38,6 +38,7 @@ function App() {
     State.loadedGames = [];
     State.query = "";
     State.creatingAccount = false;
+    User.me = null;
   }
 
   return (
