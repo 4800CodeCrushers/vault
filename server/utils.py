@@ -32,7 +32,7 @@ def igdbRequest(params):
 	# This method hurts my soul I hope there is a better way to do this
 	if request.user:
 		for game in found_games:
-			item = Collections.query.filter(Collections.user_id == request.user.id, Collections.game_id == game['id']).first()
+			item = Collections.query.filter(Collections.user_id == request.user.user_id, Collections.game_id == game['id']).first()
 			if item:
 				game['wished'] = item.wished 
 				game['collected'] = item.collected
@@ -103,4 +103,4 @@ def beforeRequest():
 		# Attach the session key to the request, for convenience
 		request.key = key
 		# Attach the user who made the request, for convenience
-		request.user = Users.query.filter(Users.id == credentials.user_id).first()
+		request.user = Users.query.filter(Users.user_id == credentials.user_id).first()

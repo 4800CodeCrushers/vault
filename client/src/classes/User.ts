@@ -13,7 +13,7 @@ export default class User {
     }
 
     /** Get the ID of the user */
-    getID() { return this.info.id }
+    getID() { return this.info.user_id }
     /** Get the user's code */
     getCode() { return this.info.code }
     /** Get the user's picture */

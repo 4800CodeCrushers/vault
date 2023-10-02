@@ -28,15 +28,16 @@ function HomePanel(props: HomePanelProps) {
     setShowOptions(false);
     setShowAnswer(false);
     let trivia = new Trivia(await Janus.GET_TRIVIA());
+    await new Promise(resolve => setTimeout(resolve, 3000));
     setTargetTriviaOpacity(1);
     setTrivia(trivia);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setShowOptions(true);
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    setShowAnswer(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
-    setTargetTriviaOpacity(0);
+    setShowOptions(true);
     await new Promise(resolve => setTimeout(resolve, 4000));
+    setShowAnswer(true);
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    setTargetTriviaOpacity(0);
+    await new Promise(resolve => setTimeout(resolve, 5000));
     triviaLoop();
   } 
 

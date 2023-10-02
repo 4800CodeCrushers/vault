@@ -47,7 +47,7 @@ export type GameInfo = {
 
 export type UserInfo = {
     /** The id of the user */
-    id: number,
+    user_id: number,
     /** The name of the user */
     name: string,
     /** The user's picture */

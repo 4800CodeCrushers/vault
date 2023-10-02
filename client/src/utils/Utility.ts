@@ -144,12 +144,6 @@ export default class Utility {
         } 
         // Wait for the server to respond
         let response: Response = await fetch(Janus.BASE_URL + url, requestOptions);
-
-        // Print response to console for debugging
-        if(props.print) {
-          console.log(response);
-        }
-        
         // If logging in, save session key
         if (loggingIn) {
           let key = response.headers?.get('Authorization');
@@ -158,6 +152,7 @@ export default class Utility {
         }
         // jsonify the response
         let json = await response.json();
+        if(props.print) console.log(json.data)
         // Check to see if we are authorized in making the request
         if (json.message === "Unauthorized") {
             throw new Error('Unauthorized');

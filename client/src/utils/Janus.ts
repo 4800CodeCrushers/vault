@@ -67,27 +67,74 @@ export default class Janus {
   //#endregion
 
   //#region list
-  static async GET_COLLECTION(wishedGames: boolean = false, offset: number = 0) {
-    let urlParams = `&offset=${offset}` + `&wished=${wishedGames}`;
+  static async GET_COLLECTION(offset: number = 0) {
+    let urlParams = `&offset=${offset}`;
     return Utility.contactAPI<GameInfo[]>({
       url: `list/collection?` + urlParams,
       method: "GET"
     });
   }
 
-  static async ADD_TO_COLLECTION(id: number, wished: boolean = false) {
-    let urlParams = `&wished=${wished}`;
+  static async GET_WISHLIST(offset: number = 0) {
+    let urlParams = `&offset=${offset}`;
+    return Utility.contactAPI<GameInfo[]>({
+      url: `list/wishlist?` + urlParams,
+      method: "GET"
+    });
+  }
+
+  static async GET_FRIENDS(offset: number = 0) {
+    let urlParams = `&offset=${offset}`;
+    return Utility.contactAPI<GameInfo[]>({
+      url: `list/friends?` + urlParams,
+      method: "GET",
+      print: true
+    });
+  }
+
+  static async ADD_TO_COLLECTION(id: number) {
     return Utility.contactAPI<{}>({
-      url: `list/collection?` + urlParams,
+      url: `list/collection`,
       method: "POST",
       body: {id: id}
     });
   }
 
-  static async REMOVE_FROM_COLLECTION(id: number, wished: boolean = false) {
-    let urlParams = `&wished=${wished}`;
+  static async ADD_TO_WISHLIST(id: number) {
     return Utility.contactAPI<{}>({
-      url: `list/collection?` + urlParams,
+      url: `list/wishlist`,
+      method: "POST",
+      body: {id: id}
+    });
+  }
+
+  static async ADD_TO_FRIENDS(id: number) {
+    return Utility.contactAPI<{}>({
+      url: `list/friends`,
+      method: "POST",
+      body: {id: id}
+    });
+  }
+
+  static async REMOVE_FROM_COLLECTION(id: number) {
+    return Utility.contactAPI<{}>({
+      url: `list/collection`,
+      method: "DELETE",
+      body: {id: id}
+    });
+  }
+
+  static async REMOVE_FROM_WISHLIST(id: number) {
+    return Utility.contactAPI<{}>({
+      url: `list/wishlist`,
+      method: "DELETE",
+      body: {id: id}
+    });
+  }
+
+  static async REMOVE_FROM_FRIENDS(id: number) {
+    return Utility.contactAPI<{}>({
+      url: `list/friends`,
       method: "DELETE",
       body: {id: id}
     });

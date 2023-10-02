@@ -13,16 +13,13 @@ function GameTile(props: GameTileProps) {
 
   async function onWishlistClick() {
     if (props.onWishlistClick) props.onWishlistClick(game);
-
-    
-    let response = !game.getWished() ? await Janus.ADD_TO_COLLECTION(game.getID(), true) : await Janus.REMOVE_FROM_COLLECTION(game.getID(), true);
+    let response = !game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     game.setWished(!game.getWished());
     setWished(game.getWished());
   }
 
   async function onCollectionClick() {
     if (props.onCollectionClick) props.onCollectionClick(game);
-
     let response = !game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     game.setCollected(!game.getCollected());
     setCollected(game.getCollected());

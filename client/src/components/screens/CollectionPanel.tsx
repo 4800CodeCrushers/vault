@@ -4,8 +4,6 @@ import { HomePanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { forEachChild } from 'typescript';
-
 
 
 function CollectionPanel(props: HomePanelProps) {
@@ -24,23 +22,23 @@ function CollectionPanel(props: HomePanelProps) {
 
   async function getStuff() {
     setLoading(true);
-    let response = await Janus.GET_COLLECTION(false);
+    let response = await Janus.GET_COLLECTION();
     let games = response.success ? response.data.map(info => new Game(info)) : [];
     setCollection(games);
     setLoading(false);
 
     while (response.data.length > 0) {
-      response = await Janus.GET_COLLECTION(false, games.length);
+      response = await Janus.GET_COLLECTION(games.length);
       games = games.concat(response.success ? response.data.map(info => new Game(info)) : []);
       setCollection(games);
     }
 
-    let response2 = await Janus.GET_COLLECTION(true);
+    let response2 = await Janus.GET_WISHLIST();
     setWishlist(response2.success ? response2.data.map(info => new Game(info)) : []);
     let games2 = response2.success ? response2.data.map(info => new Game(info)) : [];
 
     while (response2.data.length > 0) {
-      response2 = await Janus.GET_COLLECTION(true, games2.length);
+      response2 = await Janus.GET_WISHLIST(games2.length);
       games2 = games2.concat(response2.success ? response2.data.map(info => new Game(info)) : []);
       setWishlist(games2);
     }
@@ -80,7 +78,7 @@ function CollectionPanel(props: HomePanelProps) {
   }
 
   let renderList: Game[] = getListToRender();
-  let showNoGamesText = !loading && (viewingCollection && collection.length == 0) || (!viewingCollection && wishlist.length == 0);
+  let showNoGamesText = !loading && ((viewingCollection && collection.length == 0) || (!viewingCollection && wishlist.length == 0));
   return (
     <div onScroll={onScroll} style = {styles.panel}>
       {/* Render Input Section */}

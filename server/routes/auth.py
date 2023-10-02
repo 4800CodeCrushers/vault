@@ -37,7 +37,7 @@ def create():
 		# Create a new session key
 		key = uuid.uuid4()
 		# Create a new credential
-		credential = Credentials(email = email, password = hashed_password, key = key, user_id = user.id)
+		credential = Credentials(email = email, password = hashed_password, key = key, user_id = user.user_id)
 		# Commit the changes
 		db.session.add(credential)
 		db.session.commit()
@@ -71,7 +71,7 @@ def login():
 		credential.key = key
 		db.session.commit()
 		# Get the logging in user's info
-		user = Users.query.filter(Users.id == credential.user_id).first()
+		user = Users.query.filter(Users.user_id == credential.user_id).first()
 		# Return the reponse, with the user info and session key attached
 		response = makeAPIResponse(200, 'Login successful', user)
 		response.headers['Authorization'] = key

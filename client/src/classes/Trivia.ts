@@ -20,6 +20,7 @@ export default class Trivia {
     for (let i = list.length - 1; i > 0; i--) {
       list[i] = list[i].replaceAll('&#039;', "'");
       list[i] = list[i].replaceAll('&quot;', '"');
+      list[i] = list[i].replaceAll('&amp;', '&');
       let ran = Math.floor(Math.random() * (i + 1));
       let temp = list[ran];
       list[ran] = list[i];
