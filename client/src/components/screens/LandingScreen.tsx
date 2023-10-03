@@ -49,6 +49,12 @@ function LandingScreen(props: LandingScreenProps) {
     else if (field === 'name') setName(text);
   }
 
+  function getValue(field: string) {
+    if (field === 'email') return email;
+    else if (field === 'password') return password;
+    else if (field === 'name') return name;
+  }
+
   return (
     <div style = {styles.screen}>
       {/* Title */}
@@ -63,6 +69,7 @@ function LandingScreen(props: LandingScreenProps) {
             key={field} 
             placeholder={field}
             width={400} 
+            value={getValue(field)}
             height={50} 
             fontSize={22}
             onChange={(text) => onFieldChange(field, text)}
