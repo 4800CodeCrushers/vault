@@ -13,6 +13,7 @@ export default class Trivia {
     this.question = info.question;
     this.question = this.question.replaceAll('&#039;', "'");
     this.question = this.question.replaceAll('&quot;', '"');
+    this.question = this.question.replaceAll('&rsquo;', "'");
     this.question = this.question.replaceAll('&amp;', '&');
     this.question = this.question.replaceAll('&eacute;', 'é');
     
@@ -22,6 +23,7 @@ export default class Trivia {
     let list = info.incorrect_answers.concat(info.correct_answer);
     for (let i = list.length - 1; i > 0; i--) {
       list[i] = list[i].replaceAll('&#039;', "'");
+      list[i] = list[i].replaceAll('&rsquo;', "'");
       list[i] = list[i].replaceAll('&quot;', '"');
       list[i] = list[i].replaceAll('&amp;', '&');
       list[i] = list[i].replaceAll('&eacute;', 'é');
