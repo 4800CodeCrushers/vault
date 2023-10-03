@@ -91,7 +91,7 @@ function MainScreen(props: MainScreenProps) {
         <ProfilePic user={User.me} size={60}/>
         <Text style={styles.name} size={'14pt'}>{name}</Text>
         <div style={styles.friendCodeContainer}>
-          <Text size={'10pt'} style={{marginRight: 20}} color = {'gray'}>{`Code: ${User.me?.getCode()}`}</Text>
+          <Text size={'10pt'} style={{marginRight: 20}}>{`Code: ${User.me?.getCode()}`}</Text>
           <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
         </div>
         <div style={{backgroundColor: 'white', width: '100%', height: 1}}/>

@@ -111,11 +111,11 @@ export default class Janus {
     });
   }
 
-  static async ADD_TO_FRIENDS(id: number) {
-    return Utility.contactAPI<{}>({
+  static async ADD_TO_FRIENDS(code: string) {
+    return Utility.contactAPI<UserInfo>({
       url: `list/friends`,
       method: "POST",
-      body: {id: id}
+      body: {code: code}
     });
   }
 

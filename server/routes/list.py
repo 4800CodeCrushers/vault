@@ -112,6 +112,7 @@ def getFriends():
 	return makeAPIResponse(200, 'You do not have any friends :(', [])	
 
 
+
 @list.route('/collection', methods=['POST'])
 def addToCollection():
 	# Get the offset and id from the request
@@ -149,6 +150,27 @@ def addToWishlist():
 		db.session.commit()
 	# Return a response
 	return makeAPIResponse(200, f'Game added to wishlist.')
+
+@list.route('/friends', methods=['POST'])
+def addToFriends():
+	# Get the offset and id from the request
+	if 'code' not in request.json: return makeAPIResponse(400, 'Missing required field: code')
+	code = request.json['code']
+	# Find the user with this code
+	user = Users.query.filter(Users.code == code).first()
+	if user == None : return makeAPIResponse(400, 'No user found.') 
+	elif user.user_id == request.user.user_id : return makeAPIResponse(400, 'Cannot add yourself.') 
+	# See if the user if friends with the user of this id
+	friend = Friends.query.filter(Friends.user_id == request.user.user_id, Friends.friend_id == user.user_id).first()
+	if friend: return makeAPIResponse(400, 'Already friends.') 
+	# Create the friend item
+	new_friend = Friends(user_id = request.user.user_id, friend_id = user.user_id)
+	# Add the item to the database
+	db.session.add(new_friend)
+	db.session.commit()
+	# Return a response
+	return makeAPIResponse(200, f'Friend added.', user)
+
 
 @list.route('/collection', methods=['DELETE'])
 def removeFromCollection():

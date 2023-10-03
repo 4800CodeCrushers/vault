@@ -10,9 +10,10 @@ function FriendsPanel(props: FriendPanelProps) {
   const { onFriendSelect } = props;
   
   const [listRef, animationEnabled] = useAutoAnimate();
-  const [filterText, setFilterText] = useState<string | null>(State.friendCodeText);
+  const [codeText, setCodeText] = useState<string | null>(State.friendCodeText);
   const [loading, setLoading] = useState<boolean>(true);
   const [friends, setFriends] = useState<User[]>([]);
+  const [statusText, setStatusText] = useState<string | null>(null);
  
   useEffect(() => {
     getMyFriends();
@@ -21,9 +22,20 @@ function FriendsPanel(props: FriendPanelProps) {
   async function getMyFriends() {
     setLoading(true);
     let response = await Janus.GET_FRIENDS();
-    setFriends(response.data.map(info => new User(info)));
-    console.log(response);
+    if (response.success) {
+      setFriends(response.data.map(info => new User(info)));
+    }
     setLoading(false);
+  }
+
+  async function addFriend() {
+    if (!codeText) return;
+    let response = await Janus.ADD_TO_FRIENDS(codeText);
+    if (response.success) {
+      setFriends(old => old.concat(new User(response.data)));
+    }
+    setStatusText(response.message);
+    setTimeout(() => setStatusText(null), 3000);
   }
 
   /** Runs when the user scrolls through the games */
@@ -39,17 +51,19 @@ function FriendsPanel(props: FriendPanelProps) {
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <TextInput 
-          value={filterText} 
-          defaultValue={filterText}
+          value={codeText} 
+          defaultValue={codeText}
           placeholder="Enter a friend code" 
           leftIcon={'search'} 
-          rightIcon={filterText ? 'close' : undefined} 
-          onRightIconClick={() => {setFilterText(null); State.friendCodeText = null;}} 
-          onChange={(text) => { setFilterText(text); State.friendCodeText = text;}} 
+          rightIcon={codeText ? 'close' : undefined} 
+          onRightIconClick={() => {setCodeText(null); State.friendCodeText = null;}} 
+          onChange={(text) => { setCodeText(text.length > 0 ? text : null); State.friendCodeText = text;}} 
+          onSubmit={() => addFriend()}
         />
+        <Button name = {"Add"} disabled = {codeText == null || loading} width={100} style={{marginLeft: 15}} onClick={() => addFriend()}/>
       </div>
       {/* Render friend tiles */}
-      { !loading && friends.length == 0  && <Text style={{textAlign: 'center'}}>No Friends Added!</Text>}
+      { statusText && <Text style={{textAlign: 'center'}}>{statusText}</Text>}
       <div style = {styles.grid} ref = {listRef}>
         {friends.map(f => <FriendTile key={f.getID()} user={f} onClick={() => onFriendSelect(f)}/>)}
       </div>
