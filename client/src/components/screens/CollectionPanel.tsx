@@ -106,8 +106,8 @@ function CollectionPanel(props: HomePanelProps) {
             key={game.getID()} 
             game={game} 
             onClick={() => onGameSelect(game)}
-            onCollectionClick={(g) => setCollection(removeGame(g, collection))}
-            onWishlistClick={(g) => setWishlist(removeGame(g, wishlist))}
+            onCollectionClick={(g) => g.getCollected() ? setCollection(removeGame(g, collection)) : setCollection(collection.concat(g))}
+            onWishlistClick={(g) => g.getWished() ? setWishlist(removeGame(g, wishlist)) : setWishlist(wishlist.concat(g))}
           />
         )}
       </div>
