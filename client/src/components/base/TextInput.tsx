@@ -5,7 +5,7 @@ import {Icon, Text} from "../";
 
 function TextInput(props: TextInputProps) {
   // Extract values from the props
-  const { minWidth, placeholder = 'Search', width = "50%", height = 70, canEdit = true, backgroundColor = '#363636', autoFocus = false, fontSize = 32} = props;
+  const { minWidth, placeholder = 'Search', width = "50%", height = 50, canEdit = true, backgroundColor = '#363636', autoFocus = false, fontSize = 24} = props;
   // A reference to the input field
   const inputRef: any = useRef(null);
   // Is the textbox focused
@@ -26,7 +26,7 @@ function TextInput(props: TextInputProps) {
     
     return <input 
       ref={inputRef} 
-      style={{...styles.text, backgroundColor, fontSize}} 
+      style={{...styles.text, backgroundColor, fontSize, marginLeft: props.leftIcon ? undefined : 10}} 
       placeholder = {placeholder} 
       maxLength={props.maxCharacters} 
       onChange={() => onChange()} 
@@ -46,7 +46,7 @@ function TextInput(props: TextInputProps) {
     if (!props.leftIcon) return <></>;
     return(
       <div style={styles.leftIconContainer}>
-          <Icon size = {50} name={props.leftIcon} onClick = {() => inputRef.current.focus()} cursor = {'text'}/>
+          <Icon size = {35} name={props.leftIcon} onClick = {() => inputRef.current.focus()} cursor = {'text'}/>
       </div>
     );
   }

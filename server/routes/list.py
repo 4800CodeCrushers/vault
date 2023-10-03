@@ -32,6 +32,29 @@ def getCollection():
 		return igdbRequest(params)
 	return makeAPIResponse(200, 'You do not have any games stored.', [])
 
+@list.route('/collection/<int:id>', methods=['GET'])
+def getOtherCollection(id):
+	# See if the user if friends with the user of this id
+	friend = Friends.query.filter(Friends.user_id == request.user.user_id, Friends.friend_id == id).first()
+	if friend == None : return makeAPIResponse(400, 'You are not friends with this user.') 
+	# Get the offset from the request
+	offset = int(request.args.get('offset')) if request.args.get('offset') else 0
+	# Get the games in the user's collection and serialize the result
+	collection = Collections.query.filter(Collections.user_id == id, Collections.collected == True).order_by(Collections.game_id).offset(offset).limit(100).all()
+	collection = [e.serialize() for e in collection]
+	if len(collection) > 0:
+		# Format the game_ids as a string in the form of "(1, 2, 3, ...)"
+		the_ids = "(" + ", ".join(str(item['game_id']) for item in collection) + ")"
+		# The params for our search
+		params = (
+			f'fields first_release_date, url, name, summary, cover.*, rating, genres.name, screenshots.image_id, platforms.name,'
+			f'involved_companies.company.name, involved_companies.company.logo.image_id, involved_companies.developer, involved_companies.publisher;' 
+			f'where id = {the_ids};'
+		)
+		# Get the game(s) from IGDB
+		return igdbRequest(params)
+	return makeAPIResponse(200, 'You do not have any games stored.', [])
+
 @list.route('/wishlist', methods=['GET'])
 def getWishlist():
 	# Get the offset from the request
@@ -51,6 +74,29 @@ def getWishlist():
 		# Get the game(s) from IGDB
 		return igdbRequest(params)
 	return makeAPIResponse(200, 'You do not have any games stored.', [])		
+
+@list.route('/wishlist/<int:id>', methods=['GET'])
+def getOtherWishlist(id):
+	# See if the user if friends with the user of this id
+	friend = Friends.query.filter(Friends.user_id == request.user.user_id, Friends.friend_id == id).first()
+	if friend == None : return makeAPIResponse(400, 'You are not friends with this user.') 
+	# Get the offset from the request
+	offset = int(request.args.get('offset')) if request.args.get('offset') else 0
+	# Get the games in the user's collection and serialize the result
+	collection = Collections.query.filter(Collections.user_id == id, Collections.wished == True).order_by(Collections.game_id).offset(offset).limit(100).all()
+	collection = [e.serialize() for e in collection]
+	if len(collection) > 0:
+		# Format the game_ids as a string in the form of "(1, 2, 3, ...)"
+		the_ids = "(" + ", ".join(str(item['game_id']) for item in collection) + ")"
+		# The params for our search
+		params = (
+			f'fields first_release_date, url, name, summary, cover.*, rating, genres.name, screenshots.image_id, platforms.name,'
+			f'involved_companies.company.name, involved_companies.company.logo.image_id, involved_companies.developer, involved_companies.publisher;' 
+			f'where id = {the_ids};'
+		)
+		# Get the game(s) from IGDB
+		return igdbRequest(params)
+	return makeAPIResponse(200, 'You do not have any games stored.', [])	
 
 @list.route('/friends', methods=['GET'])
 def getFriends():

@@ -17,7 +17,10 @@ export {
     PicNames,
     HomePanelProps,
     LandingScreenProps,
-    MainScreenProps
+    MainScreenProps,
+    FriendTileProps,
+    FriendPanelProps,
+    CollectionPanelProps
 } from './components';
 
 export {

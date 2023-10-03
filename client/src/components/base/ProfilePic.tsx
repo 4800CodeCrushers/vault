@@ -7,7 +7,8 @@ import { updateInterfaceDeclaration } from 'typescript';
 
 function ProfilePic(props: ProfilePicProps) {
   // Extract values from the props
-  const { picture = 'Xbox 360', size = 80, color = '#29916e', padding = 15, onClick, style} = props;
+  const { user, size = 80, padding = 15, onClick, style} = props;
+  let color =  user?.getColor() ?? '#29916e';
   let width = size; let height = size; let borderRadius = "100%";
   let background = `linear-gradient(${Utility.getShade(color, 75)}, ${color})`;
   const [hovering, setHovering] = useState<boolean>();
@@ -23,7 +24,7 @@ function ProfilePic(props: ProfilePicProps) {
       onMouseEnter={() => setHovering(true)} 
       onMouseLeave={() => setHovering(false)}
     >
-      <img style={styles.image} src={require(`../../assets/icons/${picture}.png`)}/>
+      <img style={styles.image} src={user ? require(`../../assets/icons/${user.getPicture()}.png`) : undefined}/>
     </div>
   );
 }

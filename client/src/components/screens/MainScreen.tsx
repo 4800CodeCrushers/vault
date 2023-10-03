@@ -4,23 +4,29 @@ import { Styles, Tabs, PicNames, MainScreenProps } from '../../types'
 import { Game, User } from "../../classes";
 import { Utility, Janus, State } from '../../utils';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { HexColorPicker } from "react-colorful";
 
 // troublesome IDs - 15471, 15472, 1945
 
-let lastSelectedTab: "home" | "collection" | "friends" = 'home';
+
 function MainScreen(props: MainScreenProps) {
   
   const [listRef] = useAutoAnimate();
   const [selectedTab, setSelectedTab] = useState<Tabs>('home');
+  const [lastSelectedTab, setLastSelectedTab] = useState<Tabs>('home');
   const [showSideMenu, setShowSideMenu] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [copiedRecently, setCopiedRecently] = useState<boolean>(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
-  const [game, setGame] = useState<Game>();
+  const [homeGame, setHomeGame] = useState<Game>();
+  const [collectionGame, setCollectionGame] = useState<Game>();
+  const [friendGame, setFriendGame] = useState<Game>();
+  const [viewedFriend, setViewedFriend] = useState<User | null>(null);
   const [name, setName] = useState<string | undefined>(User.me?.getName());
-  const [selectedImage, setSelectedImage] = useState<PicNames>(User.me?.getPicture() ?? 'Xbox 360');
+  const [color, setColor] = useState<string | undefined>(User.me?.getColor());
+  const [selectedImage, setSelectedImage] = useState<PicNames | null>(User.me?.getPicture() ?? null);
 
   useEffect(() => {
     State.creatingAccount = true; 
@@ -28,9 +34,9 @@ function MainScreen(props: MainScreenProps) {
 
 
   async function onUpdateClick() {
-    if (!name || !selectedImage) return;
+    if (!name || !selectedImage || !color) return;
     setLoading(true);
-    let response = await Janus.PATCH_ME({name: name, picture: selectedImage});
+    let response = await Janus.PATCH_ME({name: name, picture: selectedImage, color: color});
     if (response.success) {
       setShowPopup(false);
     }
@@ -41,19 +47,30 @@ function MainScreen(props: MainScreenProps) {
     setLoading(false);
   }
 
+  function onBackClick() {
+    if (lastSelectedTab === 'home') setHomeGame(undefined);
+    else if (lastSelectedTab === 'collection') setCollectionGame(undefined);
+    else setFriendGame(undefined);
+
+    if (selectedTab === 'collection' && lastSelectedTab === 'friends' && viewedFriend) setViewedFriend(null);
+    
+    if (selectedTab === 'game' && lastSelectedTab === 'friends' && viewedFriend) setSelectedTab('collection');
+    else setSelectedTab(lastSelectedTab);
+  }
+
   function rendeSideMenu() {
     if (!showSideMenu) return <></>;
     return (
       <div style = {styles.sideMenuContainer}>
         <div style={{width: '100%'}}>
           <div style={styles.sideMenuHeaderContainer}>
-            <ProfilePic picture={selectedImage}/>
+            <ProfilePic user={User.me}/>
             <Text style={styles.name} size={'14pt'}>{name}</Text>
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
           </div>
-          <MenuTab name={'Home'} icon={'home'} onClick={() => {setSelectedTab('home'); lastSelectedTab = 'home';}} selected={selectedTab === 'home'}/>
-          {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab('collection'); lastSelectedTab = 'collection';}} selected={selectedTab === 'collection'}/>}
-          {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab('friends'); lastSelectedTab = 'friends';}} selected={selectedTab === 'friends'}/>}
+          <MenuTab name={'Home'} icon={'home'} onClick={() => {setSelectedTab(homeGame ? 'game':'home'); setLastSelectedTab('home');}} selected={lastSelectedTab === 'home'}/>
+          {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab(collectionGame ?'game':'collection'); setLastSelectedTab('collection');}} selected={lastSelectedTab === 'collection'}/>}
+          {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab(friendGame ? 'game': (viewedFriend ? 'collection' : 'friends')); setLastSelectedTab('friends');}} selected={lastSelectedTab === 'friends'}/>}
         </div>
         <div style={{backgroundColor: 'white', width: 1, height: '100%'}}/>
       </div>
@@ -71,7 +88,7 @@ function MainScreen(props: MainScreenProps) {
 
     return (
       <div style={styles.dropDownContainer}>
-        <ProfilePic picture={selectedImage} size={60}/>
+        <ProfilePic user={User.me} size={60}/>
         <Text style={styles.name} size={'14pt'}>{name}</Text>
         <div style={styles.friendCodeContainer}>
           <Text size={'10pt'} style={{marginRight: 20}} color = {'gray'}>{`Code: ${User.me?.getCode()}`}</Text>
@@ -97,11 +114,11 @@ function MainScreen(props: MainScreenProps) {
           <Icon 
             name="back" 
             size={35} 
-            onClick={lastSelectedTab !== selectedTab ? () => setSelectedTab(lastSelectedTab) : undefined} 
+            onClick={() => onBackClick()} 
             style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}
           />
         </div>
-        {User.me && <ProfilePic picture={selectedImage} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>}
+        {User.me && <ProfilePic user={User.me} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>}
         {!User.me && <Button name = {'Create Account'} onClick={() => props.onAccountCreate()}/>}
         { renderDropDown() }
       </div>  
@@ -146,7 +163,7 @@ function MainScreen(props: MainScreenProps) {
     return (
       <div style={styles.settingsContainer}>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 15}}>
-          <ProfilePic picture={selectedImage} size={75} style={{marginRight: 20}}/>
+          <ProfilePic user={User.me} size={75} style={{marginRight: 20}}/>
           <TextInput 
             placeholder={'Enter name'} 
             value={name} 
@@ -157,16 +174,21 @@ function MainScreen(props: MainScreenProps) {
             fontSize={20}
           />
         </div>
-        <div style={styles.iconsGrid} ref = {listRef}>
-          {images.map((image, index) => (
-            <img 
-              style={{width: 40, height: 40, margin: 5, opacity: selectedImage === image ? 1 : .35}} 
-              src={require(`../../assets/icons/${image}.png`)}
-              onClick={() => {setSelectedImage(image); User.me?.setPicture(image);}}
-              key={index}
-            />
-          ))}
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', marginBottom: 15}}>
+          <div style={styles.iconsGrid} ref = {listRef}>
+            {images.map((image, index) => (
+              <img 
+                style={{width: 40, height: 40, margin: 5, opacity: selectedImage === image ? 1 : .35}} 
+                src={require(`../../assets/icons/${image}.png`)}
+                onClick={() => {setSelectedImage(image); User.me?.setPicture(image);}}
+                key={index}
+              />
+            ))}
+          </div>
+          <HexColorPicker onChange={(c) => { setColor(c); User.me?.setColor(c);}} style={{height: 200}}/>
         </div>
+        
+
         <Button name = {'Update'} disabled = {loading} onClick={() => onUpdateClick()}/>
         {/* Status Text */}
         {error && <Text color={'red'} style={{marginTop: 25}}>{error}</Text>}
@@ -180,10 +202,13 @@ function MainScreen(props: MainScreenProps) {
       {/* Render main panel */}
       <div style = {styles.panelContainer}>
         { renderToolbar() }
-        { selectedTab == 'home' && <HomePanel onGameSelect={game => {setGame(game); setSelectedTab('game');}}/>}
-        { selectedTab == 'collection' && <CollectionPanel onGameSelect={game => {setGame(game); setSelectedTab('game');}}/>}
-        { selectedTab == 'friends' && <FriendsPanel/>}
-        { game && selectedTab == 'game' && <GamePanel game={game}/>}
+        { selectedTab === 'home' && <HomePanel onGameSelect={game => {setHomeGame(game); setSelectedTab('game');}}/>}
+        { lastSelectedTab === 'collection' && selectedTab === 'collection' && <CollectionPanel user={User.me} onGameSelect={game => {setCollectionGame(game); setSelectedTab('game');}}/>}
+        { selectedTab === 'friends' && <FriendsPanel onFriendSelect={(f) => {setViewedFriend(f); setSelectedTab('collection');}}/>}
+        { viewedFriend && lastSelectedTab === 'friends' && selectedTab == 'collection' && <CollectionPanel user = {viewedFriend} onGameSelect={game => {setFriendGame(game); setSelectedTab('game');}}/>}
+        { lastSelectedTab === 'home' && homeGame && selectedTab === 'game' && <GamePanel game={homeGame}/>}
+        { lastSelectedTab === 'collection' && collectionGame && selectedTab === 'game' && <GamePanel game={collectionGame}/>}
+        { lastSelectedTab === 'friends' && friendGame && selectedTab === 'game' && <GamePanel game={friendGame}/>}
       </div>
       {/* Render popup */}
       {showPopup && <Popup onClose={() => setShowPopup(false)}>{renderSettings()}</Popup>}
@@ -280,6 +305,8 @@ let styles: Styles = {
     gap: '2px',
     display: 'grid',
     width: '100%',
+    paddingLeft: 5,
+    paddingRight: 25
   },
   backdrop: {
     position: 'absolute',

@@ -1,15 +1,15 @@
 import { CSSProperties, useState, useRef, useEffect } from 'react';
 import { Text, TextInput, GameTile, Button } from '..';
-import { HomePanelProps, Styles } from '../../types';
+import { CollectionPanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 
-function CollectionPanel(props: HomePanelProps) {
-  const { onGameSelect } = props;
-
-  const [filterText, setFilterText] = useState<string | null>(State.filterText);
+function CollectionPanel(props: CollectionPanelProps) {
+  const { onGameSelect, user } = props;
+  let viewingMyStuff = user?.getID() === User.me?.getID();
+  const [filterText, setFilterText] = useState<string | null>(viewingMyStuff ? State.myFilterText : State.otherFilterText);
   const [listRef, animationEnabled] = useAutoAnimate();
   const [collection, setCollection] = useState<Game[]>([]);
   const [wishlist, setWishlist] = useState<Game[]>([]);
@@ -21,28 +21,32 @@ function CollectionPanel(props: HomePanelProps) {
   }, []);
 
   async function getStuff() {
+    if (!user) return;
     setLoading(true);
-    let response = await Janus.GET_COLLECTION();
-    let games = response.success ? response.data.map(info => new Game(info)) : [];
-    setCollection(games);
-    setLoading(false);
-
-    while (response.data.length > 0) {
-      response = await Janus.GET_COLLECTION(games.length);
-      games = games.concat(response.success ? response.data.map(info => new Game(info)) : []);
+    
+    // Get collection
+    let response = await Janus.GET_COLLECTION(user);
+    if (response.success) {
+      let games = response.data.map(info => new Game(info));
       setCollection(games);
+      setLoading(false);
+      while (response.data?.length > 0) {
+        response = await Janus.GET_COLLECTION(user, games.length);
+        games = games.concat(response.success ? response.data.map(info => new Game(info)) : []);
+        setCollection(games);
+      }
     }
-
-    let response2 = await Janus.GET_WISHLIST();
-    setWishlist(response2.success ? response2.data.map(info => new Game(info)) : []);
-    let games2 = response2.success ? response2.data.map(info => new Game(info)) : [];
-
-    while (response2.data.length > 0) {
-      response2 = await Janus.GET_WISHLIST(games2.length);
-      games2 = games2.concat(response2.success ? response2.data.map(info => new Game(info)) : []);
+    // Get wishlist
+    let response2 = await Janus.GET_WISHLIST(user);
+    if (response2.success) {
+      let games2 = response2.data.map(info => new Game(info));
       setWishlist(games2);
+      while (response2.data?.length > 0) {
+        response2 = await Janus.GET_WISHLIST(user, games2.length);
+        games2 = games2.concat(response2.success ? response2.data.map(info => new Game(info)) : []);
+        setWishlist(games2);
+      }
     }
-   
   }
 
   function getListToRender(): Game[] {
@@ -83,14 +87,22 @@ function CollectionPanel(props: HomePanelProps) {
     <div onScroll={onScroll} style = {styles.panel}>
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
-        <TextInput 
+        <TextInput
           value={filterText} 
           defaultValue={filterText}
-          placeholder="Find a game in your collection" 
+          placeholder={`Find a game in ${user?.getID() !== User.me?.getID() ? user?.getName() + "'s" : 'your'} collection`} 
           leftIcon={'search'} 
           rightIcon={filterText ? 'close' : undefined} 
-          onRightIconClick={() => {setFilterText(null); State.filterText = null;}} 
-          onChange={(text) => { setFilterText(text); State.filterText = text;}} 
+          onRightIconClick={() => {
+            setFilterText(null);
+            if (viewingMyStuff) State.myFilterText = null;
+            else  State.otherFilterText = null;
+          }} 
+          onChange={(text) => { 
+            setFilterText(text); 
+            if (viewingMyStuff) State.myFilterText = text;
+            else  State.otherFilterText = text;
+          }} 
         />
       </div>
       {/* Collection or Wishlist */}

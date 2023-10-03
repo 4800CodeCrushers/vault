@@ -1,5 +1,5 @@
 import { CSSProperties, HTMLInputTypeAttribute } from "react"
-import Game from "../classes/Game";
+import { Game, User } from "../classes";
 
 
 export type TextProps = {
@@ -116,6 +116,13 @@ export type GameTileProps = {
   onCollectionClick?: (game: Game) => void,
 }
 
+export type FriendTileProps = {
+  /** The user to render */
+  user: User,
+  /** What happens if the tile is clicked? */
+  onClick: (user: User) => void,
+}
+
 export type PopupProps = {
   /** The game to render */
   game?: Game,
@@ -126,14 +133,12 @@ export type PopupProps = {
 }
 
 export type ProfilePicProps = {
-  /** The picture to render */
-  picture?: PicNames,
+  /** The user to render */
+  user: User | null,
   /** The picture size. The default is 100. */
   size?: number | string,
   /** Additional styling to be applied to the overall container */
   style?: CSSProperties,
-  /** The background. The default is green. */
-  color?: string,
   /** The amount of padding to surround the image with. Default is 15. */
   padding?: number,
   /** What happens if the pic is clicked? */
@@ -143,6 +148,18 @@ export type ProfilePicProps = {
 export type HomePanelProps = {
   /** On Game Select */
   onGameSelect: (game: Game) => void,
+}
+
+export type CollectionPanelProps = {
+  /** On Game Select */
+  onGameSelect: (game: Game) => void,
+  /** whose collection is this? */
+  user: User | null,
+}
+
+export type FriendPanelProps = {
+  /** On Game Select */
+  onFriendSelect: (friend: User) => void,
 }
 
 export type GamePanelProps = {

@@ -13,3 +13,4 @@ export { default as TextInput } from './base/TextInput';
 export { default as Icon } from './base/Icon';
 export { default as MenuTab } from './base/MenuTab';
 export { default as GameTile } from './base/GameTile';
+export { default as FriendTile } from './base/FriendTile';

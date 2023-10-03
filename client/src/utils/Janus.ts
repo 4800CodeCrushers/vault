@@ -1,5 +1,6 @@
 import { GameInfo, UserInfo, PicNames, TriviaInfo } from "../types";
 import { Utility}  from ".";
+import { User } from "../classes";
 
 export default class Janus {
 
@@ -57,7 +58,7 @@ export default class Janus {
   }
 
   /** Send the user's updated info to the server */
-  static async PATCH_ME(data: {picture: PicNames, name: string}) {
+  static async PATCH_ME(data: {picture: PicNames, name: string, color: string}) {
     return Utility.contactAPI<{}>({
       method: "PATCH",
       url: `user/me`,
@@ -67,25 +68,27 @@ export default class Janus {
   //#endregion
 
   //#region list
-  static async GET_COLLECTION(offset: number = 0) {
-    let urlParams = `&offset=${offset}`;
+  static async GET_COLLECTION(user: User, offset: number = 0) {
+    let urlParams = `?&offset=${offset}`;
+    let idPath = user.getID() === User.me?.getID() ? "" : `/${user.getID()}`
     return Utility.contactAPI<GameInfo[]>({
-      url: `list/collection?` + urlParams,
+      url: `list/collection` + idPath + urlParams,
       method: "GET"
     });
   }
 
-  static async GET_WISHLIST(offset: number = 0) {
-    let urlParams = `&offset=${offset}`;
+  static async GET_WISHLIST(user: User, offset: number = 0) {
+    let urlParams = `?&offset=${offset}`;
+    let idPath = user.getID() === User.me?.getID() ? "" : `/${user.getID()}`
     return Utility.contactAPI<GameInfo[]>({
-      url: `list/wishlist?` + urlParams,
+      url: `list/wishlist` + idPath + urlParams,
       method: "GET"
     });
   }
 
   static async GET_FRIENDS(offset: number = 0) {
     let urlParams = `&offset=${offset}`;
-    return Utility.contactAPI<GameInfo[]>({
+    return Utility.contactAPI<UserInfo[]>({
       url: `list/friends?` + urlParams,
       method: "GET",
       print: true

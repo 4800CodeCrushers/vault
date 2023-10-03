@@ -51,7 +51,7 @@ export type UserInfo = {
     /** The name of the user */
     name: string,
     /** The user's picture */
-    picture?: PicNames,
+    picture: PicNames | null,
     /** The user's friend code */
     code: string,
     /** The user's color */

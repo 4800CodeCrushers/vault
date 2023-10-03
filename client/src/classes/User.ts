@@ -17,11 +17,11 @@ export default class User {
     /** Get the user's code */
     getCode() { return this.info.code }
     /** Get the user's picture */
-    getPicture() { return this.info.picture }
+    getPicture() { return this.info.picture ?? "Xbox 360" }
     /** Set the user's picture */
     setPicture(pic: PicNames) { return this.info.picture = pic }
     /** Get the user's color */
-    getColor() { return this.info.color }
+    getColor() { return this.info.color ?? '#29916e' }
     /** Set the user's color */
     setColor(color: string) { return this.info.color = color }
     /** Get the name of the user */

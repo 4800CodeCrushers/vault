@@ -5,8 +5,8 @@ import { User } from "../../classes";
 import { Janus, State } from '../../utils';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
-let createFields: string[] = ['name', 'email', 'password', 'confirm password'];
-let loginFields: string[] = ['email', 'password'];
+let createFields: string[] = ['Name', 'Email', 'Password', 'Confirm password'];
+let loginFields: string[] = ['Email', 'Password'];
 
 function LandingScreen(props: LandingScreenProps) {
 
@@ -16,6 +16,7 @@ function LandingScreen(props: LandingScreenProps) {
   const [error, setError] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [confirmPassword, setConfirmPassword] = useState<string>();
   const [name, setName] = useState<string>();
 
   async function onButtonPress() {
@@ -44,24 +45,26 @@ function LandingScreen(props: LandingScreenProps) {
   }
 
   function onFieldChange(field: string, text: string) {
-    if (field === 'email') setEmail(text);
-    else if (field === 'password') setPassword(text);
-    else if (field === 'name') setName(text);
+    if (field === 'Email') setEmail(text);
+    else if (field === 'Password') setPassword(text);
+    else if (field === 'Confirm password') setConfirmPassword(text);
+    else if (field === 'Name') setName(text);
   }
 
   function getValue(field: string) {
-    if (field === 'email') return email;
-    else if (field === 'password') return password;
-    else if (field === 'name') return name;
+    if (field === 'Email') return email;
+    else if (field === 'Password') return password;
+    else if (field === 'Confirm password') return confirmPassword;
+    else if (field === 'Name') return name;
   }
 
   return (
     <div style = {styles.screen}>
       {/* Title */}
-      <Text>Welcome to</Text>
+      <Text style={{textAlign: 'center'}}>Welcome to</Text>
       <Text style={styles.title}>MyGamesVault.com</Text>
       {/* Logo */}
-      <img style = {{width: 400, height: 400, margin: 25,  alignSelf: 'center'}} src = {require('../../assets/logo.png')}/>
+      <img style = {{width: 300, height: 300, margin: 25,  alignSelf: 'center'}} src = {require('../../assets/logo.png')}/>
       {/* Input fields */}
       <div style = {styles.inputsContainer} ref = {listRef}>
         {(creating ? createFields : loginFields).map(field => 
@@ -74,7 +77,7 @@ function LandingScreen(props: LandingScreenProps) {
             fontSize={22}
             onChange={(text) => onFieldChange(field, text)}
             style={{margin: 10}}
-            type={field === 'password' || field === 'confirm password' ? 'password' : undefined}
+            type={field === 'Password' || field === 'Confirm password' ? 'password' : undefined}
             onSubmit={() => onButtonPress()}
           />
         )}
@@ -99,10 +102,9 @@ let styles: Styles = {
   screen: {
     display: 'flex', 
     flexDirection: 'column',
-    justifyContent: 'center',
-    textAlign: 'center',
     width: '100%',
-    height: '100%',
+    height: '100vh',
+    overflowY: 'auto',
   },
   title: {
     textAlign: 'center',

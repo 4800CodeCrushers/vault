@@ -17,5 +17,6 @@ def patchMe():
 	user = Users.query.get(request.user.user_id)
 	user.name = request.json['name']
 	user.picture = request.json['picture']
+	user.color = request.json['color']
 	db.session.commit()
 	return makeAPIResponse(200, 'Info updated')
