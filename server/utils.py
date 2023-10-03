@@ -1,7 +1,7 @@
 from flask import make_response, request
 from models import Credentials, Users, Collections
 from extensions import db
-import requests, time, json
+import requests, time, json, orjson
 
 
 def igdbRequest(params):
@@ -37,8 +37,20 @@ def igdbRequest(params):
 				game['wished'] = item.wished 
 				game['collected'] = item.collected
 
+
 	# Flatten the result, and store it in the database
+
+	# First, we access the JSON content as a string
+	json_data = response.text
+
+	# Second, we parse it using orjson.loads()
+	parsed_data = orjson.loads(json_data)
+
+	# This is printing just to make sense of the contents of parsed_data.
+	print(json.dumps(parsed_data, indent=2))
+
 	# print(json.dumps( found_games, indent=2))
+
 
 	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
 	if response.status_code == 429:
