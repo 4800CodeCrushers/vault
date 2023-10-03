@@ -52,31 +52,44 @@ def igdbRequest(params):
 
 	# Iterate through the list of games and collect the desired fields
 	for game in parsed_data:
-		name = game["name"]
-		game_id = game["id"]
-		summary = game["summary"]
 		
-		# Iterate through the "involved_companies" list
-		for company_info in game["involved_companies"]:
-			# First, get the name of the company.
-			company = company_info["company"]
-			
-			# Check if the company is a developer
-			if company_info["developer"]:
-				developer_name = company["name"]
-					
-			# Check if the company is a publisher
-			if company_info["publisher"]:
-				publisher_name = company["name"]
+		# Retrieve game attributes.
+		name = game.get("name", "Unavailable")
+		game_id = game.get("id", "Unavailable")
+		summary = game.get("summary", "Unavailable")
 
 		print(f"\nName: {name}")
 		print(f"\nGame ID: {game_id}")
-		print(f"\nDeveloper: {developer_name}")
-		print(f"\nPublisher: {publisher_name}")
 		print(f"\nSummary: {summary}")
-		print(f"\n\n\n")
+		
+		# Check if "involved_companies" exists in the JSON data
+		if "involved_companies" in game:
 
-	
+			# If it does, initialize default values for developer/publisher
+			developer_name = publisher_name = "Unavailable"
+
+			# Then, iterate through the "involved_companies" list
+			for company_info in game["involved_companies"]:
+				# First, get the name of the company.
+				company = company_info["company"]
+				
+				# Check if the company is a developer
+				if company_info["developer"]:
+					developer_name = company["name"]
+						
+				# Check if the company is a publisher
+				if company_info["publisher"]:
+					publisher_name = company["name"]
+
+			print(f"\nDeveloper: {developer_name}")
+			print(f"\nPublisher: {publisher_name}")
+			print(f"\n\n\n")
+
+		else:
+			#If there are no involved companies on record, then print unavailable.
+			print(f"\nDeveloper: Unavailable")
+			print(f"\nPublisher: Unavailable")
+			print(f"\n\n\n")
 
 
 	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
