@@ -33,7 +33,7 @@ function TextInput(props: TextInputProps) {
       onKeyDown={(event) => onEnter(event)} 
       type = {props.type} 
       defaultValue={props.defaultValue ?? ""}
-      value={props.value ?? ""} 
+      value={props.value ?? undefined} 
       readOnly = {!canEdit} 
       autoFocus = {autoFocus}
       onFocus={() => setFocused(true)}
