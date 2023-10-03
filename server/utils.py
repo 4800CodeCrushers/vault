@@ -46,10 +46,37 @@ def igdbRequest(params):
 	# Second, we parse it using orjson.loads()
 	parsed_data = orjson.loads(json_data)
 
-	# This is printing just to make sense of the contents of parsed_data.
-	print(json.dumps(parsed_data, indent=2))
+	# This is printing all information about all retrieved games.
+	# Functionality will still work with the following line commented out.
+	#print(json.dumps(parsed_data, indent=2))
 
-	# print(json.dumps( found_games, indent=2))
+	# Iterate through the list of games and collect the desired fields
+	for game in parsed_data:
+		name = game["name"]
+		game_id = game["id"]
+		summary = game["summary"]
+		
+		# Iterate through the "involved_companies" list
+		for company_info in game["involved_companies"]:
+			# First, get the name of the company.
+			company = company_info["company"]
+			
+			# Check if the company is a developer
+			if company_info["developer"]:
+				developer_name = company["name"]
+					
+			# Check if the company is a publisher
+			if company_info["publisher"]:
+				publisher_name = company["name"]
+
+		print(f"\nName: {name}")
+		print(f"\nGame ID: {game_id}")
+		print(f"\nDeveloper: {developer_name}")
+		print(f"\nPublisher: {publisher_name}")
+		print(f"\nSummary: {summary}")
+		print(f"\n\n\n")
+
+	
 
 
 	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
