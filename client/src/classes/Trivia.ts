@@ -13,6 +13,9 @@ export default class Trivia {
     this.question = info.question;
     this.question = this.question.replaceAll('&#039;', "'");
     this.question = this.question.replaceAll('&quot;', '"');
+    this.question = this.question.replaceAll('&amp;', '&');
+    this.question = this.question.replaceAll('&eacute;', 'é');
+    
     // Store the answer
     this.answer = info.correct_answer;
     // Store the random options
@@ -21,6 +24,7 @@ export default class Trivia {
       list[i] = list[i].replaceAll('&#039;', "'");
       list[i] = list[i].replaceAll('&quot;', '"');
       list[i] = list[i].replaceAll('&amp;', '&');
+      list[i] = list[i].replaceAll('&eacute;', 'é');
       let ran = Math.floor(Math.random() * (i + 1));
       let temp = list[ran];
       list[ran] = list[i];
