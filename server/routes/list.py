@@ -205,4 +205,17 @@ def removeFromWishlist():
 		return makeAPIResponse(200, f'Game removed from wishlist.')
 	else:
 		return makeAPIResponse(200, f'You do not have this game in your wishlist.')
-	
+
+@list.route('/friends', methods=['DELETE'])
+def removeFromFriends():
+	# Get the offset and id from the request
+	if 'id' not in request.json: return makeAPIResponse(400, 'Missing required field: id')
+	id = request.json['id']
+	# Find the friend 
+	friend = Friends.query.filter(Friends.user_id == request.user.user_id, Friends.friend_id == id).first()
+	if friend == None : return makeAPIResponse(400, "You cannot remove what ya don't have.") 
+	else: 
+		db.session.delete(friend)
+		db.session.commit()
+		# Return a response
+		return makeAPIResponse(200, f'Friend removed.')

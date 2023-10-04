@@ -12,6 +12,7 @@ function FriendsPanel(props: FriendPanelProps) {
   const [listRef, animationEnabled] = useAutoAnimate();
   const [codeText, setCodeText] = useState<string | null>(State.friendCodeText);
   const [loading, setLoading] = useState<boolean>(true);
+  const [editing, setEditing] = useState<boolean>(false);
   const [friends, setFriends] = useState<User[]>([]);
   const [statusText, setStatusText] = useState<string | null>(null);
  
@@ -38,6 +39,16 @@ function FriendsPanel(props: FriendPanelProps) {
     setTimeout(() => setStatusText(null), 3000);
   }
 
+  async function removeFriend(friend: User) {
+    if (!codeText) return;
+    let response = await Janus.REMOVE_FROM_FRIENDS(friend.getID());
+    if (response.success) {
+      // setFriends(old => old.concat(new User(response.data)));
+    }
+    setStatusText(response.message);
+    setTimeout(() => setStatusText(null), 3000);
+  }
+
   /** Runs when the user scrolls through the games */
   function onScroll (e: React.UIEvent<HTMLElement>) {
     const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
@@ -50,6 +61,7 @@ function FriendsPanel(props: FriendPanelProps) {
     <div onScroll={onScroll} style = {styles.panel}>
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
+        <Button name = {editing ? 'Stop' : "Edit"} disabled = {loading} width={100} style={{marginRight: 15}} onClick={() => setEditing(!editing)}/>
         <TextInput 
           value={codeText} 
           defaultValue={codeText}

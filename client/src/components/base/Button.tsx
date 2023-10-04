@@ -14,6 +14,7 @@ function Button(props: ButtonProps) {
     fontSize: "16pt",
     padding: 10,
     opacity: disabled ? .65 : 1,
+    cursor: disabled ? undefined : 'pointer'
   };
 
   return (
