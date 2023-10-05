@@ -35,7 +35,7 @@ function GameTile(props: GameTileProps) {
       }} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
-      onClick={() => onClick(game)}
+      // onClick={() => onClick(game)}
     >
       {/* Cover Art */}
       <img style={{ zIndex: -1, opacity: (hovering) ? .7 : 1, ...styles.image}} src={game?.getCoverURL()}/>

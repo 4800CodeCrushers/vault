@@ -55,7 +55,7 @@ function TextInput(props: TextInputProps) {
     if (!props.rightIcon) return <></>;
     return(
       <div style={styles.rightIconContainer}>
-        <Icon size = {40} name={props.rightIcon} onClick = {props.onRightIconClick}/>
+        <Icon size = {30} name={props.rightIcon} onClick = {props.onRightIconClick}/>
       </div>
     );
   }

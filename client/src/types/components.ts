@@ -8,7 +8,8 @@ export type TextProps = {
   /** The text size. The default size is 12pt. */
   size?: number | string,
   /** The text to render. */
-  children?: string | null | (string | JSX.Element)[] | JSX.Element
+  children?: string | null
+  // children?: string | null | (string | JSX.Element)[] | JSX.Element
   /** Additional styling to be applied to the text */
   style?: CSSProperties,
   /** What happens if the text is clicked? */
@@ -121,6 +122,10 @@ export type FriendTileProps = {
   user: User,
   /** What happens if the tile is clicked? */
   onClick: (user: User) => void,
+  /** What happens if the delete button is clicked? */
+  onDeleteClick: (user: User) => void,
+  /** Are we in edit mode */
+  editing: boolean
 }
 
 export type PopupProps = {

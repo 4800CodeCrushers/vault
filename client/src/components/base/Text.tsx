@@ -14,9 +14,7 @@ function Text(props: TextProps) {
   };
 
   return (
-    <div style={{ ...defaultStyle, ...style }} onClick={onClick}>
-      {children}
-    </div>
+    <div dangerouslySetInnerHTML={{__html: props.children ?? ''}} style={{ ...defaultStyle, ...style }} onClick={onClick}/>
   );
 }
 

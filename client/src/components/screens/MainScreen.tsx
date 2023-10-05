@@ -64,7 +64,8 @@ function MainScreen(props: MainScreenProps) {
       <div style = {styles.sideMenuContainer}>
         <div style={{width: '100%'}}>
           <div style={styles.sideMenuHeaderContainer}>
-            <ProfilePic user={User.me}/>
+            {/* <ProfilePic user={User.me}/> */}
+            {/* <img src={require('../../assets/logo.png')} style={{width: 100, height: 100}}/> */}
             <Text style={styles.name} size={'14pt'}>{name}</Text>
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
           </div>
@@ -298,15 +299,16 @@ let styles: Styles = {
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    padding: 15
+    padding: 15,
+    paddingRight: 30,
+    paddingLeft: 30
   },
   iconsGrid: {
     gridTemplateColumns: 'repeat(auto-fill, minmax(45px, 1fr))',
     gap: '2px',
     display: 'grid',
     width: '100%',
-    paddingLeft: 5,
-    paddingRight: 25
+    marginRight: 50
   },
   backdrop: {
     position: 'absolute',

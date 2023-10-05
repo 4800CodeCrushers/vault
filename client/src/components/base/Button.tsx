@@ -13,6 +13,8 @@ function Button(props: ButtonProps) {
     backgroundColor: color,
     fontSize: "16pt",
     padding: 10,
+    paddingRight: 25, 
+    paddingLeft: 25, 
     opacity: disabled ? .65 : 1,
     cursor: disabled ? undefined : 'pointer'
   };

@@ -108,7 +108,7 @@ function HomePanel(props: HomePanelProps) {
           onChange={(text) => onTextChange(text)} 
           onSubmit={() => getGames()}
         />
-        <Button name = {"GO"} disabled = {query == null || loading} width={100} style={{marginLeft: 15}} onClick={() => getGames()}/>
+        <Button name = {"GO"} disabled = {query == null || loading} style={{marginLeft: 15}} onClick={() => getGames()}/>
       </div>
       {!searchedOnce && renderTrvia()}
       {/* Result Grid */}
@@ -142,11 +142,13 @@ let styles: Styles = {
   triviaAnswer: {
     textAlign: 'center',
     fontSize: 22,
+    margin: 5,
     fontWeight: 'bold',
   },
   triviaAnswerCorrect: {
     textAlign: 'center',
     fontSize: 22,
+    margin: 5,
     fontWeight: 'bold',
     color: 'green'
   },
