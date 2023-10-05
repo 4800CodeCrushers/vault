@@ -34,16 +34,18 @@ function GamePanel(props: GamePanelProps) {
   );
 }
 
+
+
 let styles: Styles = {
   panel: {
     display: 'flex', 
     flexDirection: 'column',
-    maxHeight: '100vh',
+    // maxHeight: '100vh',
   },
   gameContainer: {
     display: 'flex', 
     flexDirection: 'row',
-    justifyContent: 'center', 
+    justifyContent: 'left', 
     alignItems: 'center',
     height: 700,
   },
