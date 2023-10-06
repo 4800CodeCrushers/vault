@@ -91,7 +91,6 @@ export default class Janus {
     return Utility.contactAPI<UserInfo[]>({
       url: `list/friends?` + urlParams,
       method: "GET",
-      print: true
     });
   }
 

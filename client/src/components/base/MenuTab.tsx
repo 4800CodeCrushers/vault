@@ -30,8 +30,8 @@ function MenuTab(props: MenuTabProps) {
       onMouseEnter={() => setHovering(true)} 
       onMouseLeave={() => setHovering(false)}
     >
-      {icon && <Icon name={icon} size={40} color={selected ? '#29916e' : undefined} style={{marginRight: 15}}/>}
-      <Text size={fontSize} style={{fontWeight: 'bold'}} color={color ?? (selected ? '#29916e' : undefined)}>{name}</Text>
+      {icon && <Icon name={icon} size={40} color={selected ? '#fab400' : undefined} style={{marginRight: 15}}/>}
+      <Text size={fontSize} style={{fontWeight: 'bold'}} color={color ?? (selected ? '#fab400' : undefined)}>{name}</Text>
     
     </div>
   );

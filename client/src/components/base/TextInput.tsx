@@ -96,12 +96,14 @@ const styles: Styles = {
     height: "100%",
     display:'flex',
     alignItems:'center',
+    marginLeft: 5
   },
   rightIconContainer: {
     height: "100%",
     marginLeft: 2,
     display:'flex',
     alignItems:'center',
+    marginRight: 5
   },
   text: { 
     border: "none",

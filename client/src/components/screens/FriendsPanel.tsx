@@ -1,5 +1,5 @@
 import { CSSProperties, useState, useRef, useEffect } from 'react';
-import { Text, TextInput, GameTile, Button, FriendTile } from '..';
+import { Text, TextInput, GameTile, Button, FriendTile, Icon } from '..';
 import { FriendPanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
@@ -59,7 +59,7 @@ function FriendsPanel(props: FriendPanelProps) {
     <div onScroll={onScroll} style = {styles.panel}>
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
-        <Button name = {editing ? 'Stop' : "Edit"} disabled = {loading} style={{marginRight: 15}} onClick={() => setEditing(!editing)}/>
+        {/* <Button name = {editing ? 'Stop' : "Edit"} disabled = {loading} style={{marginRight: 15}} onClick={() => setEditing(!editing)}/> */}
         <TextInput 
           value={codeText} 
           defaultValue={codeText}
@@ -70,7 +70,8 @@ function FriendsPanel(props: FriendPanelProps) {
           onChange={(text) => { setCodeText(text.length > 0 ? text : null); State.friendCodeText = text;}} 
           onSubmit={() => addFriend()}
         />
-        <Button name = {"Add"} disabled = {codeText == null || loading} style={{marginLeft: 15}} onClick={() => addFriend()}/>
+        <Icon style={{marginLeft: 15}} size={35} name={editing ? 'pencil-stop' : 'pencil'} onClick={() => setEditing(!editing)}/>
+        {/* <Button name = {"Add"} disabled = {codeText == null || loading} style={{marginLeft: 15}} onClick={() => addFriend()}/> */}
       </div>
       {/* Render friend tiles */}
       <div style={{height: 30}}>

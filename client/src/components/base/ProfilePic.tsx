@@ -35,7 +35,7 @@ let styles: Styles = {
     display: 'flex', 
     justifyContent: 'center', 
     alignContent: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderStyle: 'solid',
     borderColor: 'white',
   },

@@ -24,9 +24,9 @@ function FriendTile(props: FriendTileProps) {
       {/* Profile pic */}
       <ProfilePic user={user}/>
       {/* Title text */}
-      <Text style={styles.name} size={'10pt'}>{user.getName()}</Text>
+      <Text style={styles.name} size={'12pt'}>{user.getName()}</Text>
       {/* Delete button */}
-      {editing && <Icon name={'minus'} color={hovering ? 'red' : undefined}/>}
+      {editing && <Icon style={{position: 'absolute', top: 0, left: 20}} name={'close-circle'} color={hovering ? undefined : undefined}/>}
     </div>
   );
 }
@@ -47,6 +47,7 @@ let styles: Styles = {
     WebkitLineClamp: 2, // Set the maximum number of lines to display
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden', 
+    fontWeight:'bold',
     paddingRight: 2, 
     paddingLeft: 2,
     marginTop: 10

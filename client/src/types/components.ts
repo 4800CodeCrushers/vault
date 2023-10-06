@@ -206,6 +206,10 @@ export type IconName =
   | 'check' 
   | 'plus' 
   | 'minus' 
+  | 'user' 
+  | 'logout' 
+  | 'pencil' 
+  | 'pencil-stop' 
   | 'copy';
 
 

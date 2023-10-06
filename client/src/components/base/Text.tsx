@@ -9,6 +9,7 @@ function Text(props: TextProps) {
     color,
     fontSize: size ?? `calc(12pt + .2vmin)`,
     userSelect: !onClick ? "none" : undefined,
+    WebkitUserSelect: !onClick ? "none" : undefined,
     pointerEvents:  !onClick ? 'none' : undefined,
     cursor: !onClick ? undefined : 'pointer'
   };
