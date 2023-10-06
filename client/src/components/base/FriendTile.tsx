@@ -6,7 +6,7 @@ import { Janus } from '../../utils';
 
 function FriendTile(props: FriendTileProps) {
   // Extract values from the props
-  const { user, onClick } = props;
+  const { user, onClick, editing, onDeleteClick } = props;
   const [hovering, setHovering] = useState<boolean>(false);
 
   return (
@@ -19,12 +19,14 @@ function FriendTile(props: FriendTileProps) {
       }} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
-      onClick={() => onClick(user)}
+      onClick={!editing ? () => onClick(user) : () => onDeleteClick(user)}
     >
       {/* Profile pic */}
       <ProfilePic user={user}/>
       {/* Title text */}
-      <Text style={styles.name} size={'10pt'}>{user.getName()}</Text>
+      <Text style={styles.name} size={'12pt'}>{user.getName()}</Text>
+      {/* Delete button */}
+      {editing && <Icon style={{position: 'absolute', top: 0, left: 20}} name={'close-circle'} color={hovering ? undefined : undefined}/>}
     </div>
   );
 }
@@ -45,6 +47,7 @@ let styles: Styles = {
     WebkitLineClamp: 2, // Set the maximum number of lines to display
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden', 
+    fontWeight:'bold',
     paddingRight: 2, 
     paddingLeft: 2,
     marginTop: 10

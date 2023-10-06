@@ -12,6 +12,8 @@ export default class Game {
 
     /** Get the ID of the game */
     getID() { return this.info.id }
+    /** Get the info of the game */
+    getInfo() { return this.info }
     /** Get the name of the game */
     getName() { return this.info.name }
     /** Get the summary of the game */
@@ -58,5 +60,13 @@ export default class Game {
     getWished() { return this.info.wished }
     /** Set if the game is in the wishlist */
     setWished(b: boolean) { this.info.wished = b }
+
+    static getInfo(games: Game[]): GameInfo[] {
+        let result: GameInfo[] = [];
+        games.forEach(g => {
+            result.push(g.info);
+        });
+        return result;
+    }
 
 }

@@ -1,5 +1,6 @@
-import { ContactAPIProps, APIResponse } from "../types";
+import { ContactAPIProps, APIResponse, GameInfo } from "../types";
 import { Janus } from ".";
+import { Game } from "../classes";
 
 export default class Utility {
 
@@ -184,6 +185,55 @@ export default class Utility {
     }
     // Return the result
     return result;
+  }
+
+  /** Print the size of the cache.  */
+  static printCacheSize() {
+    const usedStorage = Object.keys(localStorage).map(key => {
+      return window.localStorage[key].length * 2; // string data, multiply by 2 for UTF-16 encoding
+    }).reduce((acc, cur) => acc + cur, 0);
+    console.log(`Total Storage: ${usedStorage} bytes`);
+  }
+
+  /** Add a game to the cache. */
+  static addToCache(game: Game, toCollection: boolean = true) {
+    // Get the cache
+    let cache = toCollection ? window.localStorage.getItem('collection') : window.localStorage.getItem('wishlist');
+    if (cache) {
+      // Extract the info from the string
+      let info: GameInfo[] = JSON.parse(cache);
+      // Add the game to the list
+      info = info.concat(game.getInfo());
+      // Sort the games by id after adding a new game
+      let sortedInfo = [...info].sort((a, b) => a.id - b.id);
+      // Put the sorted info back in the cache
+      window.localStorage.setItem(toCollection ? 'collection' : 'wishlist', JSON.stringify(sortedInfo));
+    }
+    else {
+      // Create the cache since it does not exist
+      window.localStorage.setItem(toCollection ? 'collection' : 'wishlist', JSON.stringify([game.getInfo()]));
+    }
+  }
+
+  /** Remove a game to the cache. */
+  static removeFromCache(game: Game, fromCollection: boolean = true) {
+    // Get the cache
+    let cache = fromCollection ? window.localStorage.getItem('collection') : window.localStorage.getItem('wishlist');
+    if (cache) {
+      // Extract the info from the string
+      let info: GameInfo[] = JSON.parse(cache);
+      // Remove the game from the list
+      let index = -1;
+      for (let i = 0; i < info.length; i++) {
+        if (info[i].id === game.getID()) {
+          index = i;
+          break;
+        }
+      }
+      info = info.slice(0, index).concat(info.slice(index+1));
+      // Put the sorted info back in the cache
+      window.localStorage.setItem(fromCollection ? 'collection' : 'wishlist', JSON.stringify(info));
+    }
   }
 
 }

@@ -81,11 +81,11 @@ function LandingScreen(props: LandingScreenProps) {
             onSubmit={() => onButtonPress()}
           />
         )}
-        <Button name = {creating ? "Create" : "Login"} width = {200} onClick={() => onButtonPress()} disabled={!email || !password || loading}/>
+        <Button name = {creating ? "Create" : "Login"} style={{marginTop: 20}} width = {200} onClick={() => onButtonPress()} disabled={!email || !password || loading}/>
       </div>
       {/* Status Text */}
       <div style={styles.errorContainer}>
-          {error && <Text color={'red'}>{error}</Text>}
+          {error && <Text>{error}</Text>}
       </div>
       {/* Link text */}
       <div style={styles.linksContainer}>
@@ -126,7 +126,7 @@ let styles: Styles = {
     alignItems: 'center',
   },
   errorContainer: {
-    height: 50,
+    height: 30,
     display: 'flex',
     justifyContent: 'center',
     paddingTop: 10

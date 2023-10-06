@@ -11,25 +11,13 @@ export default class Trivia {
   constructor(info: TriviaInfo) {
     // Store the question
     this.question = info.question;
-    this.question = this.question.replaceAll('&#039;', "'");
-    this.question = this.question.replaceAll('&quot;', '"');
-    this.question = this.question.replaceAll('&rsquo;', "'");
-    this.question = this.question.replaceAll('&amp;', '&');
-    this.question = this.question.replaceAll('&eacute;', 'é');
     // Store the answer
     this.answer = info.correct_answer;
-
     // Store the random options
     let list: string[] = [];
     if (info.type === 'multiple') {
       list = info.incorrect_answers.concat(info.correct_answer);
       for (let i = list.length - 1; i > 0; i--) {
-        // replace with correct characters
-        list[i] = list[i].replaceAll('&#039;', "'");
-        list[i] = list[i].replaceAll('&rsquo;', "'");
-        list[i] = list[i].replaceAll('&quot;', '"');
-        list[i] = list[i].replaceAll('&amp;', '&');
-        list[i] = list[i].replaceAll('&eacute;', 'é');
         // shift options around randomly
         let ran = Math.floor(Math.random() * (i + 1));
         let temp = list[ran];

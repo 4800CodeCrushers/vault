@@ -1,9 +1,10 @@
 import { CSSProperties, useState, useRef, useEffect } from 'react';
 import { Text, TextInput, GameTile, Button } from '..';
-import { CollectionPanelProps, Styles } from '../../types';
+import { CollectionPanelProps, GameInfo, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { json } from 'node:stream/consumers';
 
 
 function CollectionPanel(props: CollectionPanelProps) {
@@ -23,29 +24,54 @@ function CollectionPanel(props: CollectionPanelProps) {
   async function getStuff() {
     if (!user) return;
     setLoading(true);
-    
-    // Get collection
-    let response = await Janus.GET_COLLECTION(user);
-    if (response.success) {
-      let games = response.data.map(info => new Game(info));
-      setCollection(games);
-      setLoading(false);
-      while (response.data?.length > 0) {
-        response = await Janus.GET_COLLECTION(user, games.length);
-        games = games.concat(response.success ? response.data.map(info => new Game(info)) : []);
-        setCollection(games);
+    // Get your data from the cache
+    if (viewingMyStuff) {
+      let collectionCache = window.localStorage.getItem('collection');
+      let wishlistCache = window.localStorage.getItem('wishlist');
+      if (collectionCache) {
+        let info: GameInfo[] = JSON.parse(collectionCache);
+        setCollection(info.map(i => new Game(i)));
       }
+      if (wishlistCache) {
+        let info: GameInfo[] = JSON.parse(wishlistCache);
+        setWishlist(info.map(i => new Game(i)));
+      }
+      if (collectionCache || wishlistCache) return;
     }
-    // Get wishlist
-    let response2 = await Janus.GET_WISHLIST(user);
-    if (response2.success) {
-      let games2 = response2.data.map(info => new Game(info));
-      setWishlist(games2);
-      while (response2.data?.length > 0) {
-        response2 = await Janus.GET_WISHLIST(user, games2.length);
-        games2 = games2.concat(response2.success ? response2.data.map(info => new Game(info)) : []);
-        setWishlist(games2);
+    // If not viewing my stuff or nothing is cached,
+    // Alternate getting the collection and wishlist
+    let getWishlist = false;
+    let loadedAllCollection = false;
+    let loadedAllWishlist = false;
+    let loadedCollection: Game[] = [];
+    let loadedWishlist: Game[] = [];
+    do {
+      // Get wishlist
+      if (getWishlist && !loadedAllWishlist) {
+        let response = await Janus.GET_WISHLIST(user, loadedWishlist.length);
+        let loadedGames = response.success ? response.data.map(info => new Game(info)) : [];
+        if (loadedGames.length == 0) loadedAllWishlist = true;
+        loadedWishlist = loadedWishlist.concat(loadedGames);
+        setWishlist(loadedWishlist);
       }
+      // get collection
+      else if (!getWishlist && !loadedAllCollection) {
+        let response = await Janus.GET_COLLECTION(user, loadedCollection.length);
+        let loadedGames = response.success ? response.data.map(info => new Game(info)) : [];
+        if (loadedGames.length == 0) loadedAllCollection = true;
+        loadedCollection = loadedCollection.concat(loadedGames);
+        setCollection(loadedCollection);
+      }
+      // swap the flag that decides the list we are getting
+      if (!loadedAllCollection && !loadedAllWishlist) getWishlist = !getWishlist;
+      else if (loadedAllCollection && !loadedAllWishlist) getWishlist = true;
+      else if (!loadedAllCollection && loadedAllWishlist) getWishlist = false;
+      else break;
+    } while (true);
+    // Put the loaded games in the cache if this is our stuff
+    if (viewingMyStuff) {
+      window.localStorage.setItem('collection', JSON.stringify(Game.getInfo(loadedCollection)));
+      window.localStorage.setItem('wishlist', JSON.stringify(Game.getInfo(loadedWishlist)));
     }
   }
 
@@ -132,7 +158,7 @@ let styles: Styles = {
   panel: {
     display: 'flex', 
     flexDirection: 'column',
-    height: '100vh',
+    height: '100%',
     overflowY: 'auto',
   },
   inputContainer: {
@@ -151,6 +177,7 @@ let styles: Styles = {
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+    gap: 7,
     width: '80%',
     alignSelf: 'center',
   },

@@ -33,7 +33,7 @@ function HomePanel(props: HomePanelProps) {
     setTrivia(trivia);
     await new Promise(resolve => setTimeout(resolve, 2000));
     setShowOptions(true);
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await new Promise(resolve => setTimeout(resolve, 7000));
     setShowAnswer(true);
     await new Promise(resolve => setTimeout(resolve, 3000));
     setTargetTriviaOpacity(0);
@@ -72,6 +72,7 @@ function HomePanel(props: HomePanelProps) {
   }
 
   function renderTrvia() {
+
     return(
       <div style={{opacity: targetTriviaOpacity, transition: 'opacity 2s', height: 300, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '50%', alignSelf: 'center'}}>
         <Text style={styles.trivia}>{trivia?.getQuestion()}</Text>
@@ -108,7 +109,7 @@ function HomePanel(props: HomePanelProps) {
           onChange={(text) => onTextChange(text)} 
           onSubmit={() => getGames()}
         />
-        <Button name = {"GO"} disabled = {query == null || loading} width={100} style={{marginLeft: 15}} onClick={() => getGames()}/>
+        <Button name = {"GO"} disabled = {query == null || loading} style={{marginLeft: 15}} onClick={() => getGames()}/>
       </div>
       {!searchedOnce && renderTrvia()}
       {/* Result Grid */}
@@ -125,7 +126,7 @@ let styles: Styles = {
   panel: {
     display: 'flex', 
     flexDirection: 'column',
-    height: '100vh',
+    height: '100%',
     overflowY: 'auto',
   },
   greeting: {
@@ -133,6 +134,7 @@ let styles: Styles = {
     fontSize: 42,
     fontWeight: 'bold',
     marginBottom: 60,
+    marginTop: 100
   },
   trivia: {
     textAlign: 'center',
@@ -142,11 +144,13 @@ let styles: Styles = {
   triviaAnswer: {
     textAlign: 'center',
     fontSize: 22,
+    margin: 5,
     fontWeight: 'bold',
   },
   triviaAnswerCorrect: {
     textAlign: 'center',
     fontSize: 22,
+    margin: 5,
     fontWeight: 'bold',
     color: 'green'
   },

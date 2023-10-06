@@ -58,25 +58,38 @@ function MainScreen(props: MainScreenProps) {
     else setSelectedTab(lastSelectedTab);
   }
 
-  function rendeSideMenu() {
+  function renderSideMenu() {
     if (!showSideMenu) return <></>;
+
+    function onCodeCopy() {
+      if (User.me?.getCode()) navigator.clipboard.writeText(User.me.getCode());
+      setCopiedRecently(true);
+      setTimeout(() => setCopiedRecently(false), 3500);
+    }
+
     return (
       <div style = {styles.sideMenuContainer}>
         <div style={{width: '100%'}}>
           <div style={styles.sideMenuHeaderContainer}>
             <ProfilePic user={User.me}/>
             <Text style={styles.name} size={'14pt'}>{name}</Text>
+            <div style={styles.friendCodeContainer}>
+              <Text size={'10pt'} style={{marginRight: 20}}>{`Code: ${User.me?.getCode()}`}</Text>
+              <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
+            </div>  
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
           </div>
-          <MenuTab name={'Home'} icon={'home'} onClick={() => {setSelectedTab(homeGame ? 'game':'home'); setLastSelectedTab('home');}} selected={lastSelectedTab === 'home'}/>
-          {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab(collectionGame ?'game':'collection'); setLastSelectedTab('collection');}} selected={lastSelectedTab === 'collection'}/>}
-          {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab(friendGame ? 'game': (viewedFriend ? 'collection' : 'friends')); setLastSelectedTab('friends');}} selected={lastSelectedTab === 'friends'}/>}
+          <MenuTab name={'Home'} icon={'home'} onClick={() => {setSelectedTab(homeGame ? 'game':'home'); setLastSelectedTab('home');}} selected={!showPopup && lastSelectedTab === 'home'}/>
+          {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab(collectionGame ?'game':'collection'); setLastSelectedTab('collection');}} selected={!showPopup && lastSelectedTab === 'collection'}/>}
+          {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab(friendGame ? 'game': (viewedFriend ? 'collection' : 'friends')); setLastSelectedTab('friends');}} selected={!showPopup && lastSelectedTab === 'friends'}/>}
+          {User.me && <MenuTab name={'Profile'} icon={'user'} selected = {showPopup} onClick={() => setShowPopup(true)}/> }
+          {User.me && <MenuTab name={'Sign Out'} icon={'logout'} onClick={() => props.onLogout()}/>}
         </div>
         <div style={{backgroundColor: 'white', width: 1, height: '100%'}}/>
       </div>
     );
   }
-
+  
   function renderDropDown() {
     if (!showDropDown) return <></>;
 
@@ -110,6 +123,7 @@ function MainScreen(props: MainScreenProps) {
             size={35} 
             onClick={() => setShowSideMenu(!showSideMenu)} 
             style={{marginRight: 15}}
+            color={showSideMenu ? '#fab400' : undefined}
           />
           <Icon 
             name="back" 
@@ -118,7 +132,7 @@ function MainScreen(props: MainScreenProps) {
             style={{opacity: lastSelectedTab === selectedTab ? .3 : 1}}
           />
         </div>
-        {User.me && <ProfilePic user={User.me} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>}
+        {/* {User.me && <ProfilePic user={User.me} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>} */}
         {!User.me && <Button name = {'Create Account'} onClick={() => props.onAccountCreate()}/>}
         { renderDropDown() }
       </div>  
@@ -185,7 +199,7 @@ function MainScreen(props: MainScreenProps) {
               />
             ))}
           </div>
-          <HexColorPicker onChange={(c) => { setColor(c); User.me?.setColor(c);}} style={{height: 200}}/>
+          <HexColorPicker color={User.me?.getColor()} onChange={(c) => { setColor(c); User.me?.setColor(c);}} style={{height: 200}}/>
         </div>
         
 
@@ -198,17 +212,19 @@ function MainScreen(props: MainScreenProps) {
 
   return (
     <div style = {styles.screen}>
-      { rendeSideMenu() }
+      { renderToolbar() }
       {/* Render main panel */}
       <div style = {styles.panelContainer}>
-        { renderToolbar() }
-        { selectedTab === 'home' && <HomePanel onGameSelect={game => {setHomeGame(game); setSelectedTab('game');}}/>}
-        { lastSelectedTab === 'collection' && selectedTab === 'collection' && <CollectionPanel user={User.me} onGameSelect={game => {setCollectionGame(game); setSelectedTab('game');}}/>}
-        { selectedTab === 'friends' && <FriendsPanel onFriendSelect={(f) => {setViewedFriend(f); setSelectedTab('collection');}}/>}
-        { viewedFriend && lastSelectedTab === 'friends' && selectedTab == 'collection' && <CollectionPanel user = {viewedFriend} onGameSelect={game => {setFriendGame(game); setSelectedTab('game');}}/>}
-        { lastSelectedTab === 'home' && homeGame && selectedTab === 'game' && <GamePanel game={homeGame}/>}
-        { lastSelectedTab === 'collection' && collectionGame && selectedTab === 'game' && <GamePanel game={collectionGame}/>}
-        { lastSelectedTab === 'friends' && friendGame && selectedTab === 'game' && <GamePanel game={friendGame}/>}
+        { renderSideMenu() }
+        <div style={{width: '100%', paddingTop: 25}}>
+          { selectedTab === 'home' && <HomePanel onGameSelect={game => {setHomeGame(game); setSelectedTab('game');}}/>}
+          { lastSelectedTab === 'collection' && selectedTab === 'collection' && <CollectionPanel user={User.me} onGameSelect={game => {setCollectionGame(game); setSelectedTab('game');}}/>}
+          { selectedTab === 'friends' && <FriendsPanel onFriendSelect={(f) => {setViewedFriend(f); setSelectedTab('collection');}}/>}
+          { viewedFriend && lastSelectedTab === 'friends' && selectedTab == 'collection' && <CollectionPanel user = {viewedFriend} onGameSelect={game => {setFriendGame(game); setSelectedTab('game');}}/>}
+          { lastSelectedTab === 'home' && homeGame && selectedTab === 'game' && <GamePanel game={homeGame}/>}
+          { lastSelectedTab === 'collection' && collectionGame && selectedTab === 'game' && <GamePanel game={collectionGame}/>}
+          { lastSelectedTab === 'friends' && friendGame && selectedTab === 'game' && <GamePanel game={friendGame}/>}
+        </div>
       </div>
       {/* Render popup */}
       {showPopup && <Popup onClose={() => setShowPopup(false)}>{renderSettings()}</Popup>}
@@ -222,14 +238,14 @@ let styles: Styles = {
 
   screen: {
     display: 'flex', 
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   sideMenuContainer: {
     display: 'flex', 
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '15%',
-    height: '100vh',
+    height: '95vh',
     minWidth: 250,
     overflow: 'hidden',
   },
@@ -264,12 +280,13 @@ let styles: Styles = {
   },
   panelContainer: {
     display: 'flex', 
-    flexDirection: 'column',
-    height: '100vh',
-    width: '100%'
+    flexDirection: 'row',
+    height: '90vh',
+    width: '100%',
   },
   toolbarContainer: {
     backgroundColor: Utility.getTint('#0e0e0e', 10),
+    height: '5vh',
     padding: 10,
     paddingRight: 25,
     display: 'flex',
@@ -277,7 +294,6 @@ let styles: Styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     zIndex: 4,
-    marginBottom: 20
   },
   name: {
     textAlign: 'center', 
@@ -298,15 +314,16 @@ let styles: Styles = {
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    padding: 15
+    padding: 15,
+    paddingRight: 30,
+    paddingLeft: 30
   },
   iconsGrid: {
     gridTemplateColumns: 'repeat(auto-fill, minmax(45px, 1fr))',
     gap: '2px',
     display: 'grid',
     width: '100%',
-    paddingLeft: 5,
-    paddingRight: 25
+    marginRight: 50
   },
   backdrop: {
     position: 'absolute',

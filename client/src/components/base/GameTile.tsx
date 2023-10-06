@@ -2,7 +2,7 @@ import { CSSProperties, useState, useRef } from 'react';
 import { GameTileProps } from '../../types/components'
 import { Styles } from '../../types';
 import { Icon, Text } from '..';
-import { Janus } from '../../utils';
+import { Janus, Utility } from '../../utils';
 
 function GameTile(props: GameTileProps) {
   // Extract values from the props
@@ -13,6 +13,8 @@ function GameTile(props: GameTileProps) {
 
   async function onWishlistClick() {
     if (props.onWishlistClick) props.onWishlistClick(game);
+    if (!game.getWished()) Utility.addToCache(game, false);
+    else Utility.removeFromCache(game, false);
     let response = !game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     game.setWished(!game.getWished());
     setWished(game.getWished());
@@ -20,6 +22,8 @@ function GameTile(props: GameTileProps) {
 
   async function onCollectionClick() {
     if (props.onCollectionClick) props.onCollectionClick(game);
+    if (!game.getCollected()) Utility.addToCache(game);
+    else Utility.removeFromCache(game);
     let response = !game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     game.setCollected(!game.getCollected());
     setCollected(game.getCollected());
@@ -35,7 +39,7 @@ function GameTile(props: GameTileProps) {
       }} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
-      onClick={() => onClick(game)}
+      // onClick={() => onClick(game)}
     >
       {/* Cover Art */}
       <img style={{ zIndex: -1, opacity: (hovering) ? .7 : 1, ...styles.image}} src={game?.getCoverURL()}/>

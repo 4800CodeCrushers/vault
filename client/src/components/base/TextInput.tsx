@@ -55,7 +55,7 @@ function TextInput(props: TextInputProps) {
     if (!props.rightIcon) return <></>;
     return(
       <div style={styles.rightIconContainer}>
-        <Icon size = {40} name={props.rightIcon} onClick = {props.onRightIconClick}/>
+        <Icon size = {30} name={props.rightIcon} onClick = {props.onRightIconClick}/>
       </div>
     );
   }
@@ -96,12 +96,14 @@ const styles: Styles = {
     height: "100%",
     display:'flex',
     alignItems:'center',
+    marginLeft: 5
   },
   rightIconContainer: {
     height: "100%",
     marginLeft: 2,
     display:'flex',
     alignItems:'center',
+    marginRight: 5
   },
   text: { 
     border: "none",

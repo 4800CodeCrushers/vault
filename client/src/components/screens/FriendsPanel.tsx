@@ -1,5 +1,5 @@
 import { CSSProperties, useState, useRef, useEffect } from 'react';
-import { Text, TextInput, GameTile, Button, FriendTile } from '..';
+import { Text, TextInput, GameTile, Button, FriendTile, Icon } from '..';
 import { FriendPanelProps, Styles } from '../../types';
 import { Utility, Janus, State } from '../../utils';
 import { Game, User } from '../../classes';
@@ -40,11 +40,9 @@ function FriendsPanel(props: FriendPanelProps) {
   }
 
   async function removeFriend(friend: User) {
-    if (!codeText) return;
+    let index = friends.indexOf(friend);
+    setFriends(friends.slice(0,index).concat(friends.slice(index + 1)));
     let response = await Janus.REMOVE_FROM_FRIENDS(friend.getID());
-    if (response.success) {
-      // setFriends(old => old.concat(new User(response.data)));
-    }
     setStatusText(response.message);
     setTimeout(() => setStatusText(null), 3000);
   }
@@ -61,7 +59,7 @@ function FriendsPanel(props: FriendPanelProps) {
     <div onScroll={onScroll} style = {styles.panel}>
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
-        <Button name = {editing ? 'Stop' : "Edit"} disabled = {loading} width={100} style={{marginRight: 15}} onClick={() => setEditing(!editing)}/>
+        {/* <Button name = {editing ? 'Stop' : "Edit"} disabled = {loading} style={{marginRight: 15}} onClick={() => setEditing(!editing)}/> */}
         <TextInput 
           value={codeText} 
           defaultValue={codeText}
@@ -72,12 +70,23 @@ function FriendsPanel(props: FriendPanelProps) {
           onChange={(text) => { setCodeText(text.length > 0 ? text : null); State.friendCodeText = text;}} 
           onSubmit={() => addFriend()}
         />
-        <Button name = {"Add"} disabled = {codeText == null || loading} width={100} style={{marginLeft: 15}} onClick={() => addFriend()}/>
+        <Icon style={{marginLeft: 15}} size={35} name={editing ? 'pencil-stop' : 'pencil'} onClick={() => setEditing(!editing)}/>
+        {/* <Button name = {"Add"} disabled = {codeText == null || loading} style={{marginLeft: 15}} onClick={() => addFriend()}/> */}
       </div>
       {/* Render friend tiles */}
-      { statusText && <Text style={{textAlign: 'center'}}>{statusText}</Text>}
+      <div style={{height: 30}}>
+        { statusText && <Text style={{textAlign: 'center'}}>{statusText}</Text>}
+      </div>
       <div style = {styles.grid} ref = {listRef}>
-        {friends.map(f => <FriendTile key={f.getID()} user={f} onClick={() => onFriendSelect(f)}/>)}
+        {friends.map(f => 
+          <FriendTile 
+            key={f.getID()} 
+            user={f} 
+            editing = {editing}
+            onClick={() => onFriendSelect(f)}
+            onDeleteClick={() => removeFriend(f)}
+          />
+        )}
       </div>
 
     </div>
