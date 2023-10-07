@@ -13,18 +13,19 @@ function GameTile(props: GameTileProps) {
 
   async function onWishlistClick() {
     if (props.onWishlistClick) props.onWishlistClick(game);
-    if (!game.getWished()) Utility.addToCache(game, false);
-    else Utility.removeFromCache(game, false);
-    let response = !game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     game.setWished(!game.getWished());
+    if (game.getWished()) Utility.addToCache(game, false);
+    else Utility.removeFromCache(game, false);
+    let response = game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     setWished(game.getWished());
   }
 
   async function onCollectionClick() {
     if (props.onCollectionClick) props.onCollectionClick(game);
-    if (!game.getCollected()) Utility.addToCache(game);
+    game.setCollected(!game.getCollected());
+    if (game.getCollected()) Utility.addToCache(game);
     else Utility.removeFromCache(game);
-    let response = !game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
+    let response = game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     game.setCollected(!game.getCollected());
     setCollected(game.getCollected());
   }
