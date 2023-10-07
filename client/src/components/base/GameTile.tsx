@@ -3,6 +3,7 @@ import { GameTileProps } from '../../types/components'
 import { Styles } from '../../types';
 import { Icon, Text } from '..';
 import { Janus, Utility } from '../../utils';
+import { User } from '../../classes';
 
 function GameTile(props: GameTileProps) {
   // Extract values from the props
@@ -39,14 +40,14 @@ function GameTile(props: GameTileProps) {
       }} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
-      // onClick={() => onClick(game)}
     >
       {/* Cover Art */}
       <img style={{ zIndex: -1, opacity: (hovering) ? .7 : 1, ...styles.image}} src={game?.getCoverURL()}/>
       {/* Buttons on hover */}
       <div style={styles.buttonContainer}>
-        {hovering && <Icon size={60} name={wished ? 'wishlist-fill' : 'wishlist'} style={{marginRight: 20}} onClick={() => onWishlistClick()}/>}
-        {hovering && <Icon size={60} name={collected ? 'minus' : 'plus'} onClick={() => onCollectionClick()}/>}
+        <div onClick={() => onClick(game)} style={{width: '100%', height: 250, position: 'absolute'}}/>
+        {User.me && hovering && <Icon size={50} name={wished ? 'wishlist-fill' : 'wishlist'} style={{marginRight: 20, zIndex: 4}} onClick={() => onWishlistClick()}/>}
+        {User.me && hovering && <Icon size={50} name={collected ? 'minus' : 'plus'} style={{zIndex: 4}} onClick={() => onCollectionClick()}/>}
       </div>
       {/* Title text */}
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>

@@ -64,7 +64,7 @@ function LandingScreen(props: LandingScreenProps) {
       <Text style={{textAlign: 'center', marginTop: 40}}>Welcome to</Text>
       <Text style={styles.title}>MyGamesVault.com</Text>
       {/* Logo */}
-      <img style = {{width: 300, height: 300, margin: 25,  alignSelf: 'center'}} src = {require('../../assets/logo.png')}/>
+      <img style = {{width: 200, height: 200, margin: 25,  alignSelf: 'center', pointerEvents: 'none'}} src = {require('../../assets/logo.png')}/>
       {/* Input fields */}
       <div style = {styles.inputsContainer} ref = {listRef}>
         {(creating ? createFields : loginFields).map(field => 
