@@ -3,6 +3,7 @@ import { GameTileProps } from '../../types/components'
 import { Styles } from '../../types';
 import { Icon, Text } from '..';
 import { Janus, Utility } from '../../utils';
+import { User } from '../../classes';
 
 function GameTile(props: GameTileProps) {
   // Extract values from the props
@@ -12,20 +13,20 @@ function GameTile(props: GameTileProps) {
   const [wished, setWished] = useState<boolean>(game.getWished());
 
   async function onWishlistClick() {
-    if (props.onWishlistClick) props.onWishlistClick(game);
-    if (!game.getWished()) Utility.addToCache(game, false);
-    else Utility.removeFromCache(game, false);
-    let response = !game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     game.setWished(!game.getWished());
+    if (props.onWishlistClick) props.onWishlistClick(game);
+    if (game.getWished()) Utility.addToCache(game, false);
+    else Utility.removeFromCache(game, false);
+    let response = game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     setWished(game.getWished());
   }
 
   async function onCollectionClick() {
-    if (props.onCollectionClick) props.onCollectionClick(game);
-    if (!game.getCollected()) Utility.addToCache(game);
-    else Utility.removeFromCache(game);
-    let response = !game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     game.setCollected(!game.getCollected());
+    if (props.onCollectionClick) props.onCollectionClick(game);
+    if (game.getCollected()) Utility.addToCache(game);
+    else Utility.removeFromCache(game);
+    let response = game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     setCollected(game.getCollected());
   }
 
@@ -39,14 +40,14 @@ function GameTile(props: GameTileProps) {
       }} 
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)} 
-      // onClick={() => onClick(game)}
     >
       {/* Cover Art */}
       <img style={{ zIndex: -1, opacity: (hovering) ? .7 : 1, ...styles.image}} src={game?.getCoverURL()}/>
       {/* Buttons on hover */}
       <div style={styles.buttonContainer}>
-        {hovering && <Icon size={60} name={wished ? 'wishlist-fill' : 'wishlist'} style={{marginRight: 20}} onClick={() => onWishlistClick()}/>}
-        {hovering && <Icon size={60} name={collected ? 'minus' : 'plus'} onClick={() => onCollectionClick()}/>}
+        <div onClick={() => onClick(game)} style={{width: '100%', height: 250, position: 'absolute'}}/>
+        {User.me && hovering && <Icon size={50} name={wished ? 'wishlist-fill' : 'wishlist'} style={{marginRight: 20, zIndex: 4}} onClick={() => onWishlistClick()}/>}
+        {User.me && hovering && <Icon size={50} name={collected ? 'minus' : 'plus'} style={{zIndex: 4}} onClick={() => onCollectionClick()}/>}
       </div>
       {/* Title text */}
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
