@@ -46,7 +46,8 @@ let styles: Styles = {
   panel: {
     display: 'flex', 
     flexDirection: 'column',
-    maxHeight: '100vh',
+    height: '100%',
+    overflowY: 'auto',
   },
   gameContainer: {
     display: 'flex', 
