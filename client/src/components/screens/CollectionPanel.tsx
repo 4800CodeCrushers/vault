@@ -26,6 +26,8 @@ function CollectionPanel(props: CollectionPanelProps) {
     setLoading(true);
     // Get your data from the cache
     if (viewingMyStuff) {
+      // window.localStorage.removeItem('collection');
+      // window.localStorage.removeItem('wishlist');
       let collectionCache = window.localStorage.getItem('collection');
       let wishlistCache = window.localStorage.getItem('wishlist');
       if (collectionCache) {
@@ -144,8 +146,8 @@ function CollectionPanel(props: CollectionPanelProps) {
             key={game.getID()} 
             game={game} 
             onClick={() => onGameSelect(game)}
-            onCollectionClick={(g) => g.getCollected() ? setCollection(removeGame(g, collection)) : setCollection(collection.concat(g))}
-            onWishlistClick={(g) => g.getWished() ? setWishlist(removeGame(g, wishlist)) : setWishlist(wishlist.concat(g))}
+            onCollectionClick={(g) => !g.getCollected() ? setCollection(removeGame(g, collection)) : setCollection(collection.concat(g))}
+            onWishlistClick={(g) => !g.getWished() ? setWishlist(removeGame(g, wishlist)) : setWishlist(wishlist.concat(g))}
           />
         )}
       </div>
