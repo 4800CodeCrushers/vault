@@ -10,9 +10,17 @@ function GamePanel(props: GamePanelProps) {
   const { game } = props;
   
   return (
-    <div style = {styles.panel}>
+    // <div style = {styles.panel}>
+
+      <div style = {styles.testPanel}>
       {/* Render game info */}
-      <div style={styles.gameContainer}>
+
+      {/* <div style={styles.gameContainer}> */}
+
+        {/* Render Background image*/}
+        <img style={{...styles.backgroundImage, opacity: game ? 1: 0}} src={game?.getScreenshotURL()}/>
+        {/* Render game info */}
+        <div style={styles.testGameContainer}>
         {/* Render image */}
         <img style={{...styles.cover, opacity: game ? 1 : 0}} src={game?.getCoverURL()}/>
         {/* Render text */}
@@ -34,18 +42,16 @@ function GamePanel(props: GamePanelProps) {
   );
 }
 
-
-
 let styles: Styles = {
   panel: {
     display: 'flex', 
     flexDirection: 'column',
-    // maxHeight: '100vh',
+    maxHeight: '100vh',
   },
   gameContainer: {
     display: 'flex', 
     flexDirection: 'row',
-    justifyContent: 'left', 
+    justifyContent: 'center', 
     alignItems: 'center',
     height: 700,
   },
@@ -83,6 +89,29 @@ let styles: Styles = {
   logo: {
     height: 50,
   },
+  testPanel: {
+    display: 'flex', 
+    flexDirection: 'column',
+    maxHeight: '100vh',
+    overflowY: 'auto',
+  },
+  testGameContainer: {
+    display: 'flex', 
+    flexDirection: 'row',
+    justifyContent: 'center', 
+    alignItems: 'center',
+    height: 1000,
+  },
+  backgroundImage:{
+    backgroundAttachment: 'fixed',
+    backgroundColor: '#cccccc',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    height:'300px',
+    // backgroundPositionX: 'center',
+    // backgroundPositionY: 'center',
+  }
 }
   
 
