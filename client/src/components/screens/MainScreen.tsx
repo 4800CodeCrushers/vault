@@ -118,13 +118,13 @@ function MainScreen(props: MainScreenProps) {
     return (
       <div style={styles.toolbarContainer}>
         <div>
-          <Icon 
+          {User.me && <Icon 
             name="hamburger" 
             size={35} 
             onClick={() => setShowSideMenu(!showSideMenu)} 
             style={{marginRight: 15}}
             color={showSideMenu ? '#fab400' : undefined}
-          />
+          />}
           <Icon 
             name="back" 
             size={35} 
