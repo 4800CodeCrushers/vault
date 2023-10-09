@@ -15,7 +15,6 @@ function MainScreen(props: MainScreenProps) {
   const [selectedTab, setSelectedTab] = useState<Tabs>('home');
   const [lastSelectedTab, setLastSelectedTab] = useState<Tabs>('home');
   const [showSideMenu, setShowSideMenu] = useState<boolean>(false);
-  const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [copiedRecently, setCopiedRecently] = useState<boolean>(false);
@@ -74,7 +73,7 @@ function MainScreen(props: MainScreenProps) {
             <ProfilePic user={User.me}/>
             <Text style={styles.name} size={'14pt'}>{name}</Text>
             <div style={styles.friendCodeContainer}>
-              <Text size={'10pt'} style={{marginRight: 20}}>{`Code: ${User.me?.getCode()}`}</Text>
+              <Text size={'10pt'} style={{marginRight: 5}}>{`Code: ${User.me?.getCode()}`}</Text>
               <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
             </div>  
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
@@ -83,6 +82,7 @@ function MainScreen(props: MainScreenProps) {
           {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab(collectionGame ?'game':'collection'); setLastSelectedTab('collection');}} selected={!showPopup && lastSelectedTab === 'collection'}/>}
           {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab(friendGame ? 'game': (viewedFriend ? 'collection' : 'friends')); setLastSelectedTab('friends');}} selected={!showPopup && lastSelectedTab === 'friends'}/>}
           {User.me && <MenuTab name={'Profile'} icon={'user'} selected = {showPopup} onClick={() => setShowPopup(true)}/> }
+          {User.me && <MenuTab name={'Clear Cache'} icon={'close-circle'} onClick={() => {window.localStorage.removeItem('collection'); window.localStorage.removeItem('wishlist');}}/> }
           {User.me && <MenuTab name={'Sign Out'} icon={'logout'} onClick={() => props.onLogout()}/>}
         </div>
         <div style={{backgroundColor: 'white', width: 1, height: '100%'}}/>
@@ -90,30 +90,6 @@ function MainScreen(props: MainScreenProps) {
     );
   }
   
-  function renderDropDown() {
-    if (!showDropDown) return <></>;
-
-    function onCodeCopy() {
-      if (User.me?.getCode()) navigator.clipboard.writeText(User.me.getCode());
-      setCopiedRecently(true);
-      setTimeout(() => setCopiedRecently(false), 3500);
-    }
-
-    return (
-      <div style={styles.dropDownContainer}>
-        <ProfilePic user={User.me} size={60}/>
-        <Text style={styles.name} size={'14pt'}>{name}</Text>
-        <div style={styles.friendCodeContainer}>
-          <Text size={'10pt'} style={{marginRight: 20}}>{`Code: ${User.me?.getCode()}`}</Text>
-          <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
-        </div>
-        <div style={{backgroundColor: 'white', width: '100%', height: 1}}/>
-        <MenuTab name={'Settings'} fontSize={18} height={35} onClick={() => {setShowPopup(true);setShowDropDown(false);}}/>
-        <MenuTab name={'Sign Out'} fontSize={18} height={35} color={'red'} onClick={() => props.onLogout()}/>
-      </div>
-    );
-  }
-
   function renderToolbar() {
     return (
       <div style={styles.toolbarContainer}>
@@ -133,8 +109,8 @@ function MainScreen(props: MainScreenProps) {
           />
         </div>
         {/* {User.me && <ProfilePic user={User.me} size = {35} padding={5} onClick={() => setShowDropDown(!showDropDown)}/>} */}
+        {User.me && <Text style={{fontWeight: 'bolder'}}>MyGamesVault.com</Text>}
         {!User.me && <Button name = {'Create Account'} onClick={() => props.onAccountCreate()}/>}
-        { renderDropDown() }
       </div>  
     );
   }
@@ -255,20 +231,6 @@ let styles: Styles = {
     alignItems: 'center',
     padding: 5,
     marginTop: 10
-  },
-  dropDownContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    overflow: 'hidden',
-    position: 'absolute', 
-    width: 250,
-    right: 25, 
-    top: 75, 
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    backgroundColor: '#2b3134',
-    boxShadow: '50px rgba(0, 0, 0, 1)'
   },
   friendCodeContainer: {
     flexDirection: 'row', 

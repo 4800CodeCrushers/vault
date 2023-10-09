@@ -52,39 +52,30 @@ def igdbRequest(params):
 
 	# Iterate through the list of games and collect the desired fields
 	for game in parsed_data:
-		
 		# Retrieve game attributes.
 		name = game.get("name", "Unavailable")
 		game_id = game.get("id", "Unavailable")
 		summary = game.get("summary", "Unavailable")
-
 		print(f"\nName: {name}")
 		print(f"\nGame ID: {game_id}")
 		print(f"\nSummary: {summary}")
-		
 		# Check if "involved_companies" exists in the JSON data
 		if "involved_companies" in game:
-
 			# If it does, initialize default values for developer/publisher
 			developer_name = publisher_name = "Unavailable"
-
 			# Then, iterate through the "involved_companies" list
 			for company_info in game["involved_companies"]:
 				# First, get the name of the company.
 				company = company_info["company"]
-				
 				# Check if the company is a developer
 				if company_info["developer"]:
 					developer_name = company["name"]
-						
 				# Check if the company is a publisher
 				if company_info["publisher"]:
 					publisher_name = company["name"]
-
 			print(f"\nDeveloper: {developer_name}")
 			print(f"\nPublisher: {publisher_name}")
 			print(f"\n\n\n")
-
 		else:
 			#If there are no involved companies on record, then print unavailable.
 			print(f"\nDeveloper: Unavailable")
@@ -94,7 +85,7 @@ def igdbRequest(params):
 
 	# Wait and try again if we got a 'Too Many Requests' error code from IGDB
 	if response.status_code == 429:
-		time.sleep(.33)
+		time.sleep(.3)
 		return igdbRequest(params)
 	# Return the games if we retrieved at least one
 	elif response.status_code == 200 and len(found_games) > 0:
@@ -132,7 +123,7 @@ def beforeRequest():
 	"""
 	Check if the user is authorized before every request, exluding log in.
 	Also, let the client know CORS is allowed for an 'OPTION' request.
-	It was set to automatically run in app.py.
+	It was set to automatically run before every request in app.py.
     """
 	# When seeing the CORS options, let the client know we allow the requests 
 	if request.method == 'OPTIONS':

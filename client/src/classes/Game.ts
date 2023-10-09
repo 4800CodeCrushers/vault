@@ -18,7 +18,7 @@ export default class Game {
     getName() { return this.info.name }
     /** Get the summary of the game */
     getSummary() { return this.info.summary }
-    /** Get the rating of the game */
+    /** Get the raw numeric rating of the game (out of 100) */
     getRating() { return this.info.rating }
     /** Get the cover URL of the game */
     getCoverURL() { 
@@ -44,13 +44,27 @@ export default class Game {
         });
         return res;
     }
+    /** Is the game from this genre? */
+    fromPlatform(platform: string) { 
+        for (let i = 0; i < this.getPlatforms().length; i++) {
+            if (this.getPlatforms()[i] == platform) return true;
+        }
+        return false;
+    }
     /** Get the genres of the game */
     getGenres() { 
         let res: string[] = [];
-        this.info.genres.forEach(element => {
+        this.info.genres?.forEach(element => {
             res.push(element.name);
         });
         return res;
+    }
+    /** Is the game from this genre? */
+    fromGenre(genre: string) { 
+        for (let i = 0; i < this.getGenres().length; i++) {
+            if (this.getGenres()[i] == genre) return true;
+        }
+        return false;
     }
     /** Get if the game is in the collection */
     getCollected() { return this.info.collected }
@@ -61,10 +75,26 @@ export default class Game {
     /** Set if the game is in the wishlist */
     setWished(b: boolean) { this.info.wished = b }
 
-    static getInfo(games: Game[]): GameInfo[] {
+    static getInfoInList(games: Game[]): GameInfo[] {
         let result: GameInfo[] = [];
         games.forEach(g => {
             result.push(g.info);
+        });
+        return result;
+    }
+
+    static getGenresInList(games: Game[]): Set<string> {
+        let result: Set<string> = new Set();
+        games.forEach(g => {
+            g.getGenres().map((g) => result.add(g));
+        });
+        return result;
+    }
+
+    static getPlatformsInList(games: Game[]): Set<string> {
+        let result: Set<string> = new Set();
+        games.forEach(g => {
+            g.getPlatforms().map((p) => result.add(p));
         });
         return result;
     }

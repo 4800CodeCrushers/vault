@@ -7,7 +7,7 @@ import { User } from '../../classes';
 
 function GameTile(props: GameTileProps) {
   // Extract values from the props
-  const { game, onClick } = props;
+  const { game, onClick, sort } = props;
   const [hovering, setHovering] = useState<boolean>(false);
   const [collected, setCollected] = useState<boolean>(game.getCollected());
   const [wished, setWished] = useState<boolean>(game.getWished());
@@ -51,6 +51,7 @@ function GameTile(props: GameTileProps) {
       </div>
       {/* Title text */}
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
+      {sort === 'Rating' && <Text color={'#fab400'} style={{...styles.title, marginTop: 5}} size={'10pt'}>{`${Math.round(game.getRating())}%`}</Text>}
     </div>
   );
 }

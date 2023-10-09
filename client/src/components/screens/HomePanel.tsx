@@ -128,6 +128,7 @@ let styles: Styles = {
     flexDirection: 'column',
     height: '100%',
     overflowY: 'auto',
+    padding: '0px 20px 0px 20px',
   },
   greeting: {
     textAlign: 'center',
@@ -161,11 +162,10 @@ let styles: Styles = {
     alignItems: 'center',
   },
   grid: {
-    margin: 30,
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-    width: '80%',
-    alignSelf: 'center',
+    gap: 7,
+    width: '100%',
   },
 }
   

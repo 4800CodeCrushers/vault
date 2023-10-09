@@ -115,6 +115,8 @@ export type GameTileProps = {
   onWishlistClick?: (game: Game) => void,
   /** What happens if the collection button is clicked? */
   onCollectionClick?: (game: Game) => void,
+  /** What are we sorting by? */
+  sort?: Sort,
 }
 
 export type FriendTileProps = {
@@ -189,6 +191,7 @@ export type MainScreenProps = {
 
 export type Screens = "main" | "landing" | 'loading';
 export type Tabs = "home" | "collection" | "friends" | 'game';
+export type Sort = "Title" | "Rating" | "Genre" | 'Platform';
 
 export type IconName = 
   | 'members' 
@@ -206,6 +209,8 @@ export type IconName =
   | 'check' 
   | 'plus' 
   | 'minus' 
+  | 'up' 
+  | 'down' 
   | 'user' 
   | 'logout' 
   | 'pencil' 

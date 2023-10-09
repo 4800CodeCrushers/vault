@@ -3,7 +3,7 @@ import { IconProps, IconName } from "../../types/components";
 
 import { MdGroups2, MdSearch } from "react-icons/md";
 import { GoEye, GoEyeClosed } from "react-icons/go";
-import { AiOutlineClose, AiOutlineCloseCircle, AiFillHome, AiFillCopy, AiFillCloseCircle } from "react-icons/ai";
+import { AiOutlineClose, AiFillCaretDown, AiFillCaretUp, AiFillHome, AiFillCopy, AiFillCloseCircle } from "react-icons/ai";
 import { BiSolidCategoryAlt, BiLogOut } from "react-icons/bi";
 import { BsFillCheckCircleFill, BsBookmarkStar, BsFillBookmarkStarFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -53,6 +53,8 @@ function getIcon (name: IconName) {
     case 'minus': return <ImMinus/>;
     case 'user': return <CgProfile/>;
     case 'logout': return <BiLogOut/>;
+    case 'up': return <AiFillCaretUp/>;
+    case 'down': return <AiFillCaretDown/>;
     case 'pencil': return <PiPencilSimple/>;
     case 'pencil-stop': return <PiPencilSimpleSlash/>;
   }

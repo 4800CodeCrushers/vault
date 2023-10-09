@@ -20,7 +20,8 @@ export {
     MainScreenProps,
     FriendTileProps,
     FriendPanelProps,
-    CollectionPanelProps
+    CollectionPanelProps,
+    Sort
 } from './components';
 
 export {
