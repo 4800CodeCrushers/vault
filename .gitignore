@@ -3,7 +3,7 @@
 # dependencies
 client/node_modules
 # production
-client/build
+# client/build
 
 server/config.json
 
