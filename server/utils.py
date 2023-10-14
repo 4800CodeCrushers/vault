@@ -140,6 +140,7 @@ def beforeRequest():
 		# Get the session key from the request
 		key = request.headers.get('Authorization')
 		print(key)
+		print(request.headers)
 		# Reject the user if they did not give us a session key
 		if not key and request.path != '/api/vg/search': return makeAPIResponse(401, 'Unauthorized')
 		# Check if the session key they gave us is in the DB
