@@ -24,7 +24,8 @@ export default class Janus {
       method: "POST",
       authorizationRequired: false,
       body: {email: email, password: password},
-      loggingIn: true
+      loggingIn: true,
+      print: true
     });
   }
 
@@ -54,6 +55,7 @@ export default class Janus {
     return Utility.contactAPI<UserInfo>({
       method: "GET",
       url: `user/me`,
+      print: true
     });
   }
 
@@ -68,12 +70,14 @@ export default class Janus {
   //#endregion
 
   //#region list
+
   static async GET_COLLECTION(user: User, offset: number = 0) {
     let urlParams = `?&offset=${offset}`;
     let idPath = user.getID() === User.me?.getID() ? "" : `/${user.getID()}`
     return Utility.contactAPI<GameInfo[]>({
       url: `list/collection` + idPath + urlParams,
-      method: "GET"
+      method: "GET",
+      print: true
     });
   }
 
@@ -91,6 +95,7 @@ export default class Janus {
     return Utility.contactAPI<UserInfo[]>({
       url: `list/friends?` + urlParams,
       method: "GET",
+      print: true
     });
   }
 
