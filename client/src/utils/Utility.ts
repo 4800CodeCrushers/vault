@@ -133,10 +133,10 @@ export default class Utility {
           method: method, 
           headers: { 
             "Content-Type": "application/json", 
-            ...((sessionKey != null) ? {authorization: sessionKey} : {})
+            ...((sessionKey != null) ? {Authorization: sessionKey} : {})
           },
           body: (body ? JSON.stringify(body) : undefined),
-          mode: 'cors'
+          // mode: 'cors'
         };
         // Print request options to console for debudding
         if (props.print) {
