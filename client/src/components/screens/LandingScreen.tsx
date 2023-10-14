@@ -76,7 +76,7 @@ function LandingScreen(props: LandingScreenProps) {
             height={50} 
             fontSize={22}
             onChange={(text) => onFieldChange(field, text)}
-            style={{margin: 10}}
+            style={{margin: 10, maxWidth: '70%'}}
             type={field === 'Password' || field === 'Confirm password' ? 'password' : undefined}
             onSubmit={() => onButtonPress()}
           />
