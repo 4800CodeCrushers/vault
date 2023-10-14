@@ -44,6 +44,7 @@ function CollectionPanel(props: CollectionPanelProps) {
     if (viewingMyStuff) {
       let collectionCache = window.localStorage.getItem('collection');
       let wishlistCache = window.localStorage.getItem('wishlist');
+      console.log('Collection', collectionCache);
       if (collectionCache) {
         let info: GameInfo[] = JSON.parse(collectionCache);
         let c: Game[] = info.map(i => new Game(i));

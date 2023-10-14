@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.93a0497a.css",
-    "main.js": "/static/js/main.df6c1f4f.js",
+    "main.js": "/static/js/main.ac7ac5f5.js",
     "static/media/logo.png": "/static/media/logo.16cd3dcc6f688858c6b9.png",
     "static/media/Microsoft Xbox.png": "/static/media/Microsoft Xbox.3db2bedc30844821ba2e.png",
     "static/media/Xbox 360.png": "/static/media/Xbox 360.b8a8564df98e22b0f56f.png",
@@ -35,10 +35,10 @@
     "static/media/Nintendo Wii.png": "/static/media/Nintendo Wii.fd929d08c4596cfee596.png",
     "index.html": "/index.html",
     "main.93a0497a.css.map": "/static/css/main.93a0497a.css.map",
-    "main.df6c1f4f.js.map": "/static/js/main.df6c1f4f.js.map"
+    "main.ac7ac5f5.js.map": "/static/js/main.ac7ac5f5.js.map"
   },
   "entrypoints": [
     "static/css/main.93a0497a.css",
-    "static/js/main.df6c1f4f.js"
+    "static/js/main.ac7ac5f5.js"
   ]
 }
