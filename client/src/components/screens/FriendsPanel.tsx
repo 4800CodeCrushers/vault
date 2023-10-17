@@ -100,6 +100,7 @@ let styles: Styles = {
     flexDirection: 'column',
     height: '100vh',
     overflowY: 'auto',
+    padding: '20px 20px 0px 20px',
   },
   inputContainer: {
     display: 'flex', 

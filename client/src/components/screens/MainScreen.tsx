@@ -192,7 +192,7 @@ function MainScreen(props: MainScreenProps) {
       {/* Render main panel */}
       <div style = {styles.panelContainer}>
         { renderSideMenu() }
-        <div style={{width: '100%', paddingTop: 25}}>
+        <div style={{width: showSideMenu ? '85%' : '100%'}}>
           { selectedTab === 'home' && <HomePanel onGameSelect={game => {setHomeGame(game); setSelectedTab('game');}}/>}
           { lastSelectedTab === 'collection' && selectedTab === 'collection' && <CollectionPanel user={User.me} onGameSelect={game => {setCollectionGame(game); setSelectedTab('game');}}/>}
           { selectedTab === 'friends' && <FriendsPanel onFriendSelect={(f) => {setViewedFriend(f); setSelectedTab('collection');}}/>}
@@ -243,7 +243,7 @@ let styles: Styles = {
   panelContainer: {
     display: 'flex', 
     flexDirection: 'row',
-    height: '90vh',
+    height: '100vh',
     width: '100%',
   },
   toolbarContainer: {

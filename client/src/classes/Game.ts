@@ -18,8 +18,11 @@ export default class Game {
     getName() { return this.info.name }
     /** Get the summary of the game */
     getSummary() { return this.info.summary }
-    /** Get the raw numeric rating of the game (out of 100) */
-    getRating() { return this.info.rating }
+    /** Get the raw numeric rating of the game (out of 5) */
+    getRating() { 
+        // rating is out of 100 so normalize to 5
+        return this.info.rating / 20; 
+    }
     /** Get the cover URL of the game */
     getCoverURL() { 
         if (this.info.cover)
@@ -33,7 +36,21 @@ export default class Game {
         return undefined; 
     }
     /** Get a screenshot URL of the game */
-    getScreenshotURL() { return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${this.info.screenshots[0].image_id}.png`}
+    getScreenshot(index?: number) { 
+        if (!this.info.screenshots) return undefined;
+        index = index ?? Math.floor(Math.random() * this.info.screenshots.length);
+        if (index > this.info.screenshots.length - 1) index = this.info.screenshots.length - 1;
+        if (index < 0) index = 0;
+        return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${this.info.screenshots[index].image_id}.png`
+    }
+    /** Get the platforms the game was released on */
+    getScreenshots() { 
+        let res: string[] = [];
+        this.info.screenshots.forEach(element => {
+            res.push(`https://images.igdb.com/igdb/image/upload/t_screenshot_big/${element.image_id}.png`);
+        });
+        return res;
+    }
     /** Get the release date */
     getReleaseDate() { return Utility.getRelativeDay(this.info.first_release_date) }
     /** Get the platforms the game was released on */

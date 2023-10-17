@@ -28,14 +28,6 @@ export default class Utility {
     let dayOfWeek = (t.toString().split(' ')[0]);
     let month = t.getMonth() + 1;
     let year = t.getFullYear();
-    // convert day of week to full string
-    if(dayOfWeek ==  "Mon") dayOfWeek = "Monday";
-    else if(dayOfWeek ===  "Tue") dayOfWeek = "Tuesday";
-    else if(dayOfWeek ===  "Wed") dayOfWeek = "Wednesday";
-    else if(dayOfWeek ===  "Thu") dayOfWeek = "Thursday";
-    else if(dayOfWeek ===  "Fri") dayOfWeek = "Friday";
-    else if(dayOfWeek ===  "Sat") dayOfWeek = "Saturday";
-    else dayOfWeek = "Sunday";
     // Check to see if the current time is close to the given timestamp 
     let currentTime = new Date();
     let isClose = year === currentTime.getFullYear() && month === (currentTime.getMonth() + 1);
@@ -43,10 +35,42 @@ export default class Utility {
     if (isClose) {
       if(date === currentTime.getDate()) return "Today";
       else if(date === currentTime.getDate() - 1) return "Yesterday";
-      else if( date >= (currentTime.getDate() - 7)) return dayOfWeek;
+      else if( date >= (currentTime.getDate() - 7)) {
+        // convert day of week to full string
+        if(dayOfWeek ==  "Mon") dayOfWeek = "Monday";
+        else if(dayOfWeek ===  "Tue") dayOfWeek = "Tuesday";
+        else if(dayOfWeek ===  "Wed") dayOfWeek = "Wednesday";
+        else if(dayOfWeek ===  "Thu") dayOfWeek = "Thursday";
+        else if(dayOfWeek ===  "Fri") dayOfWeek = "Friday";
+        else if(dayOfWeek ===  "Sat") dayOfWeek = "Saturday";
+        else dayOfWeek = "Sunday";
+        return dayOfWeek;
+      }
     }
+
+    // convert month to full string
+    let monthString: string;
+    if(month == 1) monthString = "January";
+    else if(month === 2) monthString = "February";
+    else if(month === 3) monthString = "March";
+    else if(month === 4) monthString = "April";
+    else if(month === 5) monthString = "May";
+    else if(month === 6) monthString = "June";
+    else if(month === 7) monthString = "July";
+    else if(month === 8) monthString = "August";
+    else if(month === 9) monthString = "September";
+    else if(month === 10) monthString = "October";
+    else if(month === 11) monthString = "November";
+    else monthString = "December";
+
+    let dateString: string;
+    if(date == 1) dateString = `${date}st`
+    else if(date == 2) dateString = `${date}nd`
+    else if(date == 3) dateString = `${date}rd`
+    else dateString = `${date}th`
+
     // if we are not close in time, return a basic timestamp format
-    return (month + "/" + date + "/" + year);
+    return (monthString + " " + dateString + ", " + year);
   }
 
   /** Get a greeting depending on the time of day. Ex - Good Afternoon. */

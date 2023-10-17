@@ -270,7 +270,7 @@ function CollectionPanel(props: CollectionPanelProps) {
   let showNoGamesText = !loading && ((viewingCollection && collection.length == 0) || (!viewingCollection && wishlist.length == 0));
   
   return (
-    <div onScroll={onScroll} style = {styles.panel}>
+    <div onScroll={onScroll} style = {styles.gridContainer}>
       {/* Render Input Section */}
       <div style = {styles.inputContainer}>
         <TextInput
@@ -305,7 +305,7 @@ function CollectionPanel(props: CollectionPanelProps) {
         <Text size={25} onClick={() => setViewingCollection(false)} style={{fontWeight: 'bolder', textDecorationLine: !viewingCollection ? 'underline' : undefined}}>Wishlist</Text>
       </div>
       { showNoGamesText && <Text style={{textAlign: 'center'}}>No Games Added!</Text>}
-      { renderGrid() }
+      { renderGrid() } 
     </div>
   );
 }
@@ -317,7 +317,13 @@ let styles: Styles = {
     flexDirection: 'column',
     height: '100%',
     overflowY: 'auto',
-    padding: '0px 20px 0px 20px',
+  },
+  gridContainer: {
+    display: 'flex', 
+    flexDirection: 'column',
+    height: '90%',
+    overflowY: 'auto',
+    padding: '20px 20px 0px 20px',
   },
   inputContainer: {
     display: 'flex', 
