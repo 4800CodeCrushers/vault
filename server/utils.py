@@ -133,14 +133,11 @@ def beforeRequest():
 		response.headers.add('Access-Control-Allow-Methods', "*")
 		return response
    
-	print(request.path)
 	
 	# Ensure we do not run this when logging/finding a game in since we will not have a session key
-	if request.path != '/'  and request.path != '/manifest.json'  and not request.path.startswith('/static/') and request.path != '/api/auth/login' and request.path != '/api/auth/create':
+	if request.path != '/'  and request.path != '/manifest.json' and request.path != '/favicon.ico' and not request.path.startswith('/static/') and request.path != '/api/auth/login' and request.path != '/api/auth/create':
 		# Get the session key from the request
 		key = request.headers.get('Authorization')
-		print(key)
-		print(request.headers)
 		# Reject the user if they did not give us a session key
 		if not key and request.path != '/api/vg/search': return makeAPIResponse(401, 'Unauthorized')
 		# Check if the session key they gave us is in the DB

@@ -4,8 +4,8 @@ import { User } from "../classes";
 
 export default class Janus {
 
-  // static BASE_URL = `http://mygamesvault.com/api/`;
-  static BASE_URL = `http://127.0.0.1:17777/api/`;
+  static BASE_URL = `http://mygamesvault.com/api/`;
+  // static BASE_URL = `http://127.0.0.1:17777/api/`;
 
   //#region vg
   static async SEARCH_GAMES(query: string, offset: number = 0) {
