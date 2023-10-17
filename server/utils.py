@@ -126,12 +126,12 @@ def beforeRequest():
 	It was set to automatically run before every request in app.py.
     """
 	# When seeing the CORS options, let the client know we allow the requests 
-	# if request.method == 'OPTIONS':
-	# 	response = make_response()
-	# 	response.headers.add("Access-Control-Allow-Origin", "*")
-	# 	response.headers.add('Access-Control-Allow-Headers', "*")
-	# 	response.headers.add('Access-Control-Allow-Methods', "*")
-	# 	return response
+	if request.method == 'OPTIONS':
+		response = make_response()
+		response.headers.add("Access-Control-Allow-Origin", "*")
+		response.headers.add('Access-Control-Allow-Headers', "*")
+		response.headers.add('Access-Control-Allow-Methods', "*")
+		return response
    
 	print(request.path)
 	
@@ -139,6 +139,8 @@ def beforeRequest():
 	if request.path != '/'  and request.path != '/manifest.json'  and not request.path.startswith('/static/') and request.path != '/api/auth/login' and request.path != '/api/auth/create':
 		# Get the session key from the request
 		key = request.headers.get('Authorization')
+		print(key)
+		print(request.headers)
 		# Reject the user if they did not give us a session key
 		if not key and request.path != '/api/vg/search': return makeAPIResponse(401, 'Unauthorized')
 		# Check if the session key they gave us is in the DB
