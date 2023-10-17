@@ -1,11 +1,12 @@
 import { GameInfo, UserInfo, PicNames, TriviaInfo } from "../types";
 import { Utility}  from ".";
 import { User } from "../classes";
+import config from '../../../config.json';
 
 export default class Janus {
 
-  static BASE_URL = "http://mygamesvault.com/api/";
-  // static BASE_URL = "http://127.0.0.1:17777/api/";
+  // static BASE_URL = `http://mygamesvault.com/api/`;
+  static BASE_URL = `http://${config.host}:${config.port}/api/`;
 
   //#region vg
   static async SEARCH_GAMES(query: string, offset: number = 0) {

@@ -4,7 +4,6 @@ from routes import vg, auth, trivia, user, list
 from utils import beforeRequest
 from extensions import db
 from json import load
-
 # Create app
 app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
 # Connect database with app
@@ -26,7 +25,10 @@ app.before_request(beforeRequest)
 def home():
     return render_template('index.html')
 
+# Load the config file
+f = open('../config.json')
+data = load(f)
+
 # Run the app
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=False)
-	# app.run(host='0.0.0.0', debug=False, port=17777)
+	app.run(host='0.0.0.0', debug=False, port=data['port'])
