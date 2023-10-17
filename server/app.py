@@ -27,12 +27,12 @@ def home():
 
 @app.route("/manifest.json")
 def manifest():
-    return send_from_directory('./build', 'manifest.json')
+    return send_from_directory('../client/build', 'manifest.json')
 
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory('./build', 'favicon.ico')
+    return send_from_directory('../client/build', 'favicon.ico')
 
 # Run the app
 if __name__ == '__main__':
