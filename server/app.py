@@ -26,7 +26,7 @@ def home():
     return render_template('index.html')
 
 # Load the config file
-f = open('../config.json')
+f = open('config.json')
 data = load(f)
 
 # Run the app

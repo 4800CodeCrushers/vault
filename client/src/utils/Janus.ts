@@ -1,11 +1,10 @@
 import { GameInfo, UserInfo, PicNames, TriviaInfo } from "../types";
 import { Utility}  from ".";
 import { User } from "../classes";
-import config from '../../../config.json';
+import config from '../config.json';
 
 export default class Janus {
 
-  // static BASE_URL = `http://mygamesvault.com/api/`;
   static BASE_URL = `http://${config.host}:${config.port}/api/`;
 
   //#region vg
