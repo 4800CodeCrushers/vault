@@ -26,7 +26,7 @@ function TextInput(props: TextInputProps) {
     
     return <input 
       ref={inputRef} 
-      style={{...styles.text, backgroundColor, fontSize, marginLeft: props.leftIcon ? undefined : 10}} 
+      style={{...styles.text, backgroundColor, fontSize}} 
       placeholder = {placeholder} 
       maxLength={props.maxCharacters} 
       onChange={() => onChange()} 
