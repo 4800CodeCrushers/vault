@@ -106,7 +106,7 @@ let styles: Styles = {
   },
   backgroundImage: {
     width: '100%',
-    filter: `blur(${5}px)`,
+    filter: `blur(${2}px)`,
     
   },
   cover: {

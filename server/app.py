@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 from flask_cors import CORS
 from routes import vg, auth, trivia, user, list
 from utils import beforeRequest
@@ -24,6 +24,15 @@ app.before_request(beforeRequest)
 @app.route("/")
 def home():
     return render_template('index.html')
+
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory('./build', 'manifest.json')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('./build', 'favicon.ico')
 
 # Run the app
 if __name__ == '__main__':
