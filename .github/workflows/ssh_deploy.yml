@@ -56,4 +56,4 @@ jobs:
           chmod 400 $HOME/key.pem
       
       - name: Update image on server
-        run: ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} 'vault'
+        run: ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} 'update'
