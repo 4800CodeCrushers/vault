@@ -12,10 +12,12 @@ jobs:
     steps:
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v0.1.7
+        env:
+          PASSWORD: ${{ secrets.PASSWORD }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.USER_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script_stop: true
-          script: cd ~/vault && ~/fastgit.exp && sudo service apache2 stop
+          script: cd ~/vault && git pull "https://Cameron-Ross:$PASSWORD@github.com/4800CodeCrushers/vault.git" && sudo service apache2 restart
