@@ -16,8 +16,13 @@ jobs:
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.4
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-private-key: |
+          ${{ secrets.SSH_PRIVATE_KEY }}
+          # Add your private key content here from v_key.pem file
+          # Make sure to replace any line breaks with '\n' characters
 
     - name: SSH into Server and Run Command
       run: |
-        ssh ubuntu@ec2-54-183-235-69.us-west-1.compute.amazonaws.com 'update'
+        ssh -i v_key.pem ubuntu@ec2-54-183-235-69.us-west-1.compute.amazonaws.com 'update'
+
+
