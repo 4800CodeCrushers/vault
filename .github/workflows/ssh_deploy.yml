@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   Deploy:
@@ -18,8 +18,42 @@ jobs:
             USER_NAME: ${{secrets.USER_NAME}}
       
         run: |
-          vault '
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
               # Now we have got the access of EC2 and we will start the deploy .
-              update
+              cd /home/ubuntu/<PROJECT_DIRECTORY> &&
+              git checkout dev &&
+              git fetch --all &&
+              git reset --hard origin/dev &&
+              git pull origin dev &&
+              sudo npm i &&
+              sudo npm run build &&
+              sudo pm2 stop ./dist/index.js &&
+              sudo pm2 start ./dist/index.js
               '
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Build & Deploy
+        id: setup-key
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.SSH_HOST}}
+            USER_NAME: ${{secrets.USER_NAME}}
+      
+        run: |
+          echo "$PRIVATE_KEY" >> $HOME/key.pem
+          chmod 400 $HOME/key.pem
+      
+      - name: Update image on server
+        run: ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} 'vault'
