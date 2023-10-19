@@ -13,15 +13,12 @@ jobs:
         id: setup-key
         env:
             PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-            HOSTNAME: ${{secrets.SSH_HOST}}
-            USER_NAME: ${{secrets.USER_NAME}}
         run: |
           echo "$PRIVATE_KEY" >> $HOME/key.pem
           chmod 400 $HOME/key.pem
       
       - name: App on server
         env:
-          PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           HOSTNAME: ${{secrets.SSH_HOST}}
           USER_NAME: ${{secrets.USER_NAME}}
         run: ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} 'update'
