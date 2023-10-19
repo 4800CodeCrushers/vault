@@ -18,4 +18,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script_stop: true
-          script: echo howdy && ls -all
+          script: cat ~/.bashrc && update
