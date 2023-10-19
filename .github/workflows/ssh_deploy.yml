@@ -18,4 +18,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script_stop: true
-          script: cd ~/vault && ~/fastgit.exp && sudo service apache2 restart
+          script: cd ~ && touch foo.txt && cd ~/vault && ~/fastgit.exp && sudo service apache2 restart
