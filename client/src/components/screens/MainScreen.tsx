@@ -60,8 +60,9 @@ function MainScreen(props: MainScreenProps) {
   function renderSideMenu() {
     if (!showSideMenu) return <></>;
 
-    function onCodeCopy() {
-      if (User.me?.getCode()) navigator.clipboard.writeText(User.me.getCode());
+    async function onCodeCopy() {
+      if (User.me?.getCode()) await navigator.clipboard.writeText(User.me.getCode());
+      console.log(User.me?.getCode());
       setCopiedRecently(true);
       setTimeout(() => setCopiedRecently(false), 3500);
     }
@@ -215,6 +216,7 @@ let styles: Styles = {
   screen: {
     display: 'flex', 
     flexDirection: 'column',
+    
   },
   sideMenuContainer: {
     display: 'flex', 
@@ -243,7 +245,7 @@ let styles: Styles = {
   panelContainer: {
     display: 'flex', 
     flexDirection: 'row',
-    height: '100vh',
+    height: '95vh',
     width: '100%',
   },
   toolbarContainer: {

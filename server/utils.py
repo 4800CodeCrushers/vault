@@ -147,4 +147,4 @@ def beforeRequest():
 		# Attach the session key to the request, for convenience
 		request.key = key
 		# Attach the user who made the request, for convenience
-		request.user = Users.query.filter(Users.user_id == credentials.user_id).first()
+		if request.path != '/api/vg/search': request.user = Users.query.filter(Users.user_id == credentials.user_id).first()

@@ -53,6 +53,7 @@ let styles: Styles = {
   screen: {
     height: '100vh',
     background: `linear-gradient(${Utility.getTint('#0e0e0e', 15)}, #0e0e0e)`,
+    backgroundColor: 'black',
     overflow: 'hidden'
   }
 }

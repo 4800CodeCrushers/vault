@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-import hashlib, uuid, time
+import hashlib, uuid, time, shortuuid
 from extensions import db
 from models import Credentials, Users
 from utils import makeAPIResponse
@@ -24,7 +24,7 @@ def create():
 		return makeAPIResponse(403, 'Account already exists.')
 	else:
 		# Create a new friend code
-		code = uuid.uuid4()
+		code = shortuuid.ShortUUID().random(length=10)
 		# The time the user joined
 		now = int(time.time() * 1000)
 		# Create the new user
@@ -41,7 +41,7 @@ def create():
 		# Commit the changes
 		db.session.add(credential)
 		db.session.commit()
-		return makeAPIResponse(200, 'Creation successful')
+		return makeAPIResponse(200, 'Creation successful', user)
 
 @auth.route('/resetpassword', methods=['POST'])
 def reset():

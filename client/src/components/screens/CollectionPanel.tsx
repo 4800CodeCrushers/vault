@@ -44,7 +44,6 @@ function CollectionPanel(props: CollectionPanelProps) {
     if (viewingMyStuff) {
       let collectionCache = window.localStorage.getItem('collection');
       let wishlistCache = window.localStorage.getItem('wishlist');
-      console.log('Collection', collectionCache);
       if (collectionCache) {
         let info: GameInfo[] = JSON.parse(collectionCache);
         let c: Game[] = info.map(i => new Game(i));
@@ -140,12 +139,38 @@ function CollectionPanel(props: CollectionPanelProps) {
 
   function onCollectionClick(game: Game) {
     if (!viewingMyStuff) return;
-    setCollection(game.getCollected() ? collection.concat(game) : removeGame(game, collection));
+
+    let l = game.getCollected() ? collection.concat(game) : removeGame(game, collection);
+    // setCollection();
+
+    // Sort the lists depending on the option
+    if (sort === 'Title') {
+      setCollection(l.sort((a,b) => a.getName() < b.getName() ? -1 : 1));
+    }
+    else if (sort === 'Rating') {
+      setCollection(l.sort((a,b) => b.getRating() - a.getRating()));
+    }
+    else {
+      setCollection(l);
+    }
   }
 
   function onWishlistClick(game: Game) {
     if (!viewingMyStuff) return;
-    setWishlist(game.getCollected() ? wishlist.concat(game) : removeGame(game, wishlist));
+    let l = game.getWished() ? wishlist.concat(game) : removeGame(game, wishlist);
+    // setWishlist();
+
+    // Sort the lists depending on the option
+    if (sort === 'Title') {
+      setWishlist(l.sort((a,b) => a.getName() < b.getName() ? -1 : 1));
+    }
+    else if (sort === 'Rating') {
+      setWishlist(l.sort((a,b) => b.getRating() - a.getRating()));
+    }
+    else {
+      setWishlist(l);
+    }
+
   }
 
   function removeGame(game: Game, list: Game[]): Game[] {
@@ -165,26 +190,12 @@ function CollectionPanel(props: CollectionPanelProps) {
     if (option == sort) return;
     // Sort the lists depending on the option
     if (option === 'Title') {
-      setCollection(collection.sort((a,b) => {
-        if(a.getName() < b.getName()) return -1;
-        else return 1;
-      }));
-      setWishlist(wishlist.sort((a,b) => {
-        if(a.getName() < b.getName()) return -1;
-        else return 1;
-      }));
+      setCollection(collection.sort((a,b) => a.getName() < b.getName() ? -1 : 1));
+      setWishlist(wishlist.sort((a,b) => a.getName() < b.getName() ? -1 : 1));
     }
     else if (option === 'Rating') {
-      setCollection(collection.sort((a,b) => {
-        return a.getRating() - b.getRating();
-      }));
-      setWishlist(wishlist.sort((a,b) => {
-        if(b.getName() < a.getName()) return -1;
-        else return 1;
-      }));
-    }
-    else if (option === 'Genre') {
-
+      setCollection(collection.sort((a,b) => b.getRating() - a.getRating()));
+      setWishlist(wishlist.sort((a,b) => b.getRating() - a.getRating()));
     }
   }
 

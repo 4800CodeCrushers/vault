@@ -4,8 +4,8 @@ import { User } from "../classes";
 
 export default class Janus {
 
-  static BASE_URL = `http://mygamesvault.com/api/`;
-  // static BASE_URL = `http://127.0.0.1:17777/api/`;
+  // static BASE_URL = `http://mygamesvault.com/api/`;
+  static BASE_URL = `http://127.0.0.1:17777/api/`;
 
   //#region vg
   static async SEARCH_GAMES(query: string, offset: number = 0) {
@@ -20,6 +20,10 @@ export default class Janus {
 
   //#region auth
   static async LOGIN(email: string, password: string) {
+    // Clear the cache
+    window.localStorage.removeItem('collection'); 
+    window.localStorage.removeItem('wishlist');
+
     return Utility.contactAPI<UserInfo>({
       url: `auth/login`,
       method: "POST",
@@ -33,6 +37,9 @@ export default class Janus {
   static async LOGOUT() {
     // Remove the session key from local secured storage
     window.localStorage.removeItem('key');
+    // Clear the cache
+    window.localStorage.removeItem('collection'); 
+    window.localStorage.removeItem('wishlist');
     // contacy the server
     return await Utility.contactAPI<{}>({
       method: "POST",

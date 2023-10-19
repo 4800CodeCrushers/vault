@@ -14,18 +14,18 @@ function GameTile(props: GameTileProps) {
 
   async function onWishlistClick() {
     game.setWished(!game.getWished());
-    if (props.onWishlistClick) props.onWishlistClick(game);
     if (game.getWished()) Utility.addToCache(game, false);
     else Utility.removeFromCache(game, false);
+    if (props.onWishlistClick) props.onWishlistClick(game);
     let response = game.getWished() ? await Janus.ADD_TO_WISHLIST(game.getID()) : await Janus.REMOVE_FROM_WISHLIST(game.getID());
     setWished(game.getWished());
   }
 
   async function onCollectionClick() {
     game.setCollected(!game.getCollected());
-    if (props.onCollectionClick) props.onCollectionClick(game);
     if (game.getCollected()) Utility.addToCache(game);
     else Utility.removeFromCache(game);
+    if (props.onCollectionClick) props.onCollectionClick(game);
     let response = game.getCollected() ? await Janus.ADD_TO_COLLECTION(game.getID()) : await Janus.REMOVE_FROM_COLLECTION(game.getID());
     setCollected(game.getCollected());
   }
@@ -51,7 +51,7 @@ function GameTile(props: GameTileProps) {
       </div>
       {/* Title text */}
       <Text style={styles.title} size={'10pt'}>{game.getName()}</Text>
-      {sort === 'Rating' && <Text color={'#fab400'} style={{...styles.title, marginTop: 5}} size={'10pt'}>{`${Math.round(game.getRating())}%`}</Text>}
+      {sort === 'Rating' && <Text color={'#fab400'} style={{...styles.title, marginTop: 5}} size={'10pt'}>{`${Math.round(game.getRating() * 20)}%`}</Text>}
     </div>
   );
 }
