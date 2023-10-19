@@ -63,7 +63,7 @@ function LandingScreen(props: LandingScreenProps) {
     <div style = {styles.screen}>
       {/* Title */}
       <Text style={{textAlign: 'center', marginTop: 40}}>Welcome to</Text>
-      <Text style={styles.title}>MyGamesVault2.com</Text>
+      <Text style={styles.title}>MyGamesVault3.com</Text>
       {/* Logo */}
       <img style = {{width: 200, height: 200, margin: 25,  alignSelf: 'center', pointerEvents: 'none'}} src = {require('../../assets/logo.png')}/>
       {/* Input fields */}
@@ -109,7 +109,7 @@ let styles: Styles = {
   },
   title: {
     textAlign: 'center',
-    fontSize: 42,
+    fontSize: 32,
     fontWeight: 'bold',
   },
   linksContainer: {
