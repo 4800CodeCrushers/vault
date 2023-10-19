@@ -9,19 +9,24 @@ function GamePanel(props: GamePanelProps) {
   // Extract values from the props
   const { game } = props;
 
-  const [index, setIndex] = useState<number>(0);
+  const [index1, setIndex1] = useState<number>(0);
+  const [targetBGOpacity, setTargetBGOpacity] = useState<1 | 0>(1);
   const [collected, setCollected] = useState<boolean>(game.getCollected());
   const [wished, setWished] = useState<boolean>(game.getWished());
 
+
   useEffect(() => {
-    loop(0);
+    bgImageLoop(0);
   }, []); 
 
-  async function loop(cur : number) {
+  async function bgImageLoop(cur: number) {
     let i = cur + 1 < game.getInfo().screenshots.length ? cur + 1 : 0; 
-    setIndex(i);
     await new Promise(resolve => setTimeout(resolve, 6000));
-    loop(i);
+    setTargetBGOpacity(0);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    setIndex1(i);
+    setTargetBGOpacity(1);
+    bgImageLoop(i);
   } 
 
   async function onWishlistClick() {
@@ -42,10 +47,10 @@ function GamePanel(props: GamePanelProps) {
   
   return (
     <div style = {styles.panel}>
-      <div style={{height: '92%', overflow: 'scroll'}}>
+      <div style={{height: '100%', overflow: 'scroll'}}>
         {/* Render screenshot */}
-        <div style={{width: '100%', height: 250, overflow: 'hidden'}}>
-          <img style={styles.backgroundImage} src={game?.getScreenshot(index)}/>
+        <div style={{width: '100%', height: 400, overflow: 'hidden'}}>
+          <img style={{opacity: targetBGOpacity, ...styles.backgroundImage}} src={game?.getScreenshot(index1)}/>
         </div>
         {/* Render cover, title, date, rating, and buttons */}
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
@@ -55,7 +60,7 @@ function GamePanel(props: GamePanelProps) {
               <Text size={30} style = {{marginBottom: 10, fontWeight: 'bolder'}}>{game?.getName()}</Text>
               <Text size={22}>{game?.getReleaseDate()}</Text>
               <div style={{marginTop: 10, display: 'flex', flexDirection: 'row', alignContent: 'center'}}>
-                <Text size={22} style={{marginRight: 20}}>{game?.getRating().toFixed(1)}</Text>
+                <Text size={22} style={{marginRight: 20}}>{game?.getRating().toFixed(2)}</Text>
                 <Rating size={25} readonly allowFraction initialValue={game?.getRating()}/>
               </div>
             </div>
@@ -86,7 +91,7 @@ function GamePanel(props: GamePanelProps) {
             {game?.getPlatforms().map(p => <Text size={15} style={{padding: 10, backgroundColor: '#fab400', borderRadius: 25, margin: 2, fontWeight: 'bolder'}}>{p}</Text>)}
           </div>
           {/* Screenshots */}
-          <Text size={20} style={{margin: '20px 0px 20px 20px', fontWeight: 'bolder'}}>{game.getPlatforms().length > 1 ? "Screenshots" : "Screenshot"}</Text>
+          <Text size={20} style={{margin: '20px 0px 20px 20px', fontWeight: 'bolder'}}>Gallery</Text>
           <div style={{display: 'flex', flexDirection: 'row', height: 300, alignSelf: 'center', width: '95%', overflowX: 'auto'}}>
             {game?.getScreenshots().map(i => <img style={{margin: '0px 10px 0px 10px'}} src={i}/>)}
           </div>
@@ -106,7 +111,8 @@ let styles: Styles = {
   },
   backgroundImage: {
     width: '100%',
-    filter: `blur(${2}px)`,
+    // filter: `blur(${0}px)`,
+    transition: 'opacity .4s',
     
   },
   cover: {
