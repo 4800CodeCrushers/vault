@@ -9,15 +9,15 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
-      - name: Build & Deploy
+      - name: Dump key
         id: setup-key
         env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
             HOSTNAME: ${{secrets.SSH_HOST}}
             USER_NAME: ${{secrets.USER_NAME}}
         run: |
           echo "$PRIVATE_KEY" >> $HOME/key.pem
           chmod 400 $HOME/key.pem
       
-      - name: Update image on server
+      - name: App on server
         run: ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} 'update'
