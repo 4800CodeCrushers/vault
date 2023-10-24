@@ -148,3 +148,4 @@ def beforeRequest():
 		request.key = key
 		# Attach the user who made the request, for convenience
 		if request.path != '/api/vg/search': request.user = Users.query.filter(Users.user_id == credentials.user_id).first()
+		else: request.user = Users.query.filter(Users.user_id == credentials.user_id).first() if credentials else None
