@@ -29,10 +29,13 @@ def searchGame():
 	# Reject requests without the a query arg
 	if request.args.get('query'):
 		query = request.args.get('query')
+		# Do not even check a short query
+		if len(query) < 4: return makeAPIResponse(400, 'Make the query longer.') 	
 	else: 
 		return makeAPIResponse(400, 'Missing required field: query')
 	# Get the offset of the search results
 	offset = request.args.get('offset') if request.args.get('offset') else 0
+	
 	# The params for our search
 	params = (
 		f'search \"{query}\";'
