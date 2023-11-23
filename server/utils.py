@@ -28,6 +28,8 @@ def igdbRequest(params):
 	# Get the games list from the response
 	found_games = response.json()
 
+	print(found_games)
+
 	# See if the game is in the user's collection
 	# This method hurts my soul I hope there is a better way to do this
 	if request.user:
