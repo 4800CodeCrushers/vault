@@ -14,6 +14,7 @@ function HomePanel(props: HomePanelProps) {
   const [searchedOnce, setSearchedOnce] = useState<boolean>(State.loadedGames.length > 0);
   const [games, setGames] = useState<Game[]>(State.loadedGames);
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   const [targetTriviaOpacity, setTargetTriviaOpacity] = useState<1 | 0>(0);
   const [trivia, setTrivia] = useState<Trivia>();
@@ -49,8 +50,10 @@ function HomePanel(props: HomePanelProps) {
     if (response.success) {
       State.loadedGames = response.data.map(info => new Game(info));
       setGames(State.loadedGames);
+      setErrorText(null);
     }
     else {
+      setErrorText(response.message);
       setGames([]);
     }
     setSearchedOnce(true);
@@ -63,6 +66,7 @@ function HomePanel(props: HomePanelProps) {
     setQuery(null);
     setSearchedOnce(false);
     setGames([]);
+    setErrorText(null);
     animationEnabled(false);
   }
 
@@ -116,7 +120,7 @@ function HomePanel(props: HomePanelProps) {
       <div style = {styles.grid} ref = {listRef}>
         {games?.map(game => <GameTile key={game.getID()} game={game} onClick={() => onGameSelect(game)}/>)}
       </div>
-      { searchedOnce && games.length == 0 && <Text style={{textAlign: 'center'}}>No Games Found!</Text>}
+      { errorText && <Text style={{textAlign: 'center'}}>{errorText}</Text>}
     </div>
   );
 }
