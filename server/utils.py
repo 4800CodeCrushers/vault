@@ -12,7 +12,7 @@ def igdbRequest(params):
 		The parsed response from IGDB.
     """
 	# The credentials needed to contact IGDB
-	token = "mt8tntiq4be5mdf1m5hv72pa7xrsft"
+	token = "mmfke3lcfndwa2il5snjt4zgppskp8"
 	clientID = "fqgbk3v135ggx22yzzjx72yctiho44"
 	# Make the request
 	response = requests.post(
