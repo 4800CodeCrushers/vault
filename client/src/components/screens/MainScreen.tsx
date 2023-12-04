@@ -75,7 +75,7 @@ function MainScreen(props: MainScreenProps) {
             <Text style={styles.name} size={'14pt'}>{name}</Text>
             <div style={styles.friendCodeContainer}>
               <Text size={'10pt'} style={{marginRight: 5}}>{`Code: ${User.me?.getCode()}`}</Text>
-              <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/>
+              {/* <Icon name={copiedRecently ? 'check' : 'copy'} size={20} onClick={() => onCodeCopy()}/> */}
             </div>  
             <div style={{backgroundColor: 'white', width: '85%', height: 1}}/>
           </div>
