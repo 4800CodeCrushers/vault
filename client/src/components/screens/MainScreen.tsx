@@ -83,7 +83,7 @@ function MainScreen(props: MainScreenProps) {
           {User.me &&  <MenuTab name={'Collection'} icon={'catelog'} onClick={() => {setSelectedTab(collectionGame ?'game':'collection'); setLastSelectedTab('collection');}} selected={!showPopup && lastSelectedTab === 'collection'}/>}
           {User.me && <MenuTab name={'Friends'} icon={'members'} onClick={() => {setSelectedTab(friendGame ? 'game': (viewedFriend ? 'collection' : 'friends')); setLastSelectedTab('friends');}} selected={!showPopup && lastSelectedTab === 'friends'}/>}
           {User.me && <MenuTab name={'Profile'} icon={'user'} selected = {showPopup} onClick={() => setShowPopup(true)}/> }
-          {User.me && <MenuTab name={'Clear Cache'} icon={'close-circle'} onClick={() => {window.localStorage.removeItem('collection'); window.localStorage.removeItem('wishlist');}}/> }
+          {/* {User.me && <MenuTab name={'Clear Cache'} icon={'close-circle'} onClick={() => {window.localStorage.removeItem('collection'); window.localStorage.removeItem('wishlist');}}/> } */}
           {User.me && <MenuTab name={'Sign Out'} icon={'logout'} onClick={() => props.onLogout()}/>}
         </div>
         <div style={{backgroundColor: 'white', width: 1, height: '100%'}}/>
